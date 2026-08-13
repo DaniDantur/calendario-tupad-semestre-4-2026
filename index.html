@@ -762,6 +762,7 @@
         {
           id: "ds",
           name: "DESARROLLO DE SOFTWARE",
+          color: "#7e22ce",
           headerBg: "#581c87",
           events: [
             { id: "ds-1p", title: "Primer Parcial", category: "parciales", dateStr: "Viernes 11/09", startDate: "2026-09-11", endDate: "2026-09-11" },
@@ -773,6 +774,7 @@
         {
           id: "leg",
           name: "LEGISLACIÓN",
+          color: "#d97706",
           headerBg: "#78350f",
           events: [
             { id: "leg-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", dateStr: "08/10 al 10/10", startDate: "2026-10-08", endDate: "2026-10-10" },
@@ -785,6 +787,7 @@
         {
           id: "ms2",
           name: "METODOLOGÍA DE SISTEMAS II",
+          color: "#2563eb",
           headerBg: "#1e3a8a",
           events: [
             { id: "ms2-1p", title: "Primer Parcial", category: "parciales", dateStr: "Viernes 25/09", startDate: "2026-09-25", endDate: "2026-09-25" },
@@ -801,6 +804,7 @@
         {
           id: "p4",
           name: "PROGRAMACIÓN IV",
+          color: "#9333ea",
           headerBg: "#581c87",
           events: [
             { id: "p4-1p", title: "Primer Parcial", category: "parciales", dateStr: "21/09 al 26/09", startDate: "2026-09-21", endDate: "2026-09-26" },
@@ -813,6 +817,7 @@
         {
           id: "ad",
           name: "ANÁLISIS DE DATOS",
+          color: "#db2777",
           headerBg: "#831843",
           events: [
             { id: "ad-1p", title: "Primer Parcial", category: "parciales", dateStr: "Martes 22/09", startDate: "2026-09-22", endDate: "2026-09-22" },
@@ -828,6 +833,7 @@
         {
           id: "entregas_imp",
           name: "FECHAS IMPORTANTES (ENTREGAS)",
+          color: "#16a34a",
           headerBg: "#14532d",
           events: [
             { id: "ent-1", title: "1 - Propuesta de Proyecto y Repositorio", category: "entregas", dateStr: "30 de Agosto", startDate: "2026-08-30", endDate: "2026-08-30" },
@@ -838,6 +844,7 @@
         {
           id: "ad_int",
           name: "ANÁLISIS DE DATOS (INTEGRADOR)",
+          color: "#ea580c",
           headerBg: "#831843",
           events: [
             { id: "ad-int-1", title: "1ª Entrega", category: "entregas", dateStr: "17/08 al 21/08", startDate: "2026-08-17", endDate: "2026-08-21" },
@@ -907,7 +914,7 @@
 
         return `
           <div class="subject-card ${selectedSubjectId === subject.id ? 'highlighted' : ''}" onclick="toggleSubjectHighlight('${subject.id}')">
-            <div class="subject-header" style="background-color: ${subject.headerBg};">
+            <div class="subject-header" style="background-color: ${subject.headerBg}; border-left: 5px solid ${subject.color};">
               <span>${subject.name}</span>
             </div>
             <table class="subject-table">
@@ -1054,6 +1061,7 @@
             const cat = getCategory(ev.category);
             const pill = document.createElement("div");
             pill.className = `event-pill cat-${ev.category}`;
+            pill.style.borderLeft = `4px solid ${subject.color || subject.headerBg}`;
             
             if (!isSubjectActive) {
               pill.classList.add("dimmed");
@@ -1169,9 +1177,12 @@
       document.getElementById("event-modal").classList.remove("active");
     }
 
-    // Close modal on escape key
+    // Close modal on escape key or backdrop click
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeModal();
+    });
+    document.getElementById("event-modal").addEventListener("click", (e) => {
+      if (e.target.id === "event-modal") closeModal();
     });
   </script>
 </body>
