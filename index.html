@@ -587,9 +587,92 @@
       color: #64748b;
     }
 
-    .modal-value {
+    /* Form & Admin Modal Styles */
+    .modal-lg {
+      max-width: 800px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      font-size: 12px;
       font-weight: 700;
-      color: #0f172a;
+      color: #334155;
+    }
+    .form-control {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .btn-danger {
+      background: #dc2626;
+      color: #ffffff;
+    }
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .tab-btn.active {
+      color: #0b1f48;
+      border-bottom-color: #0b1f48;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .admin-table th, .admin-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    .admin-table th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #334155;
     }
 
     /* ==========================================================================
@@ -670,6 +753,14 @@
         <button class="btn btn-secondary" onclick="resetFilters()">
           Mostrar Todo
         </button>
+        <button class="btn btn-secondary" onclick="openAdminModal()" title="Administrar materias, eventos y categorías">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          Gestionar Datos
+        </button>
+
         <button class="btn btn-secondary" onclick="exportCalendarJSON()" title="Descargar datos actuales en JSON">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -742,10 +833,277 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title" id="modal-title">Detalle del Evento</div>
-        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <button class="modal-close" onclick="closeModal('event-modal')">&times;</button>
       </div>
       <div class="modal-body" id="modal-body">
         <!-- Populated via JS -->
+      </div>
+      <div class="modal-footer" id="modal-event-actions">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="event-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="event-form-title">Agregar Evento</div>
+        <button class="modal-close" onclick="closeModal('event-form-modal')">&times;</button>
+      </div>
+      <form id="event-form" onsubmit="handleEventFormSubmit(event)">
+        <input type="hidden" id="event-form-id">
+        <div class="form-group">
+          <label>Materia</label>
+          <select id="event-form-subject" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Título del Evento</label>
+          <input type="text" id="event-form-name" class="form-control" placeholder="Ej: Primer Parcial" required>
+        </div>
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="event-form-category" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Texto de Fecha (Formato visible)</label>
+          <input type="text" id="event-form-datestr" class="form-control" placeholder="Ej: Viernes 11/09 ó 21/09 al 26/09">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha Inicio (AAAA-MM-DD)</label>
+            <input type="date" id="event-form-startdate" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Fecha Fin (AAAA-MM-DD)</label>
+            <input type="date" id="event-form-enddate" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="event-form-delete-btn" class="btn btn-danger" style="display:none;" onclick="deleteEventFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('event-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Evento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Subject Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="subject-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="subject-form-title">Agregar Materia</div>
+        <button class="modal-close" onclick="closeModal('subject-form-modal')">&times;</button>
+      </div>
+      <form id="subject-form" onsubmit="handleSubjectFormSubmit(event)">
+        <input type="hidden" id="subject-form-id">
+        <div class="form-group">
+          <label>Nombre de la Materia</label>
+          <input type="text" id="subject-form-name" class="form-control" placeholder="Ej: INTELIGENCIA ARTIFICIAL" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Color del Borde Acentuado</label>
+            <input type="color" id="subject-form-color" class="form-control" value="#2563eb" style="height: 38px;">
+          </div>
+          <div class="form-group">
+            <label>Color de Fondo Encabezado</label>
+            <input type="color" id="subject-form-headerbg" class="form-control" value="#1e3a8a" style="height: 38px;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="subject-form-delete-btn" class="btn btn-danger" style="display:none;" onclick="deleteSubjectFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('subject-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Materia</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Category Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="category-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="category-form-title">Agregar Categoría</div>
+        <button class="modal-close" onclick="closeModal('category-form-modal')">&times;</button>
+      </div>
+      <form id="category-form" onsubmit="handleCategoryFormSubmit(event)">
+        <input type="hidden" id="category-form-id">
+        <div class="form-group">
+          <label>Nombre / Etiqueta de la Categoría</label>
+          <input type="text" id="category-form-label" class="form-control" placeholder="Ej: TALLERES" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Color de Texto / Borde</label>
+            <input type="color" id="category-form-color" class="form-control" value="#1d4ed8" style="height: 38px;">
+          </div>
+          <div class="form-group">
+            <label>Color de Fondo (Pastel)</label>
+            <input type="color" id="category-form-bg" class="form-control" value="#dbeafe" style="height: 38px;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="category-form-delete-btn" class="btn btn-danger" style="display:none;" onclick="deleteCategoryFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('category-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Categoría</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Month Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="month-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="month-form-title">Agregar Mes</div>
+        <button class="modal-close" onclick="closeModal('month-form-modal')">&times;</button>
+      </div>
+      <form id="month-form" onsubmit="handleMonthFormSubmit(event)">
+        <input type="hidden" id="month-form-index">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Año</label>
+            <input type="number" id="month-form-year" class="form-control" value="2026" min="2020" max="2035" required>
+          </div>
+          <div class="form-group">
+            <label>Mes</label>
+            <select id="month-form-monthidx" class="form-control" required>
+              <option value="0">Enero (01)</option>
+              <option value="1">Febrero (02)</option>
+              <option value="2">Marzo (03)</option>
+              <option value="3">Abril (04)</option>
+              <option value="4">Mayo (05)</option>
+              <option value="5">Junio (06)</option>
+              <option value="6">Julio (07)</option>
+              <option value="7">Agosto (08)</option>
+              <option value="8">Septiembre (09)</option>
+              <option value="9">Octubre (10)</option>
+              <option value="10">Noviembre (11)</option>
+              <option value="11">Diciembre (12)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nombre Personalizado (Opcional)</label>
+          <input type="text" id="month-form-name" class="form-control" placeholder="Ej: AGOSTO 2026">
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="month-form-delete-btn" class="btn btn-danger" style="display:none;" onclick="deleteMonthFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('month-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Mes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Central Admin Data Management Modal -->
+  <div class="modal-overlay" id="admin-modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">Gestión General de Datos</div>
+        <button class="modal-close" onclick="closeModal('admin-modal')">&times;</button>
+      </div>
+      <div class="admin-tabs">
+        <button class="tab-btn active" id="tab-btn-events" onclick="switchAdminTab('events')">Eventos</button>
+        <button class="tab-btn" id="tab-btn-subjects" onclick="switchAdminTab('subjects')">Materias</button>
+        <button class="tab-btn" id="tab-btn-categories" onclick="switchAdminTab('categories')">Categorías</button>
+        <button class="tab-btn" id="tab-btn-months" onclick="switchAdminTab('months')">Meses</button>
+      </div>
+
+      <!-- Tab Content: Events -->
+      <div id="admin-tab-events">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Lista de Eventos Registrados</span>
+          <button class="btn btn-sm" onclick="openEventForm()">+ Nuevo Evento</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Materia</th>
+                <th>Evento</th>
+                <th>Categoría</th>
+                <th>Fechas</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-events-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content: Subjects -->
+      <div id="admin-tab-subjects" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Lista de Materias</span>
+          <button class="btn btn-sm" onclick="openSubjectForm()">+ Nueva Materia</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Color Borde</th>
+                <th>Color Encabezado</th>
+                <th>Eventos</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-subjects-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content: Categories -->
+      <div id="admin-tab-categories" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Lista de Categorías</span>
+          <button class="btn btn-sm" onclick="openCategoryForm()">+ Nueva Categoría</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Identificador</th>
+                <th>Etiqueta</th>
+                <th>Color</th>
+                <th>Fondo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-categories-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content: Months -->
+      <div id="admin-tab-months" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Meses Mostrados en el Calendario</span>
+          <button class="btn btn-sm" onclick="openMonthForm()">+ Agregar Mes</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Mes</th>
+                <th>Nombre Mostrado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-months-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('admin-modal')">Cerrar</button>
       </div>
     </div>
   </div>
@@ -970,12 +1328,19 @@
     // 1. Render Category Legend
     function renderLegend() {
       const container = document.getElementById("legend-container");
-      container.innerHTML = academicCalendarData.categories.map(cat => `
-        <div class="legend-item" data-category="${cat.id}" onclick="filterCategory('${cat.id}')">
+      const categoryHtml = academicCalendarData.categories.map(cat => `
+        <div class="legend-item ${selectedCategory === cat.id ? 'active' : ''}" data-category="${cat.id}" onclick="filterCategory('${cat.id}')">
           <span class="legend-dot" style="background-color: ${cat.color};"></span>
           <span>${cat.label}</span>
+          <span style="margin-left: 4px; opacity: 0.7;" onclick="event.stopPropagation(); openCategoryForm('${cat.id}')" title="Editar Categoría">✏️</span>
         </div>
       `).join('');
+
+      container.innerHTML = categoryHtml + `
+        <div class="legend-item" style="background: rgba(255,255,255,0.25);" onclick="openCategoryForm()" title="Agregar nueva categoría">
+          <span>+ Categoría</span>
+        </div>
+      `;
     }
 
     // Helper for accent-insensitive search matching
@@ -1003,6 +1368,10 @@
           <div class="subject-card ${selectedSubjectId === subject.id ? 'highlighted' : ''}" onclick="toggleSubjectHighlight('${subject.id}')">
             <div class="subject-header" style="background-color: ${subject.headerBg}; border-left: 5px solid ${subject.color};">
               <span>${subject.name}</span>
+              <div style="display: flex; gap: 6px; align-items: center;" onclick="event.stopPropagation()">
+                <button class="btn btn-sm" style="padding: 2px 6px; background: rgba(255,255,255,0.25);" onclick="openEventForm(null, '${subject.id}')" title="Agregar evento a esta materia">+ Evento</button>
+                <span style="cursor: pointer; opacity: 0.8;" onclick="openSubjectForm('${subject.id}')" title="Editar Materia">✏️</span>
+              </div>
             </div>
             <table class="subject-table">
               <tbody>
@@ -1148,7 +1517,9 @@
             const cat = getCategory(ev.category);
             const pill = document.createElement("div");
             pill.className = `event-pill cat-${ev.category}`;
-            pill.style.borderLeft = `4px solid ${subject.color || subject.headerBg}`;
+            if (cat.bg) pill.style.backgroundColor = cat.bg;
+            if (cat.color) pill.style.color = cat.color;
+            pill.style.borderLeft = `4px solid ${subject.color || subject.headerBg || cat.color || '#000'}`;
             
             if (!isSubjectActive) {
               pill.classList.add("dimmed");
@@ -1228,6 +1599,23 @@
       });
     }
 
+    /* ==========================================================================
+       CRUD OPERATIONAL FUNCTIONS & MODAL HANDLERS
+       ========================================================================== */
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add("active");
+    }
+
+    function closeModal(modalId) {
+      if (!modalId) {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+        return;
+      }
+      const el = document.getElementById(modalId);
+      if (el) el.classList.remove("active");
+    }
+
+    // Event Detail Modal with Edit / Delete actions
     function openEventModal(eventId) {
       const data = getSubjectByEvent(eventId);
       if (!data) return;
@@ -1257,19 +1645,528 @@
         ` : ''}
       `;
 
-      document.getElementById("event-modal").classList.add("active");
+      document.getElementById("modal-event-actions").innerHTML = `
+        <button class="btn btn-danger btn-sm" onclick="deleteEvent('${event.id}')">Eliminar Evento</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('event-modal'); openEventForm('${event.id}')">Editar Evento</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('event-modal')">Cerrar</button>
+      `;
+
+      openModal("event-modal");
     }
 
-    function closeModal() {
-      document.getElementById("event-modal").classList.remove("active");
+    // --- EVENT CRUD ---
+    function openEventForm(eventId = null, defaultSubjectId = null) {
+      const subjectSelect = document.getElementById("event-form-subject");
+      const categorySelect = document.getElementById("event-form-category");
+      const deleteBtn = document.getElementById("event-form-delete-btn");
+
+      // Populate subject select
+      subjectSelect.innerHTML = academicCalendarData.subjects.map(s => `
+        <option value="${s.id}">${s.name}</option>
+      `).join('');
+
+      // Populate category select
+      categorySelect.innerHTML = academicCalendarData.categories.map(c => `
+        <option value="${c.id}">${c.label}</option>
+      `).join('');
+
+      if (eventId) {
+        const data = getSubjectByEvent(eventId);
+        if (!data) return;
+        const { subject, event } = data;
+        document.getElementById("event-form-title").innerText = "Editar Evento";
+        document.getElementById("event-form-id").value = event.id;
+        subjectSelect.value = subject.id;
+        document.getElementById("event-form-name").value = event.title;
+        categorySelect.value = event.category;
+        document.getElementById("event-form-datestr").value = event.dateStr || "";
+        document.getElementById("event-form-startdate").value = event.startDate || "";
+        document.getElementById("event-form-enddate").value = event.endDate || "";
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("event-form-title").innerText = "Agregar Evento";
+        document.getElementById("event-form-id").value = "";
+        if (defaultSubjectId) subjectSelect.value = defaultSubjectId;
+        document.getElementById("event-form-name").value = "";
+        document.getElementById("event-form-datestr").value = "";
+        document.getElementById("event-form-startdate").value = "";
+        document.getElementById("event-form-enddate").value = "";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+
+      openModal("event-form-modal");
+    }
+
+    function handleEventFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("event-form-id").value;
+      const subjectId = document.getElementById("event-form-subject").value;
+      const title = document.getElementById("event-form-name").value.trim();
+      const category = document.getElementById("event-form-category").value;
+      let dateStr = document.getElementById("event-form-datestr").value.trim();
+      let startDate = document.getElementById("event-form-startdate").value;
+      let endDate = document.getElementById("event-form-enddate").value;
+
+      if (startDate && !endDate) {
+        endDate = startDate;
+      } else if (startDate && endDate && endDate < startDate) {
+        endDate = startDate;
+      }
+
+      if (!dateStr && startDate) {
+        if (startDate === endDate) {
+          const parts = startDate.split('-');
+          dateStr = `${parts[2]}/${parts[1]}`;
+        } else {
+          const sParts = startDate.split('-');
+          const eParts = endDate.split('-');
+          dateStr = `${sParts[2]}/${sParts[1]} al ${eParts[2]}/${eParts[1]}`;
+        }
+      }
+
+      const targetSubject = academicCalendarData.subjects.find(s => s.id === subjectId);
+      if (!targetSubject) return;
+
+      if (id) {
+        // Edit existing event
+        const oldData = getSubjectByEvent(id);
+        if (oldData) {
+          // If subject changed, remove from old subject first
+          if (oldData.subject.id !== subjectId) {
+            oldData.subject.events = oldData.subject.events.filter(ev => ev.id !== id);
+            targetSubject.events.push({ id, title, category, dateStr, startDate, endDate });
+          } else {
+            const ev = targetSubject.events.find(e => e.id === id);
+            if (ev) {
+              ev.title = title;
+              ev.category = category;
+              ev.dateStr = dateStr;
+              ev.startDate = startDate;
+              ev.endDate = endDate;
+            }
+          }
+        }
+      } else {
+        // Create new event
+        const newId = "ev-" + Date.now();
+        targetSubject.events.push({
+          id: newId,
+          title,
+          category,
+          dateStr: dateStr || (startDate === endDate ? startDate : `${startDate} al ${endDate}`),
+          startDate,
+          endDate
+        });
+      }
+
+      saveCalendarData();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminEventsTable();
+      }
+      closeModal("event-form-modal");
+    }
+
+    function deleteEvent(eventId) {
+      if (!confirm("¿Estás seguro de eliminar este evento?")) return;
+      const data = getSubjectByEvent(eventId);
+      if (data) {
+        data.subject.events = data.subject.events.filter(ev => ev.id !== eventId);
+        saveCalendarData();
+        renderSidebarSubjects();
+        renderCalendars();
+        if (document.getElementById("admin-modal").classList.contains("active")) {
+          renderAdminEventsTable();
+        }
+      }
+      closeModal("event-modal");
+    }
+
+    function deleteEventFromForm() {
+      const id = document.getElementById("event-form-id").value;
+      if (id) {
+        deleteEvent(id);
+        closeModal("event-form-modal");
+      }
+    }
+
+    // --- SUBJECT CRUD ---
+    function openSubjectForm(subjectId = null) {
+      const deleteBtn = document.getElementById("subject-form-delete-btn");
+      if (subjectId) {
+        const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
+        if (!subj) return;
+        document.getElementById("subject-form-title").innerText = "Editar Materia";
+        document.getElementById("subject-form-id").value = subj.id;
+        document.getElementById("subject-form-name").value = subj.name;
+        document.getElementById("subject-form-color").value = subj.color || "#2563eb";
+        document.getElementById("subject-form-headerbg").value = subj.headerBg || "#1e3a8a";
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("subject-form-title").innerText = "Agregar Materia";
+        document.getElementById("subject-form-id").value = "";
+        document.getElementById("subject-form-name").value = "";
+        document.getElementById("subject-form-color").value = "#2563eb";
+        document.getElementById("subject-form-headerbg").value = "#1e3a8a";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+      openModal("subject-form-modal");
+    }
+
+    function handleSubjectFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("subject-form-id").value;
+      const name = document.getElementById("subject-form-name").value.trim();
+      const color = document.getElementById("subject-form-color").value;
+      const headerBg = document.getElementById("subject-form-headerbg").value;
+
+      if (id) {
+        const subj = academicCalendarData.subjects.find(s => s.id === id);
+        if (subj) {
+          subj.name = name;
+          subj.color = color;
+          subj.headerBg = headerBg;
+        }
+      } else {
+        const newId = "subj-" + Date.now();
+        academicCalendarData.subjects.push({
+          id: newId,
+          name,
+          color,
+          headerBg,
+          events: []
+        });
+      }
+
+      saveCalendarData();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminSubjectsTable();
+      }
+      closeModal("subject-form-modal");
+    }
+
+    function deleteSubject(subjectId) {
+      const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
+      if (!subj) return;
+      if (!confirm(`¿Estás seguro de eliminar la materia "${subj.name}" y todos sus eventos (${subj.events.length})?`)) return;
+
+      academicCalendarData.subjects = academicCalendarData.subjects.filter(s => s.id !== subjectId);
+      if (selectedSubjectId === subjectId) selectedSubjectId = null;
+      saveCalendarData();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminSubjectsTable();
+      }
+      closeModal("subject-form-modal");
+    }
+
+    function deleteSubjectFromForm() {
+      const id = document.getElementById("subject-form-id").value;
+      if (id) {
+        deleteSubject(id);
+      }
+    }
+
+    // --- CATEGORY CRUD ---
+    function openCategoryForm(categoryId = null) {
+      const deleteBtn = document.getElementById("category-form-delete-btn");
+      if (categoryId) {
+        const cat = academicCalendarData.categories.find(c => c.id === categoryId);
+        if (!cat) return;
+        document.getElementById("category-form-title").innerText = "Editar Categoría";
+        document.getElementById("category-form-id").value = cat.id;
+        document.getElementById("category-form-label").value = cat.label;
+        document.getElementById("category-form-color").value = cat.color || "#1d4ed8";
+        document.getElementById("category-form-bg").value = cat.bg || "#dbeafe";
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("category-form-title").innerText = "Agregar Categoría";
+        document.getElementById("category-form-id").value = "";
+        document.getElementById("category-form-label").value = "";
+        document.getElementById("category-form-color").value = "#1d4ed8";
+        document.getElementById("category-form-bg").value = "#dbeafe";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+      openModal("category-form-modal");
+    }
+
+    function handleCategoryFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("category-form-id").value;
+      const label = document.getElementById("category-form-label").value.trim();
+      const color = document.getElementById("category-form-color").value;
+      const bg = document.getElementById("category-form-bg").value;
+      const border = color;
+
+      if (id) {
+        const cat = academicCalendarData.categories.find(c => c.id === id);
+        if (cat) {
+          cat.label = label;
+          cat.color = color;
+          cat.bg = bg;
+          cat.border = border;
+        }
+      } else {
+        const newId = label.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now();
+        academicCalendarData.categories.push({
+          id: newId,
+          label,
+          color,
+          bg,
+          border
+        });
+      }
+
+      saveCalendarData();
+      renderLegend();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminCategoriesTable();
+      }
+      closeModal("category-form-modal");
+    }
+
+    function deleteCategory(categoryId) {
+      const cat = academicCalendarData.categories.find(c => c.id === categoryId);
+      if (!cat) return;
+      
+      let count = 0;
+      academicCalendarData.subjects.forEach(s => {
+        s.events.forEach(e => {
+          if (e.category === categoryId) count++;
+        });
+      });
+
+      const confirmMsg = count > 0 
+        ? `La categoría "${cat.label}" está asignada a ${count} evento(s). ¿Estás seguro de eliminarla?`
+        : `¿Estás seguro de eliminar la categoría "${cat.label}"?`;
+
+      if (!confirm(confirmMsg)) return;
+
+      academicCalendarData.categories = academicCalendarData.categories.filter(c => c.id !== categoryId);
+      if (selectedCategory === categoryId) selectedCategory = null;
+
+      saveCalendarData();
+      renderLegend();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminCategoriesTable();
+      }
+      closeModal("category-form-modal");
+    }
+
+    function deleteCategoryFromForm() {
+      const id = document.getElementById("category-form-id").value;
+      if (id) {
+        deleteCategory(id);
+      }
+    }
+
+    // --- MONTH CRUD ---
+    const monthNamesEs = [
+      "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+      "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+    ];
+
+    function openMonthForm(monthIndexInArray = null) {
+      const deleteBtn = document.getElementById("month-form-delete-btn");
+      if (monthIndexInArray !== null && monthIndexInArray >= 0) {
+        const m = academicCalendarData.months[monthIndexInArray];
+        if (!m) return;
+        document.getElementById("month-form-title").innerText = "Editar Mes";
+        document.getElementById("month-form-index").value = monthIndexInArray;
+        document.getElementById("month-form-year").value = m.year;
+        document.getElementById("month-form-monthidx").value = m.monthIdx;
+        document.getElementById("month-form-name").value = m.name;
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("month-form-title").innerText = "Agregar Mes";
+        document.getElementById("month-form-index").value = "-1";
+        document.getElementById("month-form-year").value = academicCalendarData.year || 2026;
+        document.getElementById("month-form-monthidx").value = "7";
+        document.getElementById("month-form-name").value = "";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+      openModal("month-form-modal");
+    }
+
+    function handleMonthFormSubmit(e) {
+      e.preventDefault();
+      const idxStr = document.getElementById("month-form-index").value;
+      const idx = parseInt(idxStr, 10);
+      const year = parseInt(document.getElementById("month-form-year").value, 10);
+      const monthIdx = parseInt(document.getElementById("month-form-monthidx").value, 10);
+      let name = document.getElementById("month-form-name").value.trim();
+      if (!name) {
+        name = `${monthNamesEs[monthIdx]} ${year}`;
+      }
+
+      const monthObj = { year, monthIdx, name };
+
+      if (idx >= 0 && idx < academicCalendarData.months.length) {
+        academicCalendarData.months[idx] = monthObj;
+      } else {
+        const exists = academicCalendarData.months.some(m => m.year === year && m.monthIdx === monthIdx);
+        if (exists) {
+          alert("El mes seleccionado ya existe en el calendario.");
+          return;
+        }
+        academicCalendarData.months.push(monthObj);
+      }
+
+      academicCalendarData.months.sort((a, b) => (a.year * 12 + a.monthIdx) - (b.year * 12 + b.monthIdx));
+
+      saveCalendarData();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminMonthsTable();
+      }
+      closeModal("month-form-modal");
+    }
+
+    function deleteMonth(idx) {
+      if (academicCalendarData.months.length <= 1) {
+        alert("El calendario debe tener al menos un mes.");
+        return;
+      }
+      const m = academicCalendarData.months[idx];
+      if (!m) return;
+      if (!confirm(`¿Estás seguro de eliminar el mes "${m.name}" del calendario?`)) return;
+
+      academicCalendarData.months.splice(idx, 1);
+      saveCalendarData();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminMonthsTable();
+      }
+      closeModal("month-form-modal");
+    }
+
+    function deleteMonthFromForm() {
+      const idxStr = document.getElementById("month-form-index").value;
+      const idx = parseInt(idxStr, 10);
+      if (idx >= 0) {
+        deleteMonth(idx);
+      }
+    }
+
+    // --- CENTRAL ADMIN MODAL & TAB RENDERERS ---
+    function openAdminModal() {
+      switchAdminTab('events');
+      openModal("admin-modal");
+    }
+
+    function switchAdminTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('admin-tab-events').style.display = 'none';
+      document.getElementById('admin-tab-subjects').style.display = 'none';
+      document.getElementById('admin-tab-categories').style.display = 'none';
+      const monthsTab = document.getElementById('admin-tab-months');
+      if (monthsTab) monthsTab.style.display = 'none';
+
+      if (tabName === 'events') {
+        document.getElementById('tab-btn-events').classList.add('active');
+        document.getElementById('admin-tab-events').style.display = 'block';
+        renderAdminEventsTable();
+      } else if (tabName === 'subjects') {
+        document.getElementById('tab-btn-subjects').classList.add('active');
+        document.getElementById('admin-tab-subjects').style.display = 'block';
+        renderAdminSubjectsTable();
+      } else if (tabName === 'categories') {
+        document.getElementById('tab-btn-categories').classList.add('active');
+        document.getElementById('admin-tab-categories').style.display = 'block';
+        renderAdminCategoriesTable();
+      } else if (tabName === 'months') {
+        document.getElementById('tab-btn-months').classList.add('active');
+        if (monthsTab) monthsTab.style.display = 'block';
+        renderAdminMonthsTable();
+      }
+    }
+
+    function renderAdminEventsTable() {
+      const tbody = document.getElementById("admin-events-tbody");
+      let html = "";
+      academicCalendarData.subjects.forEach(subj => {
+        subj.events.forEach(ev => {
+          const cat = getCategory(ev.category);
+          html += `
+            <tr>
+              <td><strong>${subj.name}</strong></td>
+              <td>${ev.title}</td>
+              <td><span style="color: ${cat.color}; font-weight:700;">${cat.label}</span></td>
+              <td>${ev.dateStr}</td>
+              <td>
+                <button class="btn btn-sm" onclick="openEventForm('${ev.id}')">✏️ Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteEvent('${ev.id}')">🗑️ Eliminar</button>
+              </td>
+            </tr>
+          `;
+        });
+      });
+      tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center;">No hay eventos registrados.</td></tr>`;
+    }
+
+    function renderAdminSubjectsTable() {
+      const tbody = document.getElementById("admin-subjects-tbody");
+      tbody.innerHTML = academicCalendarData.subjects.map(s => `
+        <tr>
+          <td><strong>${s.name}</strong></td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${s.color}; border-radius:3px; vertical-align:middle;"></span> ${s.color}</td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${s.headerBg}; border-radius:3px; vertical-align:middle;"></span> ${s.headerBg}</td>
+          <td>${s.events.length} eventos</td>
+          <td>
+            <button class="btn btn-sm" onclick="openSubjectForm('${s.id}')">✏️ Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteSubject('${s.id}')">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      `).join('') || `<tr><td colspan="5" style="text-align:center;">No hay materias registradas.</td></tr>`;
+    }
+
+    function renderAdminCategoriesTable() {
+      const tbody = document.getElementById("admin-categories-tbody");
+      tbody.innerHTML = academicCalendarData.categories.map(c => `
+        <tr>
+          <td><code>${c.id}</code></td>
+          <td><strong>${c.label}</strong></td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${c.color}; border-radius:3px; vertical-align:middle;"></span> ${c.color}</td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${c.bg}; border-radius:3px; vertical-align:middle;"></span> ${c.bg}</td>
+          <td>
+            <button class="btn btn-sm" onclick="openCategoryForm('${c.id}')">✏️ Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCategory('${c.id}')">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      `).join('') || `<tr><td colspan="5" style="text-align:center;">No hay categorías registradas.</td></tr>`;
+    }
+
+    function renderAdminMonthsTable() {
+      const tbody = document.getElementById("admin-months-tbody");
+      tbody.innerHTML = academicCalendarData.months.map((m, idx) => `
+        <tr>
+          <td><strong>${m.year}</strong></td>
+          <td>${monthNamesEs[m.monthIdx]} (${String(m.monthIdx + 1).padStart(2, '0')})</td>
+          <td><strong>${m.name}</strong></td>
+          <td>
+            <button class="btn btn-sm" onclick="openMonthForm(${idx})">✏️ Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteMonth(${idx})">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      `).join('') || `<tr><td colspan="4" style="text-align:center;">No hay meses registrados.</td></tr>`;
     }
 
     // Close modal on escape key or backdrop click
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeModal();
     });
-    document.getElementById("event-modal").addEventListener("click", (e) => {
-      if (e.target.id === "event-modal") closeModal();
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeModal(overlay.id);
+      });
     });
   </script>
 </body>
