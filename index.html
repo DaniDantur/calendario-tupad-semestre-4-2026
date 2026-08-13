@@ -666,10 +666,36 @@
         <input type="text" id="search-input" placeholder="Buscar materia, parcial, entrega...">
       </div>
 
-      <div style="display: flex; gap: 8px;">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
         <button class="btn btn-secondary" onclick="resetFilters()">
           Mostrar Todo
         </button>
+        <button class="btn btn-secondary" onclick="exportCalendarJSON()" title="Descargar datos actuales en JSON">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Exportar JSON
+        </button>
+        <button class="btn btn-secondary" onclick="triggerImportJSON()" title="Cargar datos desde un archivo JSON">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          Importar JSON
+        </button>
+        <input type="file" id="json-file-input" accept=".json" style="display:none" onchange="importCalendarJSON(event)">
+
+        <button class="btn btn-secondary" onclick="resetToDefaultJSON()" title="Restablecer datos originales">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          Restablecer
+        </button>
+
         <button class="btn" onclick="window.print()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -726,10 +752,9 @@
 
   <!-- Hardcoded JSON Data Script & Render Engine -->
   <script>
-    /* ==========================================================================
-       HARDCODED JSON DATA STRUCTURE
-       ========================================================================== */
-    const academicCalendarData = {
+    const STORAGE_KEY = "academicCalendarData_v1";
+
+    const defaultAcademicCalendarData = {
       year: 2026,
       categories: [
         { id: "parciales", label: "PARCIALES / EXÁMENES", color: "#1d4ed8", bg: "#dbeafe", border: "#93c5fd" },
@@ -846,6 +871,87 @@
       ]
     };
 
+    let academicCalendarData = null;
+
+    /* ==========================================================================
+       LOCALSTORAGE & IMPORT/EXPORT LOGIC
+       ========================================================================== */
+    function loadCalendarData() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          academicCalendarData = JSON.parse(stored);
+        } else {
+          academicCalendarData = JSON.parse(JSON.stringify(defaultAcademicCalendarData));
+          saveCalendarData();
+        }
+      } catch (err) {
+        console.error("Error cargando datos de localStorage", err);
+        academicCalendarData = JSON.parse(JSON.stringify(defaultAcademicCalendarData));
+      }
+    }
+
+    function saveCalendarData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(academicCalendarData, null, 2));
+      } catch (err) {
+        console.error("Error guardando en localStorage", err);
+      }
+    }
+
+    function exportCalendarJSON() {
+      const jsonStr = JSON.stringify(academicCalendarData, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `calendario_academico_${academicCalendarData.year || 2026}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function triggerImportJSON() {
+      document.getElementById("json-file-input").click();
+    }
+
+    function importCalendarJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed.subjects || !parsed.categories || !parsed.months) {
+            alert("El archivo JSON no posee la estructura válida del calendario.");
+            return;
+          }
+          academicCalendarData = parsed;
+          saveCalendarData();
+          renderLegend();
+          renderSidebarSubjects();
+          renderCalendars();
+          alert("¡Calendario importado y guardado exitosamente en LocalStorage!");
+        } catch (err) {
+          alert("Error al procesar el archivo JSON: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = "";
+    }
+
+    function resetToDefaultJSON() {
+      if (confirm("¿Estás seguro de restablecer los datos del calendario a los valores por defecto? Esto actualizará tu almacenamiento local.")) {
+        academicCalendarData = JSON.parse(JSON.stringify(defaultAcademicCalendarData));
+        saveCalendarData();
+        renderLegend();
+        renderSidebarSubjects();
+        renderCalendars();
+      }
+    }
+
     /* ==========================================================================
        STATE MANAGEMENT & RENDER ENGINE
        ========================================================================== */
@@ -854,6 +960,7 @@
     let searchQuery = "";
 
     document.addEventListener("DOMContentLoaded", () => {
+      loadCalendarData();
       renderLegend();
       renderSidebarSubjects();
       renderCalendars();
