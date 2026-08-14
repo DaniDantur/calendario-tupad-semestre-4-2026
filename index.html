@@ -937,8 +937,8 @@
           <select id="event-form-category" class="form-control" required></select>
         </div>
         <div class="form-group">
-          <label>Texto de Fecha (Formato visible)</label>
-          <input type="text" id="event-form-datestr" class="form-control" placeholder="Ej: Viernes 11/09 ó 21/09 al 26/09">
+          <label>Detalle / Notas del Evento (Opcional)</label>
+          <input type="text" id="event-form-details" class="form-control" placeholder="Ej: Aula 204, entrega por Campus, temas de 1 a 4...">
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -1207,10 +1207,10 @@
           color: "#7e22ce",
           headerBg: "#581c87",
           events: [
-            { id: "ds-1p", title: "Primer Parcial", category: "parciales", dateStr: "Viernes 11/09", startDate: "2026-09-11", endDate: "2026-09-11" },
-            { id: "ds-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", dateStr: "Viernes 18/09", startDate: "2026-09-18", endDate: "2026-09-18" },
-            { id: "ds-2p", title: "Segundo Parcial", category: "parciales", dateStr: "Viernes 16/10", startDate: "2026-10-16", endDate: "2026-10-16" },
-            { id: "ds-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", dateStr: "Viernes 23/10", startDate: "2026-10-23", endDate: "2026-10-23" }
+            { id: "ds-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-11", endDate: "2026-09-11" },
+            { id: "ds-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-18", endDate: "2026-09-18" },
+            { id: "ds-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-10-16", endDate: "2026-10-16" },
+            { id: "ds-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-10-23", endDate: "2026-10-23" }
           ]
         },
         {
@@ -1220,11 +1220,11 @@
           color: "#d97706",
           headerBg: "#78350f",
           events: [
-            { id: "leg-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", dateStr: "08/10 al 10/10", startDate: "2026-10-08", endDate: "2026-10-10" },
-            { id: "leg-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", dateStr: "10/11 al 12/11", startDate: "2026-11-10", endDate: "2026-11-12" },
-            { id: "leg-recup", title: "Recuperatorio", category: "recuperatorios", dateStr: "16/11 al 18/11", startDate: "2026-11-16", endDate: "2026-11-18" },
-            { id: "leg-int", title: "Integrador", category: "integradores", dateStr: "Hasta 05/11", startDate: "2026-11-05", endDate: "2026-11-05" },
-            { id: "leg-recup-int", title: "Recuperatorio Integrador", category: "integradores", dateStr: "Hasta 15/11", startDate: "2026-11-15", endDate: "2026-11-15" }
+            { id: "leg-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-10-08", endDate: "2026-10-10" },
+            { id: "leg-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-11-10", endDate: "2026-11-12" },
+            { id: "leg-recup", title: "Recuperatorio", category: "recuperatorios", startDate: "2026-11-16", endDate: "2026-11-18" },
+            { id: "leg-int", title: "Integrador", category: "integradores", startDate: "2026-11-05", endDate: "2026-11-05" },
+            { id: "leg-recup-int", title: "Recuperatorio Integrador", category: "integradores", startDate: "2026-11-15", endDate: "2026-11-15" }
           ]
         },
         {
@@ -1234,15 +1234,15 @@
           color: "#2563eb",
           headerBg: "#1e3a8a",
           events: [
-            { id: "ms2-1p", title: "Primer Parcial", category: "parciales", dateStr: "Viernes 25/09", startDate: "2026-09-25", endDate: "2026-09-25" },
-            { id: "ms2-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", dateStr: "Viernes 02/10", startDate: "2026-10-02", endDate: "2026-10-02" },
-            { id: "ms2-2p", title: "Segundo Parcial", category: "parciales", dateStr: "Miércoles 28/10", startDate: "2026-10-28", endDate: "2026-10-28" },
-            { id: "ms2-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", dateStr: "Miércoles 04/11", startDate: "2026-11-04", endDate: "2026-11-04" },
-            { id: "ms2-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", dateStr: "15/10 al 17/10", startDate: "2026-10-15", endDate: "2026-10-17" },
-            { id: "ms2-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", dateStr: "09/11 al 11/11", startDate: "2026-11-09", endDate: "2026-11-11" },
-            { id: "ms2-recup", title: "Recuperatorio", category: "recuperatorios", dateStr: "19/11 al 21/11", startDate: "2026-11-19", endDate: "2026-11-21" },
-            { id: "ms2-int", title: "Integrador", category: "integradores", dateStr: "30/08 al 08/11", startDate: "2026-08-30", endDate: "2026-11-08" },
-            { id: "ms2-recup-int", title: "Recuperatorio Integrador", category: "integradores", dateStr: "Hasta el 18/11", startDate: "2026-11-18", endDate: "2026-11-18" }
+            { id: "ms2-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-25", endDate: "2026-09-25" },
+            { id: "ms2-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-10-02", endDate: "2026-10-02" },
+            { id: "ms2-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-10-28", endDate: "2026-10-28" },
+            { id: "ms2-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-04", endDate: "2026-11-04" },
+            { id: "ms2-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-10-15", endDate: "2026-10-17" },
+            { id: "ms2-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-11-09", endDate: "2026-11-11" },
+            { id: "ms2-recup", title: "Recuperatorio", category: "recuperatorios", startDate: "2026-11-19", endDate: "2026-11-21" },
+            { id: "ms2-int", title: "Integrador", category: "integradores", startDate: "2026-08-30", endDate: "2026-11-08" },
+            { id: "ms2-recup-int", title: "Recuperatorio Integrador", category: "integradores", startDate: "2026-11-18", endDate: "2026-11-18" }
           ]
         },
         {
@@ -1252,11 +1252,11 @@
           color: "#9333ea",
           headerBg: "#581c87",
           events: [
-            { id: "p4-1p", title: "Primer Parcial", category: "parciales", dateStr: "21/09 al 26/09", startDate: "2026-09-21", endDate: "2026-09-26" },
-            { id: "p4-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", dateStr: "28/09 al 03/10", startDate: "2026-09-28", endDate: "2026-10-03" },
-            { id: "p4-2p", title: "Segundo Parcial", category: "parciales", dateStr: "02/11 al 07/11", startDate: "2026-11-02", endDate: "2026-11-07" },
-            { id: "p4-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", dateStr: "09/11 al 14/11", startDate: "2026-11-09", endDate: "2026-11-14" },
-            { id: "p4-int", title: "Integrador", category: "integradores", dateStr: "Con la primer mesa de examen", startDate: "", endDate: "" }
+            { id: "p4-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-21", endDate: "2026-09-26" },
+            { id: "p4-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-28", endDate: "2026-10-03" },
+            { id: "p4-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-11-02", endDate: "2026-11-07" },
+            { id: "p4-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-09", endDate: "2026-11-14" },
+            { id: "p4-int", title: "Integrador", category: "integradores", details: "Con la primer mesa de examen", startDate: "", endDate: "" }
           ]
         },
         {
@@ -1266,14 +1266,14 @@
           color: "#db2777",
           headerBg: "#831843",
           events: [
-            { id: "ad-1p", title: "Primer Parcial", category: "parciales", dateStr: "Martes 22/09", startDate: "2026-09-22", endDate: "2026-09-22" },
-            { id: "ad-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", dateStr: "Martes 29/09", startDate: "2026-09-29", endDate: "2026-09-29" },
-            { id: "ad-2p", title: "Segundo Parcial", category: "parciales", dateStr: "Martes 10/11", startDate: "2026-11-10", endDate: "2026-11-10" },
-            { id: "ad-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", dateStr: "Martes 17/11", startDate: "2026-11-17", endDate: "2026-11-17" },
-            { id: "ad-col1", title: "1º Llamado Coloquios", category: "coloquios", dateStr: "23/09 al 25/09", startDate: "2026-09-23", endDate: "2026-09-25" },
-            { id: "ad-col1r", title: "Recup. Coloquios 1º", category: "recuperatorios", dateStr: "30/09 al 02/10", startDate: "2026-09-30", endDate: "2026-10-02" },
-            { id: "ad-col2", title: "2º Llamado Coloquios", category: "coloquios", dateStr: "11/11 al 13/11", startDate: "2026-11-11", endDate: "2026-11-13" },
-            { id: "ad-col2r", title: "Recup. Coloquios 2º", category: "recuperatorios", dateStr: "18/11 al 20/11", startDate: "2026-11-18", endDate: "2026-11-20" }
+            { id: "ad-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-22", endDate: "2026-09-22" },
+            { id: "ad-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-29", endDate: "2026-09-29" },
+            { id: "ad-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-11-10", endDate: "2026-11-10" },
+            { id: "ad-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-17", endDate: "2026-11-17" },
+            { id: "ad-col1", title: "1º Llamado Coloquios", category: "coloquios", startDate: "2026-09-23", endDate: "2026-09-25" },
+            { id: "ad-col1r", title: "Recup. Coloquios 1º", category: "recuperatorios", startDate: "2026-09-30", endDate: "2026-10-02" },
+            { id: "ad-col2", title: "2º Llamado Coloquios", category: "coloquios", startDate: "2026-11-11", endDate: "2026-11-13" },
+            { id: "ad-col2r", title: "Recup. Coloquios 2º", category: "recuperatorios", startDate: "2026-11-18", endDate: "2026-11-20" }
           ]
         },
         {
@@ -1283,9 +1283,9 @@
           color: "#16a34a",
           headerBg: "#14532d",
           events: [
-            { id: "ent-1", title: "1 - Propuesta de Proyecto y Repositorio", category: "entregas", dateStr: "30 de Agosto", startDate: "2026-08-30", endDate: "2026-08-30" },
-            { id: "ent-2", title: "2 - Diseño y Módulos", category: "entregas", dateStr: "27 de Septiembre", startDate: "2026-09-27", endDate: "2026-09-27" },
-            { id: "ent-3", title: "3 - Entrega Final - Informe y Video", category: "entregas", dateStr: "14 de Noviembre", startDate: "2026-11-14", endDate: "2026-11-14" }
+            { id: "ent-1", title: "1 - Propuesta de Proyecto y Repositorio", category: "entregas", startDate: "2026-08-30", endDate: "2026-08-30" },
+            { id: "ent-2", title: "2 - Diseño y Módulos", category: "entregas", startDate: "2026-09-27", endDate: "2026-09-27" },
+            { id: "ent-3", title: "3 - Entrega Final - Informe y Video", category: "entregas", startDate: "2026-11-14", endDate: "2026-11-14" }
           ]
         },
         {
@@ -1295,14 +1295,14 @@
           color: "#ea580c",
           headerBg: "#831843",
           events: [
-            { id: "ad-int-1", title: "1ª Entrega", category: "entregas", dateStr: "17/08 al 21/08", startDate: "2026-08-17", endDate: "2026-08-21" },
-            { id: "ad-int-2", title: "2ª Entrega", category: "entregas", dateStr: "31/08 al 04/09", startDate: "2026-08-31", endDate: "2026-09-04" },
-            { id: "ad-int-3", title: "3ª Entrega", category: "entregas", dateStr: "07/09 al 11/09", startDate: "2026-09-07", endDate: "2026-09-11" },
-            { id: "ad-int-4", title: "4ª Entrega", category: "entregas", dateStr: "05/10 al 09/10", startDate: "2026-10-05", endDate: "2026-10-09" },
-            { id: "ad-int-5", title: "5ª Entrega", category: "entregas", dateStr: "19/10 al 23/10", startDate: "2026-10-19", endDate: "2026-10-23" },
-            { id: "ad-int-6", title: "6ª Entrega", category: "entregas", dateStr: "26/10 al 30/10", startDate: "2026-10-26", endDate: "2026-10-30" },
-            { id: "ad-int-fn", title: "Entrega Final", category: "entregas", dateStr: "09/11 al 13/11", startDate: "2026-11-09", endDate: "2026-11-13" },
-            { id: "ad-int-col", title: "Coloquio Integrador", category: "coloquios", dateStr: "16/11 al 20/11", startDate: "2026-11-16", endDate: "2026-11-20" }
+            { id: "ad-int-1", title: "1ª Entrega", category: "entregas", startDate: "2026-08-17", endDate: "2026-08-21" },
+            { id: "ad-int-2", title: "2ª Entrega", category: "entregas", startDate: "2026-08-31", endDate: "2026-09-04" },
+            { id: "ad-int-3", title: "3ª Entrega", category: "entregas", startDate: "2026-09-07", endDate: "2026-09-11" },
+            { id: "ad-int-4", title: "4ª Entrega", category: "entregas", startDate: "2026-10-05", endDate: "2026-10-09" },
+            { id: "ad-int-5", title: "5ª Entrega", category: "entregas", startDate: "2026-10-19", endDate: "2026-10-23" },
+            { id: "ad-int-6", title: "6ª Entrega", category: "entregas", startDate: "2026-10-26", endDate: "2026-10-30" },
+            { id: "ad-int-fn", title: "Entrega Final", category: "entregas", startDate: "2026-11-09", endDate: "2026-11-13" },
+            { id: "ad-int-col", title: "Coloquio Integrador", category: "coloquios", startDate: "2026-11-16", endDate: "2026-11-20" }
           ]
         }
       ],
@@ -1329,6 +1329,13 @@
               if (!s.code) {
                 const defSubj = defaultAcademicCalendarData.subjects.find(d => d.id === s.id);
                 s.code = defSubj ? defSubj.code : s.name.split(' ')[0];
+              }
+              if (s.events) {
+                s.events.forEach(e => {
+                  if (e.startDate && e.dateStr) {
+                    delete e.dateStr;
+                  }
+                });
               }
             });
           }
@@ -1449,7 +1456,11 @@
       container.innerHTML = academicCalendarData.subjects.map(subject => {
         const matchingEvents = subject.events.filter(ev => {
           if (selectedCategory && ev.category !== selectedCategory) return false;
-          if (normalizedQuery && !normalizeStr(ev.title).includes(normalizedQuery) && !normalizeStr(subject.name).includes(normalizedQuery) && !normalizeStr(subject.code || "").includes(normalizedQuery)) return false;
+          if (normalizedQuery && 
+              !normalizeStr(ev.title).includes(normalizedQuery) && 
+              !normalizeStr(subject.name).includes(normalizedQuery) && 
+              !normalizeStr(subject.code || "").includes(normalizedQuery) &&
+              !normalizeStr(ev.details || "").includes(normalizedQuery)) return false;
           return true;
         });
 
@@ -1472,13 +1483,14 @@
               <tbody>
                 ${subject.events.map(ev => {
                   const cat = getCategory(ev.category);
+                  const dStr = getEventDateStr(ev);
                   return `
-                    <tr onclick="event.stopPropagation(); openEventModal('${ev.id}')">
+                    <tr onclick="event.stopPropagation(); openEventModal('${ev.id}')" title="${ev.details ? `${ev.title} - ${ev.details}` : ev.title}">
                       <td class="event-name">
                         <span class="event-dot" style="background-color: ${cat.color}"></span>
                         <span>${ev.title}</span>
                       </td>
-                      <td class="event-date">${ev.dateStr}</td>
+                      <td class="event-date">${dStr}</td>
                     </tr>
                   `;
                 }).join('')}
@@ -1487,6 +1499,20 @@
           </div>
         `;
       }).join('');
+    }
+
+    // Helper to format event date string dynamically
+    function getEventDateStr(ev) {
+      if (ev.startDate && ev.endDate) {
+        const sParts = ev.startDate.split('-');
+        const eParts = ev.endDate.split('-');
+        if (ev.startDate === ev.endDate) {
+          return `${sParts[2]}/${sParts[1]}`;
+        } else {
+          return `${sParts[2]}/${sParts[1]} al ${eParts[2]}/${eParts[1]}`;
+        }
+      }
+      return ev.dateStr || "";
     }
 
     // Helper to get category definition
@@ -1653,7 +1679,8 @@
                 if (normalizedQuery && 
                     !normalizeStr(ev.title).includes(normalizedQuery) && 
                     !normalizeStr(subject.name).includes(normalizedQuery) && 
-                    !normalizeStr(subject.code || "").includes(normalizedQuery)) return;
+                    !normalizeStr(subject.code || "").includes(normalizedQuery) &&
+                    !normalizeStr(ev.details || "").includes(normalizedQuery)) return;
 
                 // Find start column (0..6)
                 let startCol = 0;
@@ -1726,15 +1753,16 @@
             }
 
             const subjectCode = subject.code || subject.name.split(' ')[0];
+            const dStr = getEventDateStr(ev);
             let displayLabel = "";
-            if (span > 1 || ev.startDate !== ev.endDate) {
-              displayLabel = `${subjectCode}: ${ev.title} (${ev.dateStr})`;
+            if (span > 1 || (ev.startDate && ev.startDate !== ev.endDate)) {
+              displayLabel = `${subjectCode}: ${ev.title}${dStr ? ` (${dStr})` : ''}`;
             } else {
               displayLabel = `${subjectCode}: ${ev.title}`;
             }
 
             pill.innerText = displayLabel;
-            pill.title = `${subject.name} (${subjectCode}) - ${ev.title} (${ev.dateStr})`;
+            pill.title = `${subject.name} (${subjectCode}) - ${ev.title}${dStr ? ` (${dStr})` : ''}${ev.details ? ` - ${ev.details}` : ''}`;
             pill.onclick = (e) => {
               e.stopPropagation();
               openEventModal(ev.id);
@@ -1828,25 +1856,28 @@
 
       const { subject, event } = data;
       const cat = getCategory(event.category);
+      const dateDisplay = getEventDateStr(event);
 
       document.getElementById("modal-title").innerText = event.title;
       document.getElementById("modal-body").innerHTML = `
         <div class="modal-field">
           <span class="modal-label">Materia:</span>
-          <span class="modal-value">${subject.name}</span>
+          <span class="modal-value">${subject.name} (${subject.code || ''})</span>
         </div>
         <div class="modal-field">
           <span class="modal-label">Tipo de Evento:</span>
           <span class="modal-value" style="color: ${cat.color}">${cat.label}</span>
         </div>
-        <div class="modal-field">
-          <span class="modal-label">Fecha / Periodo:</span>
-          <span class="modal-value">${event.dateStr}</span>
-        </div>
+        ${event.details ? `
+          <div class="modal-field">
+            <span class="modal-label">Detalle:</span>
+            <span class="modal-value">${event.details}</span>
+          </div>
+        ` : ''}
         ${event.startDate ? `
           <div class="modal-field">
-            <span class="modal-label">Rango en Calendario:</span>
-            <span class="modal-value">${event.startDate} al ${event.endDate}</span>
+            <span class="modal-label">Fecha en Calendario:</span>
+            <span class="modal-value">${event.startDate === event.endDate ? event.startDate : `${event.startDate} al ${event.endDate}`}</span>
           </div>
         ` : ''}
       `;
@@ -1885,7 +1916,7 @@
         subjectSelect.value = subject.id;
         document.getElementById("event-form-name").value = event.title;
         categorySelect.value = event.category;
-        document.getElementById("event-form-datestr").value = event.dateStr || "";
+        document.getElementById("event-form-details").value = event.details || "";
         document.getElementById("event-form-startdate").value = event.startDate || "";
         document.getElementById("event-form-enddate").value = event.endDate || "";
         if (deleteBtn) deleteBtn.style.display = "inline-block";
@@ -1894,7 +1925,7 @@
         document.getElementById("event-form-id").value = "";
         if (defaultSubjectId) subjectSelect.value = defaultSubjectId;
         document.getElementById("event-form-name").value = "";
-        document.getElementById("event-form-datestr").value = "";
+        document.getElementById("event-form-details").value = "";
         document.getElementById("event-form-startdate").value = "";
         document.getElementById("event-form-enddate").value = "";
         if (deleteBtn) deleteBtn.style.display = "none";
@@ -1909,7 +1940,7 @@
       const subjectId = document.getElementById("event-form-subject").value;
       const title = document.getElementById("event-form-name").value.trim();
       const category = document.getElementById("event-form-category").value;
-      let dateStr = document.getElementById("event-form-datestr").value.trim();
+      const details = document.getElementById("event-form-details").value.trim();
       let startDate = document.getElementById("event-form-startdate").value;
       let endDate = document.getElementById("event-form-enddate").value;
 
@@ -1917,17 +1948,6 @@
         endDate = startDate;
       } else if (startDate && endDate && endDate < startDate) {
         endDate = startDate;
-      }
-
-      if (!dateStr && startDate) {
-        if (startDate === endDate) {
-          const parts = startDate.split('-');
-          dateStr = `${parts[2]}/${parts[1]}`;
-        } else {
-          const sParts = startDate.split('-');
-          const eParts = endDate.split('-');
-          dateStr = `${sParts[2]}/${sParts[1]} al ${eParts[2]}/${eParts[1]}`;
-        }
       }
 
       const targetSubject = academicCalendarData.subjects.find(s => s.id === subjectId);
@@ -1940,13 +1960,13 @@
           // If subject changed, remove from old subject first
           if (oldData.subject.id !== subjectId) {
             oldData.subject.events = oldData.subject.events.filter(ev => ev.id !== id);
-            targetSubject.events.push({ id, title, category, dateStr, startDate, endDate });
+            targetSubject.events.push({ id, title, category, details, startDate, endDate });
           } else {
             const ev = targetSubject.events.find(e => e.id === id);
             if (ev) {
               ev.title = title;
               ev.category = category;
-              ev.dateStr = dateStr;
+              ev.details = details;
               ev.startDate = startDate;
               ev.endDate = endDate;
             }
@@ -1959,7 +1979,7 @@
           id: newId,
           title,
           category,
-          dateStr: dateStr || (startDate === endDate ? startDate : `${startDate} al ${endDate}`),
+          details,
           startDate,
           endDate
         });
@@ -2306,12 +2326,16 @@
       academicCalendarData.subjects.forEach(subj => {
         subj.events.forEach(ev => {
           const cat = getCategory(ev.category);
+          const dateDisplay = getEventDateStr(ev);
           html += `
             <tr>
-              <td><strong>${subj.name}</strong></td>
-              <td>${ev.title}</td>
+              <td><strong>${subj.name}</strong> (${subj.code || ''})</td>
+              <td>
+                <div><strong>${ev.title}</strong></div>
+                ${ev.details ? `<div style="font-size: 11px; color: #64748b; margin-top:2px;">${ev.details}</div>` : ''}
+              </td>
               <td><span style="color: ${cat.color}; font-weight:700;">${cat.label}</span></td>
-              <td>${ev.dateStr}</td>
+              <td>${dateDisplay}</td>
               <td>
                 <button class="btn btn-sm" onclick="openEventForm('${ev.id}')">✏️ Editar</button>
                 <button class="btn btn-sm btn-danger" onclick="deleteEvent('${ev.id}')">🗑️ Eliminar</button>
