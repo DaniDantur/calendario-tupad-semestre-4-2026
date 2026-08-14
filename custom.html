@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario Académico 2026 - Fechas Importantes</title>
+  <meta name="description"
+    content="Calendario Académico 2026 con fechas importantes, parciales, recuperatorios, coloquios, integradores y entregas.">
+
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & UTILITIES
+       ========================================================================== */
+    :root {
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+
+      --bg-main: #f1f5f9;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+
+      /* Primary Brand Colors */
+      --header-bg: #0b1f48;
+      --header-accent: #1e3a8a;
+
+      /* Category Colors */
+      --cat-parcial-color: #1d4ed8;
+      --cat-parcial-bg: #dbeafe;
+      --cat-parcial-border: #93c5fd;
+
+      --cat-recup-color: #b91c1c;
+      --cat-recup-bg: #fee2e2;
+      --cat-recup-border: #fca5a5;
+
+      --cat-coloquio-color: #6b21a8;
+      --cat-coloquio-bg: #f3e8ff;
+      --cat-coloquio-border: #d8b4fe;
+
+      --cat-integrador-color: #15803d;
+      --cat-integrador-bg: #dcfce7;
+      --cat-integrador-border: #86efac;
+
+      --cat-entrega-color: #c2410c;
+      --cat-entrega-bg: #ffedd5;
+      --cat-entrega-border: #fdba74;
+
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.4;
+      padding: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION BAR
+       ========================================================================== */
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #0b1f48 0%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: 16px 24px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      background: #ffffff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b1f48;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fbbf24;
+      letter-spacing: 1px;
+    }
+
+    /* Legend Bar */
+    .legend-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      user-select: none;
+    }
+
+    .legend-item:hover,
+    .legend-item.active {
+      background: #ffffff;
+      color: #0b1f48;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f8fafc;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 6px;
+      flex-grow: 1;
+      max-width: 400px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 14px;
+      font-family: var(--font-body);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0b1f48;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #1e3a8a;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT GRID LAYOUT
+       ========================================================================== */
+    .layout-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ==========================================================================
+       LEFT SIDEBAR - SUBJECT CARDS
+       ========================================================================== */
+    .sidebar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .subject-card {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+    }
+
+    .subject-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .subject-card.highlighted {
+      outline: 2px solid #2563eb;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .subject-header {
+      color: #ffffff;
+      padding: 6px 12px;
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .subject-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+    }
+
+    .subject-table tr {
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .subject-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .subject-table td {
+      padding: 5px 10px;
+      vertical-align: middle;
+    }
+
+    .subject-table td.event-name {
+      font-weight: 600;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .subject-table td.event-date {
+      text-align: right;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .event-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       CENTER AREA - MONTHLY CALENDARS
+       ========================================================================== */
+    .calendar-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .month-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .month-header {
+      background: #0b1f48;
+      color: #ffffff;
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      padding: 8px;
+      letter-spacing: 1px;
+    }
+
+    .month-days-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      background: #1e3a8a;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      padding: 4px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .month-grid {
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid #e2e8f0;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .week-row {
+      position: relative;
+      border-bottom: 1px solid #e2e8f0;
+      min-height: 55px;
+    }
+
+    .week-bg-grid {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .day-cell {
+      border-right: 1px solid #e2e8f0;
+      background: #ffffff;
+      transition: background 0.15s ease;
+      height: 100%;
+    }
+
+    .day-cell:last-child {
+      border-right: none;
+    }
+
+    .day-cell.other-month {
+      background-color: #f8fafc;
+    }
+
+    .day-cell.today {
+      background-color: #eff6ff;
+      box-shadow: inset 0 0 0 2px #2563eb;
+    }
+
+    .week-content-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: min-content;
+      padding-top: 22px;
+      padding-bottom: 4px;
+      gap: 2px 0;
+    }
+
+    .day-number-wrapper {
+      position: absolute;
+      top: 3px;
+      padding: 0 4px;
+      box-sizing: border-box;
+      pointer-events: auto;
+    }
+
+    .day-number {
+      font-size: 11px;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1.2;
+    }
+
+    .other-month-num .day-number {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .today-num .day-number {
+      color: #1d4ed8;
+      font-weight: 800;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .today-badge {
+      font-size: 9px;
+      font-weight: 800;
+      background-color: #2563eb;
+      color: #ffffff;
+      padding: 1px 5px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Event Badges & Spans */
+    .event-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 4px;
+      line-height: 1.3;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      border-left: 4px solid transparent;
+      transition: transform 0.15s ease, filter 0.15s ease;
+      margin: 1px 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event-pill:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.95);
+      z-index: 10;
+    }
+
+    .event-pill:hover {
+      transform: scale(1.02);
+      filter: brightness(0.95);
+      z-index: 10;
+    }
+
+    .event-pill.dimmed {
+      opacity: 0.25;
+    }
+
+    .event-pill.highlighted-pill {
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+      z-index: 20;
+    }
+
+    /* Category Specific Styles */
+    .cat-parciales {
+      background-color: var(--cat-parcial-bg);
+      color: var(--cat-parcial-color);
+      border-left-color: var(--cat-parcial-color);
+    }
+
+    .cat-recuperatorios {
+      background-color: var(--cat-recup-bg);
+      color: var(--cat-recup-color);
+      border-left-color: var(--cat-recup-color);
+    }
+
+    .cat-coloquios {
+      background-color: var(--cat-coloquio-bg);
+      color: var(--cat-coloquio-color);
+      border-left-color: var(--cat-coloquio-color);
+    }
+
+    .cat-integradores {
+      background-color: var(--cat-integrador-bg);
+      color: var(--cat-integrador-color);
+      border-left-color: var(--cat-integrador-color);
+    }
+
+    .cat-entregas {
+      background-color: var(--cat-entrega-bg);
+      color: var(--cat-entrega-color);
+      border-left-color: var(--cat-entrega-color);
+    }
+
+    /* ==========================================================================
+       FOOTER & IMPORTANT NOTICE
+       ========================================================================== */
+    .app-footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .footer-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: #f8fafc;
+      border: 1px dashed #0b1f48;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: #475569;
+      font-size: 13px;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-notice-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b1f48;
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .footer-notice-content strong {
+      color: #0b1f48;
+      font-family: var(--font-heading);
+      letter-spacing: 0.5px;
+    }
+
+    /* Modal Popup */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 480px;
+      width: 90%;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #64748b;
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .modal-field {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 6px;
+    }
+
+    .modal-label {
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* Form & Admin Modal Styles */
+    .modal-lg {
+      max-width: 800px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .form-control {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .tab-btn.active {
+      color: #0b1f48;
+      border-bottom-color: #0b1f48;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+
+    .admin-table th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    /* ==========================================================================
+       PRINT MEDIA STYLES
+       ========================================================================== */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+
+      .container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .controls-bar,
+      .modal-overlay,
+      .crud-btn,
+      .crud-element,
+      .today-badge {
+        display: none !important;
+      }
+
+      .day-cell.today {
+        background-color: #ffffff !important;
+        box-shadow: none !important;
+      }
+
+      .today-num .day-number {
+        color: #1e293b !important;
+      }
+
+      .layout-grid {
+        grid-template-columns: 280px 1fr;
+        gap: 12px;
+      }
+
+      .event-pill {
+        box-shadow: none;
+      }
+
+      .app-footer {
+        margin-top: 12px;
+        padding-top: 8px;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <path d="M8 14h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M16 14h.01"></path>
+            <path d="M8 18h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M16 18h.01"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">CALENDARIO ACADÉMICO 2026</div>
+          <div class="brand-badge">★ FECHAS IMPORTANTES ★</div>
+        </div>
+      </div>
+
+      <!-- Categories Legend -->
+      <div class="legend-container" id="legend-container">
+        <!-- Rendered dynamically from JSON -->
+      </div>
+    </header>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-input" placeholder="Buscar materia, parcial, entrega...">
+      </div>
+
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="btn btn-secondary" onclick="resetFilters()">
+          Mostrar Todo
+        </button>
+        <button class="btn btn-secondary" onclick="openAdminModal()" title="Administrar materias, eventos y categorías">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          Gestionar Datos
+        </button>
+
+        <button class="btn btn-secondary" onclick="exportCalendarJSON()" title="Descargar datos actuales en JSON">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Exportar JSON
+        </button>
+        <button class="btn btn-secondary" onclick="triggerImportJSON()" title="Cargar datos desde un archivo JSON">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          Importar JSON
+        </button>
+        <input type="file" id="json-file-input" accept=".json" style="display:none"
+          onchange="importCalendarJSON(event)">
+
+        <button class="btn btn-secondary" onclick="resetToDefaultJSON()" title="Restablecer datos originales">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          Restablecer
+        </button>
+
+        <button class="btn" onclick="window.print()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          Imprimir / PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Grid Layout -->
+    <div class="layout-grid">
+      <!-- Left Sidebar: Subjects Summary -->
+      <aside class="sidebar-left" id="sidebar-left">
+        <!-- Rendered dynamically from JSON -->
+      </aside>
+
+      <!-- Center: 4-Month Calendar Grid -->
+      <main class="calendar-container" id="calendar-container">
+        <!-- Rendered dynamically from JSON -->
+      </main>
+    </div>
+
+    <!-- Footer Notice -->
+    <footer class="app-footer">
+      <div class="footer-notice">
+        <div class="footer-notice-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <div class="footer-notice-content">
+          <strong>IMPORTANTE:</strong> Las fechas y horarios pueden estar sujetos a cambios. Consultar siempre los
+          canales oficiales de la institución.
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Event Detail Modal -->
+  <div class="modal-overlay" id="event-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Detalle del Evento</div>
+        <button class="modal-close" onclick="closeModal('event-modal')">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Populated via JS -->
+      </div>
+      <div class="modal-footer" id="modal-event-actions">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="event-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="event-form-title">Agregar Evento</div>
+        <button class="modal-close" onclick="closeModal('event-form-modal')">&times;</button>
+      </div>
+      <form id="event-form" onsubmit="handleEventFormSubmit(event)">
+        <input type="hidden" id="event-form-id">
+        <div class="form-group">
+          <label>Materia</label>
+          <select id="event-form-subject" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Título del Evento</label>
+          <input type="text" id="event-form-name" class="form-control" placeholder="Ej: Primer Parcial" required>
+        </div>
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="event-form-category" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Detalle / Notas del Evento (Opcional)</label>
+          <input type="text" id="event-form-details" class="form-control"
+            placeholder="Ej: Aula 204, entrega por Campus, temas de 1 a 4...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha Inicio (AAAA-MM-DD)</label>
+            <input type="date" id="event-form-startdate" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Fecha Fin (AAAA-MM-DD)</label>
+            <input type="date" id="event-form-enddate" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="event-form-delete-btn" class="btn btn-danger" style="display:none;"
+            onclick="deleteEventFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('event-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Evento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Subject Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="subject-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="subject-form-title">Agregar Materia</div>
+        <button class="modal-close" onclick="closeModal('subject-form-modal')">&times;</button>
+      </div>
+      <form id="subject-form" onsubmit="handleSubjectFormSubmit(event)">
+        <input type="hidden" id="subject-form-id">
+        <div class="form-row">
+          <div class="form-group" style="flex: 2;">
+            <label>Nombre de la Materia</label>
+            <input type="text" id="subject-form-name" class="form-control" placeholder="Ej: METODOLOGÍA DE SISTEMAS II"
+              required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Siglas / Código</label>
+            <input type="text" id="subject-form-code" class="form-control" placeholder="Ej: MdS2" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Color del Borde Acentuado</label>
+            <input type="color" id="subject-form-color" class="form-control" value="#2563eb" style="height: 38px;">
+          </div>
+          <div class="form-group">
+            <label>Color de Fondo Encabezado</label>
+            <input type="color" id="subject-form-headerbg" class="form-control" value="#1e3a8a" style="height: 38px;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="subject-form-delete-btn" class="btn btn-danger" style="display:none;"
+            onclick="deleteSubjectFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('subject-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Materia</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Category Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="category-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="category-form-title">Agregar Categoría</div>
+        <button class="modal-close" onclick="closeModal('category-form-modal')">&times;</button>
+      </div>
+      <form id="category-form" onsubmit="handleCategoryFormSubmit(event)">
+        <input type="hidden" id="category-form-id">
+        <div class="form-group">
+          <label>Nombre / Etiqueta de la Categoría</label>
+          <input type="text" id="category-form-label" class="form-control" placeholder="Ej: TALLERES" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Color de Texto / Borde</label>
+            <input type="color" id="category-form-color" class="form-control" value="#1d4ed8" style="height: 38px;">
+          </div>
+          <div class="form-group">
+            <label>Color de Fondo (Pastel)</label>
+            <input type="color" id="category-form-bg" class="form-control" value="#dbeafe" style="height: 38px;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="category-form-delete-btn" class="btn btn-danger" style="display:none;"
+            onclick="deleteCategoryFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('category-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Categoría</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Month Form Modal (Create / Edit) -->
+  <div class="modal-overlay" id="month-form-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="month-form-title">Agregar Mes</div>
+        <button class="modal-close" onclick="closeModal('month-form-modal')">&times;</button>
+      </div>
+      <form id="month-form" onsubmit="handleMonthFormSubmit(event)">
+        <input type="hidden" id="month-form-index">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Año</label>
+            <input type="number" id="month-form-year" class="form-control" value="2026" min="2020" max="2035" required>
+          </div>
+          <div class="form-group">
+            <label>Mes</label>
+            <select id="month-form-monthidx" class="form-control" required>
+              <option value="0">Enero (01)</option>
+              <option value="1">Febrero (02)</option>
+              <option value="2">Marzo (03)</option>
+              <option value="3">Abril (04)</option>
+              <option value="4">Mayo (05)</option>
+              <option value="5">Junio (06)</option>
+              <option value="6">Julio (07)</option>
+              <option value="7">Agosto (08)</option>
+              <option value="8">Septiembre (09)</option>
+              <option value="9">Octubre (10)</option>
+              <option value="10">Noviembre (11)</option>
+              <option value="11">Diciembre (12)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nombre Personalizado (Opcional)</label>
+          <input type="text" id="month-form-name" class="form-control" placeholder="Ej: AGOSTO 2026">
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="month-form-delete-btn" class="btn btn-danger" style="display:none;"
+            onclick="deleteMonthFromForm()">Eliminar</button>
+          <div style="flex-grow:1;"></div>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('month-form-modal')">Cancelar</button>
+          <button type="submit" class="btn">Guardar Mes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Central Admin Data Management Modal -->
+  <div class="modal-overlay" id="admin-modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <div class="modal-title">Gestión General de Datos</div>
+        <button class="modal-close" onclick="closeModal('admin-modal')">&times;</button>
+      </div>
+      <div class="admin-tabs">
+        <button class="tab-btn active" id="tab-btn-events" onclick="switchAdminTab('events')">Eventos</button>
+        <button class="tab-btn" id="tab-btn-subjects" onclick="switchAdminTab('subjects')">Materias</button>
+        <button class="tab-btn" id="tab-btn-categories" onclick="switchAdminTab('categories')">Categorías</button>
+        <button class="tab-btn" id="tab-btn-months" onclick="switchAdminTab('months')">Meses</button>
+      </div>
+
+      <!-- Tab Content: Events -->
+      <div id="admin-tab-events">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Lista de Eventos Registrados</span>
+          <button class="btn btn-sm" onclick="openEventForm()">+ Nuevo Evento</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Materia</th>
+                <th>Evento</th>
+                <th>Categoría</th>
+                <th>Fechas</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-events-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content: Subjects -->
+      <div id="admin-tab-subjects" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Lista de Materias</span>
+          <button class="btn btn-sm" onclick="openSubjectForm()">+ Nueva Materia</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Siglas</th>
+                <th>Nombre</th>
+                <th>Color Borde</th>
+                <th>Color Encabezado</th>
+                <th>Eventos</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-subjects-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content: Categories -->
+      <div id="admin-tab-categories" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Lista de Categorías</span>
+          <button class="btn btn-sm" onclick="openCategoryForm()">+ Nueva Categoría</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Identificador</th>
+                <th>Etiqueta</th>
+                <th>Color</th>
+                <th>Fondo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-categories-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content: Months -->
+      <div id="admin-tab-months" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 600; color: #64748b;">Meses Mostrados en el Calendario</span>
+          <button class="btn btn-sm" onclick="openMonthForm()">+ Agregar Mes</button>
+        </div>
+        <div style="max-height: 400px; overflow-y: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Mes</th>
+                <th>Nombre Mostrado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-months-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('admin-modal')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hardcoded JSON Data Script & Render Engine -->
+  <script>
+    const STORAGE_KEY = "academicCalendarData_v1";
+
+    const defaultAcademicCalendarData = {
+      year: 2026,
+      categories: [
+        { id: "parciales", label: "PARCIALES / EXÁMENES", color: "#1d4ed8", bg: "#dbeafe", border: "#93c5fd" },
+        { id: "recuperatorios", label: "RECUPERATORIOS", color: "#b91c1c", bg: "#fee2e2", border: "#fca5a5" },
+        { id: "coloquios", label: "COLOQUIOS", color: "#6b21a8", bg: "#f3e8ff", border: "#d8b4fe" },
+        { id: "integradores", label: "INTEGRADORES", color: "#15803d", bg: "#dcfce7", border: "#86efac" },
+        { id: "entregas", label: "ENTREGAS", color: "#c2410c", bg: "#ffedd5", border: "#fdba74" }
+      ],
+      subjects: [
+        {
+          id: "ds",
+          name: "DESARROLLO DE SOFTWARE",
+          code: "DS",
+          color: "#7e22ce",
+          headerBg: "#581c87",
+          events: [
+            { id: "ds-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-11", endDate: "2026-09-11" },
+            { id: "ds-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-18", endDate: "2026-09-18" },
+            { id: "ds-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-10-16", endDate: "2026-10-16" },
+            { id: "ds-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-10-23", endDate: "2026-10-23" }
+          ]
+        },
+        {
+          id: "leg",
+          name: "LEGISLACIÓN",
+          code: "LEG",
+          color: "#d97706",
+          headerBg: "#78350f",
+          events: [
+            { id: "leg-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-10-08", endDate: "2026-10-10" },
+            { id: "leg-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-11-10", endDate: "2026-11-12" },
+            { id: "leg-recup", title: "Recuperatorio", category: "recuperatorios", startDate: "2026-11-16", endDate: "2026-11-18" },
+            { id: "leg-int", title: "Integrador", category: "integradores", startDate: "2026-11-05", endDate: "2026-11-05" },
+            { id: "leg-recup-int", title: "Recuperatorio Integrador", category: "integradores", startDate: "2026-11-15", endDate: "2026-11-15" }
+          ]
+        },
+        {
+          id: "ms2",
+          name: "METODOLOGÍA DE SISTEMAS II",
+          code: "MdS2",
+          color: "#2563eb",
+          headerBg: "#1e3a8a",
+          events: [
+            { id: "ms2-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-25", endDate: "2026-09-25" },
+            { id: "ms2-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-10-02", endDate: "2026-10-02" },
+            { id: "ms2-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-10-28", endDate: "2026-10-28" },
+            { id: "ms2-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-04", endDate: "2026-11-04" },
+            { id: "ms2-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-10-15", endDate: "2026-10-17" },
+            { id: "ms2-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-11-09", endDate: "2026-11-11" },
+            { id: "ms2-recup", title: "Recuperatorio", category: "recuperatorios", startDate: "2026-11-19", endDate: "2026-11-21" },
+            { id: "ms2-int", title: "Integrador", category: "integradores", startDate: "2026-08-30", endDate: "2026-11-08" },
+            { id: "ms2-recup-int", title: "Recuperatorio Integrador", category: "integradores", startDate: "2026-11-18", endDate: "2026-11-18" }
+          ]
+        },
+        {
+          id: "p4",
+          name: "PROGRAMACIÓN IV",
+          code: "PROG4",
+          color: "#9333ea",
+          headerBg: "#581c87",
+          events: [
+            { id: "p4-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-21", endDate: "2026-09-26" },
+            { id: "p4-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-28", endDate: "2026-10-03" },
+            { id: "p4-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-11-02", endDate: "2026-11-07" },
+            { id: "p4-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-09", endDate: "2026-11-14" },
+            { id: "p4-int", title: "Integrador", category: "integradores", details: "Con la primer mesa de examen", startDate: "", endDate: "" }
+          ]
+        },
+        {
+          id: "ad",
+          name: "ANÁLISIS DE DATOS",
+          code: "AD",
+          color: "#db2777",
+          headerBg: "#831843",
+          events: [
+            { id: "ad-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-22", endDate: "2026-09-22" },
+            { id: "ad-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-29", endDate: "2026-09-29" },
+            { id: "ad-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-11-10", endDate: "2026-11-10" },
+            { id: "ad-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-17", endDate: "2026-11-17" },
+            { id: "ad-col1", title: "1º Llamado Coloquios", category: "coloquios", startDate: "2026-09-23", endDate: "2026-09-25" },
+            { id: "ad-col1r", title: "Recup. Coloquios 1º", category: "recuperatorios", startDate: "2026-09-30", endDate: "2026-10-02" },
+            { id: "ad-col2", title: "2º Llamado Coloquios", category: "coloquios", startDate: "2026-11-11", endDate: "2026-11-13" },
+            { id: "ad-col2r", title: "Recup. Coloquios 2º", category: "recuperatorios", startDate: "2026-11-18", endDate: "2026-11-20" }
+          ]
+        },
+        {
+          id: "entregas_imp",
+          name: "FECHAS IMPORTANTES (ENTREGAS)",
+          code: "ENTREGAS",
+          color: "#16a34a",
+          headerBg: "#14532d",
+          events: [
+            { id: "ent-1", title: "1 - Propuesta de Proyecto y Repositorio", category: "entregas", startDate: "2026-08-30", endDate: "2026-08-30" },
+            { id: "ent-2", title: "2 - Diseño y Módulos", category: "entregas", startDate: "2026-09-27", endDate: "2026-09-27" },
+            { id: "ent-3", title: "3 - Entrega Final - Informe y Video", category: "entregas", startDate: "2026-11-14", endDate: "2026-11-14" }
+          ]
+        },
+        {
+          id: "ad_int",
+          name: "ANÁLISIS DE DATOS (INTEGRADOR)",
+          code: "AD-INT",
+          color: "#ea580c",
+          headerBg: "#831843",
+          events: [
+            { id: "ad-int-1", title: "1ª Entrega", category: "entregas", startDate: "2026-08-17", endDate: "2026-08-21" },
+            { id: "ad-int-2", title: "2ª Entrega", category: "entregas", startDate: "2026-08-31", endDate: "2026-09-04" },
+            { id: "ad-int-3", title: "3ª Entrega", category: "entregas", startDate: "2026-09-07", endDate: "2026-09-11" },
+            { id: "ad-int-4", title: "4ª Entrega", category: "entregas", startDate: "2026-10-05", endDate: "2026-10-09" },
+            { id: "ad-int-5", title: "5ª Entrega", category: "entregas", startDate: "2026-10-19", endDate: "2026-10-23" },
+            { id: "ad-int-6", title: "6ª Entrega", category: "entregas", startDate: "2026-10-26", endDate: "2026-10-30" },
+            { id: "ad-int-fn", title: "Entrega Final", category: "entregas", startDate: "2026-11-09", endDate: "2026-11-13" },
+            { id: "ad-int-col", title: "Coloquio Integrador", category: "coloquios", startDate: "2026-11-16", endDate: "2026-11-20" }
+          ]
+        }
+      ],
+      months: [
+        { year: 2026, monthIdx: 7, name: "AGOSTO 2026" },
+        { year: 2026, monthIdx: 8, name: "SEPTIEMBRE 2026" },
+        { year: 2026, monthIdx: 9, name: "OCTUBRE 2026" },
+        { year: 2026, monthIdx: 10, name: "NOVIEMBRE 2026" }
+      ]
+    };
+
+    let academicCalendarData = null;
+
+    /* ==========================================================================
+       LOCALSTORAGE & IMPORT/EXPORT LOGIC
+       ========================================================================== */
+    function loadCalendarData() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          academicCalendarData = JSON.parse(stored);
+          if (academicCalendarData && academicCalendarData.subjects) {
+            academicCalendarData.subjects.forEach(s => {
+              if (!s.code) {
+                const defSubj = defaultAcademicCalendarData.subjects.find(d => d.id === s.id);
+                s.code = defSubj ? defSubj.code : s.name.split(' ')[0];
+              }
+              if (s.events) {
+                s.events.forEach(e => {
+                  if (e.startDate && e.dateStr) {
+                    delete e.dateStr;
+                  }
+                });
+              }
+            });
+          }
+        } else {
+          academicCalendarData = JSON.parse(JSON.stringify(defaultAcademicCalendarData));
+          saveCalendarData();
+        }
+      } catch (err) {
+        console.error("Error cargando datos de localStorage", err);
+        academicCalendarData = JSON.parse(JSON.stringify(defaultAcademicCalendarData));
+      }
+    }
+
+    function saveCalendarData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(academicCalendarData, null, 2));
+      } catch (err) {
+        console.error("Error guardando en localStorage", err);
+      }
+    }
+
+    function exportCalendarJSON() {
+      const jsonStr = JSON.stringify(academicCalendarData, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `calendario_academico_${academicCalendarData.year || 2026}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function triggerImportJSON() {
+      document.getElementById("json-file-input").click();
+    }
+
+    function importCalendarJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (!parsed.subjects || !parsed.categories || !parsed.months) {
+            alert("El archivo JSON no posee la estructura válida del calendario.");
+            return;
+          }
+          academicCalendarData = parsed;
+          saveCalendarData();
+          renderLegend();
+          renderSidebarSubjects();
+          renderCalendars();
+          alert("¡Calendario importado y guardado exitosamente en LocalStorage!");
+        } catch (err) {
+          alert("Error al procesar el archivo JSON: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = "";
+    }
+
+    function resetToDefaultJSON() {
+      if (confirm("¿Estás seguro de restablecer los datos del calendario a los valores por defecto? Esto actualizará tu almacenamiento local.")) {
+        academicCalendarData = JSON.parse(JSON.stringify(defaultAcademicCalendarData));
+        saveCalendarData();
+        renderLegend();
+        renderSidebarSubjects();
+        renderCalendars();
+      }
+    }
+
+    /* ==========================================================================
+       STATE MANAGEMENT & RENDER ENGINE
+       ========================================================================== */
+    let selectedCategory = null;
+    let selectedSubjectId = null;
+    let searchQuery = "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadCalendarData();
+      renderLegend();
+      renderSidebarSubjects();
+      renderCalendars();
+      setupSearch();
+    });
+
+    // 1. Render Category Legend
+    function renderLegend() {
+      const container = document.getElementById("legend-container");
+      const categoryHtml = academicCalendarData.categories.map(cat => `
+        <div class="legend-item ${selectedCategory === cat.id ? 'active' : ''}" data-category="${cat.id}" onclick="filterCategory('${cat.id}')">
+          <span class="legend-dot" style="background-color: ${cat.color};"></span>
+          <span>${cat.label}</span>
+          <span class="crud-btn" style="margin-left: 4px; opacity: 0.7;" onclick="event.stopPropagation(); openCategoryForm('${cat.id}')" title="Editar Categoría">✏️</span>
+        </div>
+      `).join('');
+
+      container.innerHTML = categoryHtml + `
+        <div class="legend-item crud-btn" style="background: rgba(255,255,255,0.25);" onclick="openCategoryForm()" title="Agregar nueva categoría">
+          <span>+ Categoría</span>
+        </div>
+      `;
+    }
+
+    // Helper for accent-insensitive search matching
+    function normalizeStr(str) {
+      return (str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    }
+
+    // 2. Render Left Sidebar Subject Cards
+    function renderSidebarSubjects() {
+      const container = document.getElementById("sidebar-left");
+      const normalizedQuery = normalizeStr(searchQuery);
+
+      container.innerHTML = academicCalendarData.subjects.map(subject => {
+        const matchingEvents = subject.events.filter(ev => {
+          if (selectedCategory && ev.category !== selectedCategory) return false;
+          if (normalizedQuery &&
+            !normalizeStr(ev.title).includes(normalizedQuery) &&
+            !normalizeStr(subject.name).includes(normalizedQuery) &&
+            !normalizeStr(subject.code || "").includes(normalizedQuery) &&
+            !normalizeStr(ev.details || "").includes(normalizedQuery)) return false;
+          return true;
+        });
+
+        if (selectedCategory && matchingEvents.length === 0 && !normalizeStr(subject.name).includes(normalizedQuery) && !normalizeStr(subject.code || "").includes(normalizedQuery)) {
+          return ''; // Hide subject card if filtering active and no match
+        }
+
+        const codeBadge = subject.code ? `<span style="background: rgba(255,255,255,0.25); padding: 1px 5px; border-radius: 4px; font-size: 11px; margin-right: 4px; font-weight: 800;">${subject.code}</span>` : '';
+
+        return `
+          <div class="subject-card ${selectedSubjectId === subject.id ? 'highlighted' : ''}" onclick="toggleSubjectHighlight('${subject.id}')">
+            <div class="subject-header" style="background-color: ${subject.headerBg}; border-left: 5px solid ${subject.color};">
+              <span>${codeBadge}${subject.name}</span>
+              <div class="crud-btn" style="display: flex; gap: 6px; align-items: center;" onclick="event.stopPropagation()">
+                <button class="btn btn-sm" style="padding: 2px 6px; background: rgba(255,255,255,0.25);" onclick="openEventForm(null, '${subject.id}')" title="Agregar evento a esta materia">+ Evento</button>
+                <span style="cursor: pointer; opacity: 0.8;" onclick="openSubjectForm('${subject.id}')" title="Editar Materia">✏️</span>
+              </div>
+            </div>
+            <table class="subject-table">
+              <tbody>
+                ${subject.events.map(ev => {
+          const cat = getCategory(ev.category);
+          const dStr = getEventDateStr(ev);
+          return `
+                    <tr onclick="event.stopPropagation(); openEventModal('${ev.id}')" title="${ev.details ? `${ev.title} - ${ev.details}` : ev.title}">
+                      <td class="event-name">
+                        <span class="event-dot" style="background-color: ${cat.color}"></span>
+                        <span>${ev.title}</span>
+                      </td>
+                      <td class="event-date">${dStr}</td>
+                    </tr>
+                  `;
+        }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Helper to format event date string dynamically
+    function getEventDateStr(ev) {
+      if (ev.startDate && ev.endDate) {
+        const sParts = ev.startDate.split('-');
+        const eParts = ev.endDate.split('-');
+        if (ev.startDate === ev.endDate) {
+          return `${sParts[2]}/${sParts[1]}`;
+        } else {
+          return `${sParts[2]}/${sParts[1]} al ${eParts[2]}/${eParts[1]}`;
+        }
+      }
+      return ev.dateStr || "";
+    }
+
+    // Helper to get category definition
+    function getCategory(catId) {
+      return academicCalendarData.categories.find(c => c.id === catId) || { color: '#000', bg: '#fff' };
+    }
+
+    // Helper to get subject definition
+    function getSubjectByEvent(eventId) {
+      for (const subj of academicCalendarData.subjects) {
+        const ev = subj.events.find(e => e.id === eventId);
+        if (ev) return { subject: subj, event: ev };
+      }
+      return null;
+    }
+
+    // 3. Render Calendars for August, September, October, November 2026
+    function renderCalendars() {
+      const container = document.getElementById("calendar-container");
+      container.innerHTML = "";
+
+      const now = new Date();
+      const todayYear = now.getFullYear();
+      const todayMonth = String(now.getMonth() + 1).padStart(2, '0');
+      const todayDay = String(now.getDate()).padStart(2, '0');
+      const todayStr = `${todayYear}-${todayMonth}-${todayDay}`;
+
+      const normalizedQuery = normalizeStr(searchQuery);
+
+      academicCalendarData.months.forEach(m => {
+        const monthCard = document.createElement("div");
+        monthCard.className = "month-card";
+
+        const header = document.createElement("div");
+        header.className = "month-header";
+        header.innerText = m.name;
+        monthCard.appendChild(header);
+
+        // Days Header (Monday start)
+        const daysHeader = document.createElement("div");
+        daysHeader.className = "month-days-header";
+        const dayNames = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "DOMINGO"];
+        daysHeader.innerHTML = dayNames.map(d => `<div>${d}</div>`).join('');
+        monthCard.appendChild(daysHeader);
+
+        // Month Grid Container
+        const grid = document.createElement("div");
+        grid.className = "month-grid";
+
+        const year = m.year;
+        const monthIdx = m.monthIdx;
+
+        const firstDay = new Date(year, monthIdx, 1);
+        let firstDayOfWeek = (firstDay.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
+        const totalDays = new Date(year, monthIdx + 1, 0).getDate();
+        const prevMonthTotalDays = new Date(year, monthIdx, 0).getDate();
+
+        let dayCount = 1;
+        let nextMonthDayCount = 1;
+        const totalCells = Math.ceil((firstDayOfWeek + totalDays) / 7) * 7;
+        const numWeeks = totalCells / 7;
+
+        // Build list of all dates for all cells in month grid
+        const allCellDates = [];
+        for (let cellIdx = 0; cellIdx < totalCells; cellIdx++) {
+          let cellDateStr = "";
+          let isCurrentMonth = false;
+          let cellDayNum = 1;
+
+          if (cellIdx < firstDayOfWeek) {
+            cellDayNum = prevMonthTotalDays - (firstDayOfWeek - cellIdx - 1);
+            const dObj = new Date(year, monthIdx - 1, cellDayNum);
+            const y = dObj.getFullYear();
+            const mo = String(dObj.getMonth() + 1).padStart(2, '0');
+            const da = String(dObj.getDate()).padStart(2, '0');
+            cellDateStr = `${y}-${mo}-${da}`;
+          } else if (dayCount <= totalDays) {
+            cellDayNum = dayCount;
+            isCurrentMonth = true;
+            const mo = String(monthIdx + 1).padStart(2, '0');
+            const da = String(cellDayNum).padStart(2, '0');
+            cellDateStr = `${year}-${mo}-${da}`;
+            dayCount++;
+          } else {
+            cellDayNum = nextMonthDayCount;
+            const dObj = new Date(year, monthIdx + 1, cellDayNum);
+            const y = dObj.getFullYear();
+            const mo = String(dObj.getMonth() + 1).padStart(2, '0');
+            const da = String(dObj.getDate()).padStart(2, '0');
+            cellDateStr = `${y}-${mo}-${da}`;
+            nextMonthDayCount++;
+          }
+
+          allCellDates.push({
+            cellIdx,
+            cellDayNum,
+            isCurrentMonth,
+            dateStr: cellDateStr
+          });
+        }
+
+        // Render Week Rows
+        for (let w = 0; w < numWeeks; w++) {
+          const weekRow = document.createElement("div");
+          weekRow.className = "week-row";
+
+          const weekCells = allCellDates.slice(w * 7, w * 7 + 7);
+          const weekStartDate = weekCells[0].dateStr;
+          const weekEndDate = weekCells[6].dateStr;
+
+          // 1. Background Grid (Cols 1..7)
+          const weekBgGrid = document.createElement("div");
+          weekBgGrid.className = "week-bg-grid";
+
+          weekCells.forEach((cData) => {
+            const bgCell = document.createElement("div");
+            bgCell.className = "day-cell";
+            if (!cData.isCurrentMonth) {
+              bgCell.classList.add("other-month");
+            }
+            if (cData.dateStr === todayStr) {
+              bgCell.classList.add("today");
+            }
+            weekBgGrid.appendChild(bgCell);
+          });
+          weekRow.appendChild(weekBgGrid);
+
+          // 2. Content Grid (Day Numbers + Event Pills)
+          const weekContentGrid = document.createElement("div");
+          weekContentGrid.className = "week-content-grid";
+
+          // Render Day Numbers
+          weekCells.forEach((cData, colIdx) => {
+            const numWrap = document.createElement("div");
+            numWrap.className = "day-number-wrapper";
+            numWrap.style.left = `${(colIdx / 7) * 100}%`;
+            numWrap.style.width = `${(1 / 7) * 100}%`;
+
+            if (!cData.isCurrentMonth) {
+              numWrap.classList.add("other-month-num");
+            }
+            if (cData.dateStr === todayStr) {
+              numWrap.classList.add("today-num");
+            }
+
+            numWrap.innerHTML = `<div class="day-number"><span>${cData.cellDayNum}</span>${cData.dateStr === todayStr ? ' <span class="today-badge">HOY</span>' : ''}</div>`;
+            weekContentGrid.appendChild(numWrap);
+          });
+
+          // Render Events
+          const weekEvents = [];
+
+          academicCalendarData.subjects.forEach(subject => {
+            const isSubjectActive = !selectedSubjectId || selectedSubjectId === subject.id;
+
+            subject.events.forEach(ev => {
+              if (!ev.startDate || !ev.endDate) return;
+
+              // Check date intersection: ev [startDate, endDate] intersects week [weekStartDate, weekEndDate]
+              if (ev.startDate <= weekEndDate && ev.endDate >= weekStartDate) {
+                // Category filter
+                if (selectedCategory && ev.category !== selectedCategory) return;
+                // Search query filter
+                if (normalizedQuery &&
+                  !normalizeStr(ev.title).includes(normalizedQuery) &&
+                  !normalizeStr(subject.name).includes(normalizedQuery) &&
+                  !normalizeStr(subject.code || "").includes(normalizedQuery) &&
+                  !normalizeStr(ev.details || "").includes(normalizedQuery)) return;
+
+                // Find start column (0..6)
+                let startCol = 0;
+                for (let c = 0; c < 7; c++) {
+                  if (weekCells[c].dateStr >= ev.startDate) {
+                    startCol = c;
+                    break;
+                  }
+                }
+
+                // Find end column (0..6)
+                let endCol = 6;
+                for (let c = 6; c >= 0; c--) {
+                  if (weekCells[c].dateStr <= ev.endDate) {
+                    endCol = c;
+                    break;
+                  }
+                }
+
+                if (startCol <= endCol) {
+                  const duration = (new Date(ev.endDate) - new Date(ev.startDate)) / (1000 * 60 * 60 * 24);
+                  weekEvents.push({
+                    subject,
+                    event: ev,
+                    isSubjectActive,
+                    startCol,
+                    endCol,
+                    span: endCol - startCol + 1,
+                    duration
+                  });
+                }
+              }
+            });
+          });
+
+          // Sort week events: longest spans / multi-day first, then by startCol
+          weekEvents.sort((a, b) => {
+            if (b.span !== a.span) return b.span - a.span;
+            return a.startCol - b.startCol;
+          });
+
+          // Render event pills into week content grid
+          weekEvents.forEach(item => {
+            const { subject, event: ev, isSubjectActive, startCol, endCol, span } = item;
+            const cat = getCategory(ev.category);
+
+            const pill = document.createElement("div");
+            pill.className = `event-pill cat-${ev.category}`;
+            pill.style.gridColumn = `${startCol + 1} / ${endCol + 2}`;
+
+            if (cat.bg) pill.style.backgroundColor = cat.bg;
+            if (cat.color) pill.style.color = cat.color;
+
+            pill.style.borderLeft = `4px solid ${subject.color || subject.headerBg || cat.color || '#000'}`;
+
+            if (!isSubjectActive) {
+              pill.classList.add("dimmed");
+            } else if (selectedSubjectId === subject.id) {
+              pill.classList.add("highlighted-pill");
+            }
+
+            // Continuous visual indicator for events extending beyond week boundaries
+            if (ev.startDate < weekStartDate) {
+              pill.style.borderTopLeftRadius = "0";
+              pill.style.borderBottomLeftRadius = "0";
+            }
+            if (ev.endDate > weekEndDate) {
+              pill.style.borderTopRightRadius = "0";
+              pill.style.borderBottomRightRadius = "0";
+            }
+
+            const subjectCode = subject.code || subject.name.split(' ')[0];
+            const dStr = getEventDateStr(ev);
+            let displayLabel = "";
+            if (span > 1 || (ev.startDate && ev.startDate !== ev.endDate)) {
+              displayLabel = `${subjectCode}: ${ev.title}${dStr ? ` (${dStr})` : ''}`;
+            } else {
+              displayLabel = `${subjectCode}: ${ev.title}`;
+            }
+
+            pill.innerText = displayLabel;
+            pill.title = `${subject.name} (${subjectCode}) - ${ev.title}${dStr ? ` (${dStr})` : ''}${ev.details ? ` - ${ev.details}` : ''}`;
+            pill.onclick = (e) => {
+              e.stopPropagation();
+              openEventModal(ev.id);
+            };
+
+            weekContentGrid.appendChild(pill);
+          });
+
+          weekRow.appendChild(weekContentGrid);
+          grid.appendChild(weekRow);
+        }
+
+        monthCard.appendChild(grid);
+        container.appendChild(monthCard);
+      });
+    }
+
+    /* ==========================================================================
+       INTERACTIVE CONTROLS & MODAL
+       ========================================================================== */
+    function filterCategory(catId) {
+      if (selectedCategory === catId) {
+        selectedCategory = null;
+      } else {
+        selectedCategory = catId;
+      }
+
+      // Update UI legend active states
+      document.querySelectorAll('.legend-item').forEach(el => {
+        if (el.dataset.category === selectedCategory) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+
+      renderSidebarSubjects();
+      renderCalendars();
+    }
+
+    function toggleSubjectHighlight(subjectId) {
+      if (selectedSubjectId === subjectId) {
+        selectedSubjectId = null;
+      } else {
+        selectedSubjectId = subjectId;
+      }
+      renderSidebarSubjects();
+      renderCalendars();
+    }
+
+    function resetFilters() {
+      selectedCategory = null;
+      selectedSubjectId = null;
+      searchQuery = "";
+      document.getElementById("search-input").value = "";
+
+      document.querySelectorAll('.legend-item').forEach(el => el.classList.remove('active'));
+      renderSidebarSubjects();
+      renderCalendars();
+    }
+
+    function setupSearch() {
+      const input = document.getElementById("search-input");
+      input.addEventListener("input", (e) => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        renderSidebarSubjects();
+        renderCalendars();
+      });
+    }
+
+    /* ==========================================================================
+       CRUD OPERATIONAL FUNCTIONS & MODAL HANDLERS
+       ========================================================================== */
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add("active");
+    }
+
+    function closeModal(modalId) {
+      if (!modalId) {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+        return;
+      }
+      const el = document.getElementById(modalId);
+      if (el) el.classList.remove("active");
+    }
+
+    // Event Detail Modal with Edit / Delete actions
+    function openEventModal(eventId) {
+      const data = getSubjectByEvent(eventId);
+      if (!data) return;
+
+      const { subject, event } = data;
+      const cat = getCategory(event.category);
+      const dateDisplay = getEventDateStr(event);
+
+      document.getElementById("modal-title").innerText = event.title;
+      document.getElementById("modal-body").innerHTML = `
+        <div class="modal-field">
+          <span class="modal-label">Materia:</span>
+          <span class="modal-value">${subject.name} (${subject.code || ''})</span>
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">Tipo de Evento:</span>
+          <span class="modal-value" style="color: ${cat.color}">${cat.label}</span>
+        </div>
+        ${event.details ? `
+          <div class="modal-field">
+            <span class="modal-label">Detalle:</span>
+            <span class="modal-value">${event.details}</span>
+          </div>
+        ` : ''}
+        ${event.startDate ? `
+          <div class="modal-field">
+            <span class="modal-label">Fecha en Calendario:</span>
+            <span class="modal-value">${event.startDate === event.endDate ? event.startDate : `${event.startDate} al ${event.endDate}`}</span>
+          </div>
+        ` : ''}
+      `;
+
+      document.getElementById("modal-event-actions").innerHTML = `
+        <button class="btn btn-danger btn-sm" onclick="deleteEvent('${event.id}')">Eliminar Evento</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('event-modal'); openEventForm('${event.id}')">Editar Evento</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('event-modal')">Cerrar</button>
+      `;
+
+      openModal("event-modal");
+    }
+
+    // --- EVENT CRUD ---
+    function openEventForm(eventId = null, defaultSubjectId = null) {
+      const subjectSelect = document.getElementById("event-form-subject");
+      const categorySelect = document.getElementById("event-form-category");
+      const deleteBtn = document.getElementById("event-form-delete-btn");
+
+      // Populate subject select
+      subjectSelect.innerHTML = academicCalendarData.subjects.map(s => `
+        <option value="${s.id}">${s.name}</option>
+      `).join('');
+
+      // Populate category select
+      categorySelect.innerHTML = academicCalendarData.categories.map(c => `
+        <option value="${c.id}">${c.label}</option>
+      `).join('');
+
+      if (eventId) {
+        const data = getSubjectByEvent(eventId);
+        if (!data) return;
+        const { subject, event } = data;
+        document.getElementById("event-form-title").innerText = "Editar Evento";
+        document.getElementById("event-form-id").value = event.id;
+        subjectSelect.value = subject.id;
+        document.getElementById("event-form-name").value = event.title;
+        categorySelect.value = event.category;
+        document.getElementById("event-form-details").value = event.details || "";
+        document.getElementById("event-form-startdate").value = event.startDate || "";
+        document.getElementById("event-form-enddate").value = event.endDate || "";
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("event-form-title").innerText = "Agregar Evento";
+        document.getElementById("event-form-id").value = "";
+        if (defaultSubjectId) subjectSelect.value = defaultSubjectId;
+        document.getElementById("event-form-name").value = "";
+        document.getElementById("event-form-details").value = "";
+        document.getElementById("event-form-startdate").value = "";
+        document.getElementById("event-form-enddate").value = "";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+
+      openModal("event-form-modal");
+    }
+
+    function handleEventFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("event-form-id").value;
+      const subjectId = document.getElementById("event-form-subject").value;
+      const title = document.getElementById("event-form-name").value.trim();
+      const category = document.getElementById("event-form-category").value;
+      const details = document.getElementById("event-form-details").value.trim();
+      let startDate = document.getElementById("event-form-startdate").value;
+      let endDate = document.getElementById("event-form-enddate").value;
+
+      if (startDate && !endDate) {
+        endDate = startDate;
+      } else if (startDate && endDate && endDate < startDate) {
+        endDate = startDate;
+      }
+
+      const targetSubject = academicCalendarData.subjects.find(s => s.id === subjectId);
+      if (!targetSubject) return;
+
+      if (id) {
+        // Edit existing event
+        const oldData = getSubjectByEvent(id);
+        if (oldData) {
+          // If subject changed, remove from old subject first
+          if (oldData.subject.id !== subjectId) {
+            oldData.subject.events = oldData.subject.events.filter(ev => ev.id !== id);
+            targetSubject.events.push({ id, title, category, details, startDate, endDate });
+          } else {
+            const ev = targetSubject.events.find(e => e.id === id);
+            if (ev) {
+              ev.title = title;
+              ev.category = category;
+              ev.details = details;
+              ev.startDate = startDate;
+              ev.endDate = endDate;
+            }
+          }
+        }
+      } else {
+        // Create new event
+        const newId = "ev-" + Date.now();
+        targetSubject.events.push({
+          id: newId,
+          title,
+          category,
+          details,
+          startDate,
+          endDate
+        });
+      }
+
+      saveCalendarData();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminEventsTable();
+      }
+      closeModal("event-form-modal");
+    }
+
+    function deleteEvent(eventId) {
+      if (!confirm("¿Estás seguro de eliminar este evento?")) return;
+      const data = getSubjectByEvent(eventId);
+      if (data) {
+        data.subject.events = data.subject.events.filter(ev => ev.id !== eventId);
+        saveCalendarData();
+        renderSidebarSubjects();
+        renderCalendars();
+        if (document.getElementById("admin-modal").classList.contains("active")) {
+          renderAdminEventsTable();
+        }
+      }
+      closeModal("event-modal");
+    }
+
+    function deleteEventFromForm() {
+      const id = document.getElementById("event-form-id").value;
+      if (id) {
+        deleteEvent(id);
+        closeModal("event-form-modal");
+      }
+    }
+
+    // --- SUBJECT CRUD ---
+    function openSubjectForm(subjectId = null) {
+      const deleteBtn = document.getElementById("subject-form-delete-btn");
+      if (subjectId) {
+        const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
+        if (!subj) return;
+        document.getElementById("subject-form-title").innerText = "Editar Materia";
+        document.getElementById("subject-form-id").value = subj.id;
+        document.getElementById("subject-form-name").value = subj.name;
+        document.getElementById("subject-form-code").value = subj.code || "";
+        document.getElementById("subject-form-color").value = subj.color || "#2563eb";
+        document.getElementById("subject-form-headerbg").value = subj.headerBg || "#1e3a8a";
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("subject-form-title").innerText = "Agregar Materia";
+        document.getElementById("subject-form-id").value = "";
+        document.getElementById("subject-form-name").value = "";
+        document.getElementById("subject-form-code").value = "";
+        document.getElementById("subject-form-color").value = "#2563eb";
+        document.getElementById("subject-form-headerbg").value = "#1e3a8a";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+      openModal("subject-form-modal");
+    }
+
+    function handleSubjectFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("subject-form-id").value;
+      const name = document.getElementById("subject-form-name").value.trim();
+      const code = document.getElementById("subject-form-code").value.trim();
+      const color = document.getElementById("subject-form-color").value;
+      const headerBg = document.getElementById("subject-form-headerbg").value;
+
+      if (id) {
+        const subj = academicCalendarData.subjects.find(s => s.id === id);
+        if (subj) {
+          subj.name = name;
+          subj.code = code || name.split(' ')[0];
+          subj.color = color;
+          subj.headerBg = headerBg;
+        }
+      } else {
+        const newId = "subj-" + Date.now();
+        academicCalendarData.subjects.push({
+          id: newId,
+          name,
+          code: code || name.split(' ')[0],
+          color,
+          headerBg,
+          events: []
+        });
+      }
+
+      saveCalendarData();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminSubjectsTable();
+      }
+      closeModal("subject-form-modal");
+    }
+
+    function deleteSubject(subjectId) {
+      const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
+      if (!subj) return;
+      if (!confirm(`¿Estás seguro de eliminar la materia "${subj.name}" y todos sus eventos (${subj.events.length})?`)) return;
+
+      academicCalendarData.subjects = academicCalendarData.subjects.filter(s => s.id !== subjectId);
+      if (selectedSubjectId === subjectId) selectedSubjectId = null;
+      saveCalendarData();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminSubjectsTable();
+      }
+      closeModal("subject-form-modal");
+    }
+
+    function deleteSubjectFromForm() {
+      const id = document.getElementById("subject-form-id").value;
+      if (id) {
+        deleteSubject(id);
+      }
+    }
+
+    // --- CATEGORY CRUD ---
+    function openCategoryForm(categoryId = null) {
+      const deleteBtn = document.getElementById("category-form-delete-btn");
+      if (categoryId) {
+        const cat = academicCalendarData.categories.find(c => c.id === categoryId);
+        if (!cat) return;
+        document.getElementById("category-form-title").innerText = "Editar Categoría";
+        document.getElementById("category-form-id").value = cat.id;
+        document.getElementById("category-form-label").value = cat.label;
+        document.getElementById("category-form-color").value = cat.color || "#1d4ed8";
+        document.getElementById("category-form-bg").value = cat.bg || "#dbeafe";
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("category-form-title").innerText = "Agregar Categoría";
+        document.getElementById("category-form-id").value = "";
+        document.getElementById("category-form-label").value = "";
+        document.getElementById("category-form-color").value = "#1d4ed8";
+        document.getElementById("category-form-bg").value = "#dbeafe";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+      openModal("category-form-modal");
+    }
+
+    function handleCategoryFormSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("category-form-id").value;
+      const label = document.getElementById("category-form-label").value.trim();
+      const color = document.getElementById("category-form-color").value;
+      const bg = document.getElementById("category-form-bg").value;
+      const border = color;
+
+      if (id) {
+        const cat = academicCalendarData.categories.find(c => c.id === id);
+        if (cat) {
+          cat.label = label;
+          cat.color = color;
+          cat.bg = bg;
+          cat.border = border;
+        }
+      } else {
+        const newId = label.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + Date.now();
+        academicCalendarData.categories.push({
+          id: newId,
+          label,
+          color,
+          bg,
+          border
+        });
+      }
+
+      saveCalendarData();
+      renderLegend();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminCategoriesTable();
+      }
+      closeModal("category-form-modal");
+    }
+
+    function deleteCategory(categoryId) {
+      const cat = academicCalendarData.categories.find(c => c.id === categoryId);
+      if (!cat) return;
+
+      let count = 0;
+      academicCalendarData.subjects.forEach(s => {
+        s.events.forEach(e => {
+          if (e.category === categoryId) count++;
+        });
+      });
+
+      const confirmMsg = count > 0
+        ? `La categoría "${cat.label}" está asignada a ${count} evento(s). ¿Estás seguro de eliminarla?`
+        : `¿Estás seguro de eliminar la categoría "${cat.label}"?`;
+
+      if (!confirm(confirmMsg)) return;
+
+      academicCalendarData.categories = academicCalendarData.categories.filter(c => c.id !== categoryId);
+      if (selectedCategory === categoryId) selectedCategory = null;
+
+      saveCalendarData();
+      renderLegend();
+      renderSidebarSubjects();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminCategoriesTable();
+      }
+      closeModal("category-form-modal");
+    }
+
+    function deleteCategoryFromForm() {
+      const id = document.getElementById("category-form-id").value;
+      if (id) {
+        deleteCategory(id);
+      }
+    }
+
+    // --- MONTH CRUD ---
+    const monthNamesEs = [
+      "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+      "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+    ];
+
+    function openMonthForm(monthIndexInArray = null) {
+      const deleteBtn = document.getElementById("month-form-delete-btn");
+      if (monthIndexInArray !== null && monthIndexInArray >= 0) {
+        const m = academicCalendarData.months[monthIndexInArray];
+        if (!m) return;
+        document.getElementById("month-form-title").innerText = "Editar Mes";
+        document.getElementById("month-form-index").value = monthIndexInArray;
+        document.getElementById("month-form-year").value = m.year;
+        document.getElementById("month-form-monthidx").value = m.monthIdx;
+        document.getElementById("month-form-name").value = m.name;
+        if (deleteBtn) deleteBtn.style.display = "inline-block";
+      } else {
+        document.getElementById("month-form-title").innerText = "Agregar Mes";
+        document.getElementById("month-form-index").value = "-1";
+        document.getElementById("month-form-year").value = academicCalendarData.year || 2026;
+        document.getElementById("month-form-monthidx").value = "7";
+        document.getElementById("month-form-name").value = "";
+        if (deleteBtn) deleteBtn.style.display = "none";
+      }
+      openModal("month-form-modal");
+    }
+
+    function handleMonthFormSubmit(e) {
+      e.preventDefault();
+      const idxStr = document.getElementById("month-form-index").value;
+      const idx = parseInt(idxStr, 10);
+      const year = parseInt(document.getElementById("month-form-year").value, 10);
+      const monthIdx = parseInt(document.getElementById("month-form-monthidx").value, 10);
+      let name = document.getElementById("month-form-name").value.trim();
+      if (!name) {
+        name = `${monthNamesEs[monthIdx]} ${year}`;
+      }
+
+      const monthObj = { year, monthIdx, name };
+
+      if (idx >= 0 && idx < academicCalendarData.months.length) {
+        academicCalendarData.months[idx] = monthObj;
+      } else {
+        const exists = academicCalendarData.months.some(m => m.year === year && m.monthIdx === monthIdx);
+        if (exists) {
+          alert("El mes seleccionado ya existe en el calendario.");
+          return;
+        }
+        academicCalendarData.months.push(monthObj);
+      }
+
+      academicCalendarData.months.sort((a, b) => (a.year * 12 + a.monthIdx) - (b.year * 12 + b.monthIdx));
+
+      saveCalendarData();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminMonthsTable();
+      }
+      closeModal("month-form-modal");
+    }
+
+    function deleteMonth(idx) {
+      if (academicCalendarData.months.length <= 1) {
+        alert("El calendario debe tener al menos un mes.");
+        return;
+      }
+      const m = academicCalendarData.months[idx];
+      if (!m) return;
+      if (!confirm(`¿Estás seguro de eliminar el mes "${m.name}" del calendario?`)) return;
+
+      academicCalendarData.months.splice(idx, 1);
+      saveCalendarData();
+      renderCalendars();
+      if (document.getElementById("admin-modal").classList.contains("active")) {
+        renderAdminMonthsTable();
+      }
+      closeModal("month-form-modal");
+    }
+
+    function deleteMonthFromForm() {
+      const idxStr = document.getElementById("month-form-index").value;
+      const idx = parseInt(idxStr, 10);
+      if (idx >= 0) {
+        deleteMonth(idx);
+      }
+    }
+
+    // --- CENTRAL ADMIN MODAL & TAB RENDERERS ---
+    function openAdminModal() {
+      switchAdminTab('events');
+      openModal("admin-modal");
+    }
+
+    function switchAdminTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('admin-tab-events').style.display = 'none';
+      document.getElementById('admin-tab-subjects').style.display = 'none';
+      document.getElementById('admin-tab-categories').style.display = 'none';
+      const monthsTab = document.getElementById('admin-tab-months');
+      if (monthsTab) monthsTab.style.display = 'none';
+
+      if (tabName === 'events') {
+        document.getElementById('tab-btn-events').classList.add('active');
+        document.getElementById('admin-tab-events').style.display = 'block';
+        renderAdminEventsTable();
+      } else if (tabName === 'subjects') {
+        document.getElementById('tab-btn-subjects').classList.add('active');
+        document.getElementById('admin-tab-subjects').style.display = 'block';
+        renderAdminSubjectsTable();
+      } else if (tabName === 'categories') {
+        document.getElementById('tab-btn-categories').classList.add('active');
+        document.getElementById('admin-tab-categories').style.display = 'block';
+        renderAdminCategoriesTable();
+      } else if (tabName === 'months') {
+        document.getElementById('tab-btn-months').classList.add('active');
+        if (monthsTab) monthsTab.style.display = 'block';
+        renderAdminMonthsTable();
+      }
+    }
+
+    function renderAdminEventsTable() {
+      const tbody = document.getElementById("admin-events-tbody");
+      let html = "";
+      academicCalendarData.subjects.forEach(subj => {
+        subj.events.forEach(ev => {
+          const cat = getCategory(ev.category);
+          const dateDisplay = getEventDateStr(ev);
+          html += `
+            <tr>
+              <td><strong>${subj.name}</strong> (${subj.code || ''})</td>
+              <td>
+                <div><strong>${ev.title}</strong></div>
+                ${ev.details ? `<div style="font-size: 11px; color: #64748b; margin-top:2px;">${ev.details}</div>` : ''}
+              </td>
+              <td><span style="color: ${cat.color}; font-weight:700;">${cat.label}</span></td>
+              <td>${dateDisplay}</td>
+              <td>
+                <button class="btn btn-sm" onclick="openEventForm('${ev.id}')">✏️ Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteEvent('${ev.id}')">🗑️ Eliminar</button>
+              </td>
+            </tr>
+          `;
+        });
+      });
+      tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center;">No hay eventos registrados.</td></tr>`;
+    }
+
+    function renderAdminSubjectsTable() {
+      const tbody = document.getElementById("admin-subjects-tbody");
+      tbody.innerHTML = academicCalendarData.subjects.map(s => `
+        <tr>
+          <td><code>${s.code || s.name.split(' ')[0]}</code></td>
+          <td><strong>${s.name}</strong></td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${s.color}; border-radius:3px; vertical-align:middle;"></span> ${s.color}</td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${s.headerBg}; border-radius:3px; vertical-align:middle;"></span> ${s.headerBg}</td>
+          <td>${s.events.length} eventos</td>
+          <td>
+            <button class="btn btn-sm" onclick="openSubjectForm('${s.id}')">✏️ Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteSubject('${s.id}')">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      `).join('') || `<tr><td colspan="6" style="text-align:center;">No hay materias registradas.</td></tr>`;
+    }
+
+    function renderAdminCategoriesTable() {
+      const tbody = document.getElementById("admin-categories-tbody");
+      tbody.innerHTML = academicCalendarData.categories.map(c => `
+        <tr>
+          <td><code>${c.id}</code></td>
+          <td><strong>${c.label}</strong></td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${c.color}; border-radius:3px; vertical-align:middle;"></span> ${c.color}</td>
+          <td><span style="display:inline-block; width:14px; height:14px; background:${c.bg}; border-radius:3px; vertical-align:middle;"></span> ${c.bg}</td>
+          <td>
+            <button class="btn btn-sm" onclick="openCategoryForm('${c.id}')">✏️ Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCategory('${c.id}')">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      `).join('') || `<tr><td colspan="5" style="text-align:center;">No hay categorías registradas.</td></tr>`;
+    }
+
+    function renderAdminMonthsTable() {
+      const tbody = document.getElementById("admin-months-tbody");
+      tbody.innerHTML = academicCalendarData.months.map((m, idx) => `
+        <tr>
+          <td><strong>${m.year}</strong></td>
+          <td>${monthNamesEs[m.monthIdx]} (${String(m.monthIdx + 1).padStart(2, '0')})</td>
+          <td><strong>${m.name}</strong></td>
+          <td>
+            <button class="btn btn-sm" onclick="openMonthForm(${idx})">✏️ Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteMonth(${idx})">🗑️ Eliminar</button>
+          </td>
+        </tr>
+      `).join('') || `<tr><td colspan="4" style="text-align:center;">No hay meses registrados.</td></tr>`;
+    }
+
+    // Close modal on escape key or backdrop click
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeModal(overlay.id);
+      });
+    });
+  </script>
+</body>
+
+</html>
