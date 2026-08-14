@@ -819,11 +819,13 @@
     const academicCalendarData = {
       year: 2026,
       categories: [
-        { id: "parciales", label: "PARCIALES / EXÁMENES", color: "#1d4ed8", bg: "#dbeafe", border: "#93c5fd" },
-        { id: "recuperatorios", label: "RECUPERATORIOS", color: "#b91c1c", bg: "#fee2e2", border: "#fca5a5" },
-        { id: "coloquios", label: "COLOQUIOS", color: "#6b21a8", bg: "#f3e8ff", border: "#d8b4fe" },
-        { id: "integradores", label: "INTEGRADORES", color: "#15803d", bg: "#dcfce7", border: "#86efac" },
-        { id: "entregas", label: "ENTREGAS", color: "#c2410c", bg: "#ffedd5", border: "#fdba74" }
+        { id: "parciales", label: "PARCIAL", color: "#1d4ed8", bg: "#dbeafe", border: "#93c5fd" },
+        { id: "recu_parciales", label: "RECU PARCIAL", color: "#ea580c", bg: "#ffedd5", border: "#fdba74" },
+        { id: "coloquios", label: "COLOQUIO", color: "#7e22ce", bg: "#f3e8ff", border: "#d8b4fe" },
+        { id: "recu_coloquios", label: "RECU COLOQUIO", color: "#db2777", bg: "#fce7f3", border: "#fbcfe8" },
+        { id: "integradores", label: "TPI / INTEGRADOR", color: "#16a34a", bg: "#dcfce7", border: "#86efac" },
+        { id: "recu_integradores", label: "RECU TPI / INTEGRADOR", color: "#0d9488", bg: "#ccfbf1", border: "#99f6e4" },
+        { id: "entregas", label: "ENTREGA", color: "#14532d", bg: "#f0fdf4", border: "#bbf7d0" }
       ],
       subjects: [
         {
@@ -866,8 +868,8 @@
           id: "p4",
           name: "PROGRAMACIÓN IV",
           code: "P4",
-          color: "#9333ea",
-          headerBg: "#581c87",
+          color: "#e11d48",
+          headerBg: "#881337",
           icsUrl: "https://calendar.google.com/calendar/ical/e7c3e9e4dcb762f5fe7c6a3ddfe1342710471a2105d26b19b853e9fb8e168ba6%40group.calendar.google.com/public/basic.ics",
           events: []
         },
@@ -892,7 +894,7 @@
     /* ==========================================================================
        ICS PARSER & LOCALSTORAGE CACHING ENGINE
        ========================================================================== */
-    const CACHE_KEY_PREFIX = 'academic_calendar_ics_v2_';
+    const CACHE_KEY_PREFIX = 'academic_calendar_ics_v3_';
     const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour TTL
 
     function getCachedSubjectEvents(subjectId) {
@@ -989,11 +991,21 @@
 
     function categorizeEvent(title = '', description = '') {
       const text = (title + ' ' + description).toLowerCase();
-      if (text.includes('recuperatorio') || text.includes('recup')) return 'recuperatorios';
-      if (text.includes('parcial')) return 'parciales';
+
+      // Check Recuperatorios (must be evaluated before generic categories)
+      if (text.includes('recu') || text.includes('recuperatorio')) {
+        if (text.includes('coloquio')) return 'recu_coloquios';
+        if (text.includes('tpi') || text.includes('integrador') || text.includes('int.')) return 'recu_integradores';
+        if (text.includes('parcial')) return 'recu_parciales';
+        return 'recu_parciales';
+      }
+
+      // Regular categories
       if (text.includes('coloquio')) return 'coloquios';
-      if (text.includes('integrador') || text.includes('int.')) return 'integradores';
+      if (text.includes('tpi') || text.includes('integrador') || text.includes('int.')) return 'integradores';
+      if (text.includes('parcial')) return 'parciales';
       if (text.includes('entrega') || text.includes('tp') || text.includes('trabajo') || text.includes('propuesta')) return 'entregas';
+
       return 'entregas';
     }
 
