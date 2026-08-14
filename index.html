@@ -397,18 +397,26 @@
     }
 
     .day-cell.today {
-      background-color: #f0f9ff;
+      background-color: #eff6ff;
+      box-shadow: inset 0 0 0 2px #2563eb;
     }
 
-    .day-number {
-      font-size: 12px;
+    .day-cell.today .day-number {
+      color: #1d4ed8;
       font-weight: 800;
-      color: #1e293b;
-      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .day-cell.other-month .day-number {
-      color: #94a3b8;
-      font-weight: 500;
+
+    .today-badge {
+      font-size: 9px;
+      font-weight: 800;
+      background-color: #2563eb;
+      color: #ffffff;
+      padding: 1px 5px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
     }
 
     /* Event Badges & Spans */
@@ -898,9 +906,15 @@
       </div>
       <form id="subject-form" onsubmit="handleSubjectFormSubmit(event)">
         <input type="hidden" id="subject-form-id">
-        <div class="form-group">
-          <label>Nombre de la Materia</label>
-          <input type="text" id="subject-form-name" class="form-control" placeholder="Ej: INTELIGENCIA ARTIFICIAL" required>
+        <div class="form-row">
+          <div class="form-group" style="flex: 2;">
+            <label>Nombre de la Materia</label>
+            <input type="text" id="subject-form-name" class="form-control" placeholder="Ej: METODOLOGÍA DE SISTEMAS II" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Siglas / Código</label>
+            <input type="text" id="subject-form-code" class="form-control" placeholder="Ej: MdS2" required>
+          </div>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -1047,6 +1061,7 @@
           <table class="admin-table">
             <thead>
               <tr>
+                <th>Siglas</th>
                 <th>Nombre</th>
                 <th>Color Borde</th>
                 <th>Color Encabezado</th>
@@ -1125,6 +1140,7 @@
         {
           id: "ds",
           name: "DESARROLLO DE SOFTWARE",
+          code: "DS",
           color: "#7e22ce",
           headerBg: "#581c87",
           events: [
@@ -1137,6 +1153,7 @@
         {
           id: "leg",
           name: "LEGISLACIÓN",
+          code: "LEG",
           color: "#d97706",
           headerBg: "#78350f",
           events: [
@@ -1150,6 +1167,7 @@
         {
           id: "ms2",
           name: "METODOLOGÍA DE SISTEMAS II",
+          code: "MdS2",
           color: "#2563eb",
           headerBg: "#1e3a8a",
           events: [
@@ -1167,6 +1185,7 @@
         {
           id: "p4",
           name: "PROGRAMACIÓN IV",
+          code: "PROG4",
           color: "#9333ea",
           headerBg: "#581c87",
           events: [
@@ -1180,6 +1199,7 @@
         {
           id: "ad",
           name: "ANÁLISIS DE DATOS",
+          code: "AD",
           color: "#db2777",
           headerBg: "#831843",
           events: [
@@ -1196,6 +1216,7 @@
         {
           id: "entregas_imp",
           name: "FECHAS IMPORTANTES (ENTREGAS)",
+          code: "ENTREGAS",
           color: "#16a34a",
           headerBg: "#14532d",
           events: [
@@ -1207,6 +1228,7 @@
         {
           id: "ad_int",
           name: "ANÁLISIS DE DATOS (INTEGRADOR)",
+          code: "AD-INT",
           color: "#ea580c",
           headerBg: "#831843",
           events: [
@@ -1239,6 +1261,14 @@
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           academicCalendarData = JSON.parse(stored);
+          if (academicCalendarData && academicCalendarData.subjects) {
+            academicCalendarData.subjects.forEach(s => {
+              if (!s.code) {
+                const defSubj = defaultAcademicCalendarData.subjects.find(d => d.id === s.id);
+                s.code = defSubj ? defSubj.code : s.name.split(' ')[0];
+              }
+            });
+          }
         } else {
           academicCalendarData = JSON.parse(JSON.stringify(defaultAcademicCalendarData));
           saveCalendarData();
@@ -1356,18 +1386,20 @@
       container.innerHTML = academicCalendarData.subjects.map(subject => {
         const matchingEvents = subject.events.filter(ev => {
           if (selectedCategory && ev.category !== selectedCategory) return false;
-          if (normalizedQuery && !normalizeStr(ev.title).includes(normalizedQuery) && !normalizeStr(subject.name).includes(normalizedQuery)) return false;
+          if (normalizedQuery && !normalizeStr(ev.title).includes(normalizedQuery) && !normalizeStr(subject.name).includes(normalizedQuery) && !normalizeStr(subject.code || "").includes(normalizedQuery)) return false;
           return true;
         });
 
-        if (selectedCategory && matchingEvents.length === 0 && !normalizeStr(subject.name).includes(normalizedQuery)) {
+        if (selectedCategory && matchingEvents.length === 0 && !normalizeStr(subject.name).includes(normalizedQuery) && !normalizeStr(subject.code || "").includes(normalizedQuery)) {
           return ''; // Hide subject card if filtering active and no match
         }
+
+        const codeBadge = subject.code ? `<span style="background: rgba(255,255,255,0.25); padding: 1px 5px; border-radius: 4px; font-size: 11px; margin-right: 4px; font-weight: 800;">${subject.code}</span>` : '';
 
         return `
           <div class="subject-card ${selectedSubjectId === subject.id ? 'highlighted' : ''}" onclick="toggleSubjectHighlight('${subject.id}')">
             <div class="subject-header" style="background-color: ${subject.headerBg}; border-left: 5px solid ${subject.color};">
-              <span>${subject.name}</span>
+              <span>${codeBadge}${subject.name}</span>
               <div style="display: flex; gap: 6px; align-items: center;" onclick="event.stopPropagation()">
                 <button class="btn btn-sm" style="padding: 2px 6px; background: rgba(255,255,255,0.25);" onclick="openEventForm(null, '${subject.id}')" title="Agregar evento a esta materia">+ Evento</button>
                 <span style="cursor: pointer; opacity: 0.8;" onclick="openSubjectForm('${subject.id}')" title="Editar Materia">✏️</span>
@@ -1412,6 +1444,12 @@
     function renderCalendars() {
       const container = document.getElementById("calendar-container");
       container.innerHTML = "";
+
+      const now = new Date();
+      const todayYear = now.getFullYear();
+      const todayMonth = String(now.getMonth() + 1).padStart(2, '0');
+      const todayDay = String(now.getDate()).padStart(2, '0');
+      const todayStr = `${todayYear}-${todayMonth}-${todayDay}`;
 
       academicCalendarData.months.forEach(m => {
         const monthCard = document.createElement("div");
@@ -1459,30 +1497,41 @@
 
           let cellDateStr = "";
           let isCurrentMonth = false;
+          let cellDayNum = 1;
 
           if (cellIdx < firstDayOfWeek) {
             // Previous month day
-            const dayNum = prevMonthTotalDays - (firstDayOfWeek - cellIdx - 1);
+            cellDayNum = prevMonthTotalDays - (firstDayOfWeek - cellIdx - 1);
             cell.classList.add("other-month");
-            cell.innerHTML = `<div class="day-number">${dayNum}</div>`;
+            cell.innerHTML = `<div class="day-number"><span>${cellDayNum}</span></div>`;
             const prevMonthIdx = monthIdx - 1;
             const pMonthFormatted = String(prevMonthIdx + 1).padStart(2, '0');
-            cellDateStr = `${year}-${pMonthFormatted}-${String(dayNum).padStart(2, '0')}`;
+            cellDateStr = `${year}-${pMonthFormatted}-${String(cellDayNum).padStart(2, '0')}`;
           } else if (dayCount <= totalDays) {
             // Current month day
-            cell.innerHTML = `<div class="day-number">${dayCount}</div>`;
+            cellDayNum = dayCount;
+            cell.innerHTML = `<div class="day-number"><span>${cellDayNum}</span></div>`;
             isCurrentMonth = true;
             const mMonthFormatted = String(monthIdx + 1).padStart(2, '0');
-            cellDateStr = `${year}-${mMonthFormatted}-${String(dayCount).padStart(2, '0')}`;
+            cellDateStr = `${year}-${mMonthFormatted}-${String(cellDayNum).padStart(2, '0')}`;
             dayCount++;
           } else {
             // Next month day
+            cellDayNum = nextMonthDayCount;
             cell.classList.add("other-month");
-            cell.innerHTML = `<div class="day-number">${nextMonthDayCount}</div>`;
+            cell.innerHTML = `<div class="day-number"><span>${cellDayNum}</span></div>`;
             const nextMonthIdx = monthIdx + 1;
             const nMonthFormatted = String(nextMonthIdx + 1).padStart(2, '0');
-            cellDateStr = `${year}-${nMonthFormatted}-${String(nextMonthDayCount).padStart(2, '0')}`;
+            cellDateStr = `${year}-${nMonthFormatted}-${String(cellDayNum).padStart(2, '0')}`;
             nextMonthDayCount++;
+          }
+
+          if (cellDateStr === todayStr) {
+            cell.classList.add("today");
+            const dayNumEl = cell.querySelector(".day-number");
+            if (dayNumEl) {
+              dayNumEl.innerHTML += `<span class="today-badge">HOY</span>`;
+            }
           }
 
           // Populate events occurring on this cellDateStr
@@ -1512,7 +1561,7 @@
             // Check category filter
             if (selectedCategory && ev.category !== selectedCategory) return;
             // Check search filter
-            if (normalizedQuery && !normalizeStr(ev.title).includes(normalizedQuery) && !normalizeStr(subject.name).includes(normalizedQuery)) return;
+            if (normalizedQuery && !normalizeStr(ev.title).includes(normalizedQuery) && !normalizeStr(subject.name).includes(normalizedQuery) && !normalizeStr(subject.code || "").includes(normalizedQuery)) return;
 
             const cat = getCategory(ev.category);
             const pill = document.createElement("div");
@@ -1527,14 +1576,12 @@
               pill.classList.add("highlighted-pill");
             }
 
-            // Display text format
-            let displayLabel = `${subject.name.split(' ')[0]}: ${ev.title}`;
-            if (ev.startDate === ev.endDate) {
-              displayLabel = `${ev.title} (${subject.name})`;
-            }
+            // Display text format using Siglas (subject.code)
+            const subjectCode = subject.code || subject.name.split(' ')[0];
+            let displayLabel = `${subjectCode}: ${ev.title}`;
 
             pill.innerText = displayLabel;
-            pill.title = `${subject.name} - ${ev.title} (${ev.dateStr})`;
+            pill.title = `${subject.name} (${subjectCode}) - ${ev.title} (${ev.dateStr})`;
             pill.onclick = (e) => {
               e.stopPropagation();
               openEventModal(ev.id);
@@ -1800,6 +1847,7 @@
         document.getElementById("subject-form-title").innerText = "Editar Materia";
         document.getElementById("subject-form-id").value = subj.id;
         document.getElementById("subject-form-name").value = subj.name;
+        document.getElementById("subject-form-code").value = subj.code || "";
         document.getElementById("subject-form-color").value = subj.color || "#2563eb";
         document.getElementById("subject-form-headerbg").value = subj.headerBg || "#1e3a8a";
         if (deleteBtn) deleteBtn.style.display = "inline-block";
@@ -1807,6 +1855,7 @@
         document.getElementById("subject-form-title").innerText = "Agregar Materia";
         document.getElementById("subject-form-id").value = "";
         document.getElementById("subject-form-name").value = "";
+        document.getElementById("subject-form-code").value = "";
         document.getElementById("subject-form-color").value = "#2563eb";
         document.getElementById("subject-form-headerbg").value = "#1e3a8a";
         if (deleteBtn) deleteBtn.style.display = "none";
@@ -1818,6 +1867,7 @@
       e.preventDefault();
       const id = document.getElementById("subject-form-id").value;
       const name = document.getElementById("subject-form-name").value.trim();
+      const code = document.getElementById("subject-form-code").value.trim();
       const color = document.getElementById("subject-form-color").value;
       const headerBg = document.getElementById("subject-form-headerbg").value;
 
@@ -1825,6 +1875,7 @@
         const subj = academicCalendarData.subjects.find(s => s.id === id);
         if (subj) {
           subj.name = name;
+          subj.code = code || name.split(' ')[0];
           subj.color = color;
           subj.headerBg = headerBg;
         }
@@ -1833,6 +1884,7 @@
         academicCalendarData.subjects.push({
           id: newId,
           name,
+          code: code || name.split(' ')[0],
           color,
           headerBg,
           events: []
@@ -2116,6 +2168,7 @@
       const tbody = document.getElementById("admin-subjects-tbody");
       tbody.innerHTML = academicCalendarData.subjects.map(s => `
         <tr>
+          <td><code>${s.code || s.name.split(' ')[0]}</code></td>
           <td><strong>${s.name}</strong></td>
           <td><span style="display:inline-block; width:14px; height:14px; background:${s.color}; border-radius:3px; vertical-align:middle;"></span> ${s.color}</td>
           <td><span style="display:inline-block; width:14px; height:14px; background:${s.headerBg}; border-radius:3px; vertical-align:middle;"></span> ${s.headerBg}</td>
@@ -2125,7 +2178,7 @@
             <button class="btn btn-sm btn-danger" onclick="deleteSubject('${s.id}')">🗑️ Eliminar</button>
           </td>
         </tr>
-      `).join('') || `<tr><td colspan="5" style="text-align:center;">No hay materias registradas.</td></tr>`;
+      `).join('') || `<tr><td colspan="6" style="text-align:center;">No hay materias registradas.</td></tr>`;
     }
 
     function renderAdminCategoriesTable() {
