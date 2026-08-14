@@ -230,6 +230,31 @@
       background: #cbd5e1;
     }
 
+    .subject-sync-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: #ffffff;
+      border-radius: 4px;
+      padding: 3px 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease;
+    }
+
+    .subject-sync-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .spinning {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
     /* ==========================================================================
        MAIN LAYOUT GRID
        ========================================================================== */
@@ -720,7 +745,15 @@
         <input type="text" id="search-input" placeholder="Buscar materia, parcial, entrega...">
       </div>
 
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+        <button class="btn" id="btn-sync-all" onclick="syncAllSubjects(true)" title="Sincronizar todos los calendarios desde Google Calendar">
+          <svg id="sync-all-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+          </svg>
+          Sincronizar Todo
+        </button>
+        <span id="sync-status-label" style="font-size: 11px; color: #64748b; font-weight: 600;"></span>
+
         <button class="btn btn-secondary" onclick="resetFilters()">
           Mostrar Todo
         </button>
@@ -794,17 +827,22 @@
       ],
       subjects: [
         {
-          id: "ds",
-          name: "DESARROLLO DE SOFTWARE",
-          code: "DS",
+          id: "gds",
+          name: "GESTIÓN DE DESARROLLO DE SOFTWARE",
+          code: "GDS",
           color: "#7e22ce",
           headerBg: "#581c87",
-          events: [
-            { id: "ds-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-11", endDate: "2026-09-11" },
-            { id: "ds-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-18", endDate: "2026-09-18" },
-            { id: "ds-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-10-16", endDate: "2026-10-16" },
-            { id: "ds-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-10-23", endDate: "2026-10-23" }
-          ]
+          icsUrl: "https://calendar.google.com/calendar/ical/343983d89f95598734f74565941f78db635da707c25086be8c2e7f784dc63db2%40group.calendar.google.com/public/basic.ics",
+          events: []
+        },
+        {
+          id: "iad",
+          name: "INTRODUCCIÓN AL ANÁLISIS DE DATOS",
+          code: "IAD",
+          color: "#db2777",
+          headerBg: "#831843",
+          icsUrl: "https://calendar.google.com/calendar/ical/9a4c41e3f0988d5eca06dc5e6c8b7bf5445a8e6beeda2f847073ad475ad36274%40group.calendar.google.com/public/basic.ics",
+          events: []
         },
         {
           id: "leg",
@@ -812,91 +850,35 @@
           code: "LEG",
           color: "#d97706",
           headerBg: "#78350f",
-          events: [
-            { id: "leg-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-10-08", endDate: "2026-10-10" },
-            { id: "leg-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-11-10", endDate: "2026-11-12" },
-            { id: "leg-recup", title: "Recuperatorio", category: "recuperatorios", startDate: "2026-11-16", endDate: "2026-11-18" },
-            { id: "leg-int", title: "Integrador", category: "integradores", startDate: "2026-11-05", endDate: "2026-11-05" },
-            { id: "leg-recup-int", title: "Recuperatorio Integrador", category: "integradores", startDate: "2026-11-15", endDate: "2026-11-15" }
-          ]
+          icsUrl: "https://calendar.google.com/calendar/ical/d20579ddb27fb62b26db1a8971f4239e62133137a011227263abcbae9de85d59%40group.calendar.google.com/public/basic.ics",
+          events: []
         },
         {
           id: "ms2",
           name: "METODOLOGÍA DE SISTEMAS II",
-          code: "MdS2",
+          code: "MS2",
           color: "#2563eb",
           headerBg: "#1e3a8a",
-          events: [
-            { id: "ms2-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-25", endDate: "2026-09-25" },
-            { id: "ms2-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-10-02", endDate: "2026-10-02" },
-            { id: "ms2-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-10-28", endDate: "2026-10-28" },
-            { id: "ms2-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-04", endDate: "2026-11-04" },
-            { id: "ms2-1llam", title: "1º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-10-15", endDate: "2026-10-17" },
-            { id: "ms2-2llam", title: "2º Llamado (Int. y Col.)", category: "coloquios", startDate: "2026-11-09", endDate: "2026-11-11" },
-            { id: "ms2-recup", title: "Recuperatorio", category: "recuperatorios", startDate: "2026-11-19", endDate: "2026-11-21" },
-            { id: "ms2-int", title: "Integrador", category: "integradores", startDate: "2026-08-30", endDate: "2026-11-08" },
-            { id: "ms2-recup-int", title: "Recuperatorio Integrador", category: "integradores", startDate: "2026-11-18", endDate: "2026-11-18" }
-          ]
+          icsUrl: "https://calendar.google.com/calendar/ical/30bb681933c1ad536c39704aa2e1730358eb37837f24d9de7ee8cc14c642c410%40group.calendar.google.com/public/basic.ics",
+          events: []
         },
         {
           id: "p4",
           name: "PROGRAMACIÓN IV",
-          code: "PROG4",
+          code: "P4",
           color: "#9333ea",
           headerBg: "#581c87",
-          events: [
-            { id: "p4-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-21", endDate: "2026-09-26" },
-            { id: "p4-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-28", endDate: "2026-10-03" },
-            { id: "p4-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-11-02", endDate: "2026-11-07" },
-            { id: "p4-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-09", endDate: "2026-11-14" },
-            { id: "p4-int", title: "Integrador", category: "integradores", details: "Con la primer mesa de examen", startDate: "", endDate: "" }
-          ]
+          icsUrl: "https://calendar.google.com/calendar/ical/e7c3e9e4dcb762f5fe7c6a3ddfe1342710471a2105d26b19b853e9fb8e168ba6%40group.calendar.google.com/public/basic.ics",
+          events: []
         },
         {
-          id: "ad",
-          name: "ANÁLISIS DE DATOS",
-          code: "AD",
-          color: "#db2777",
-          headerBg: "#831843",
-          events: [
-            { id: "ad-1p", title: "Primer Parcial", category: "parciales", startDate: "2026-09-22", endDate: "2026-09-22" },
-            { id: "ad-1r", title: "Recuperatorio Primer Parcial", category: "recuperatorios", startDate: "2026-09-29", endDate: "2026-09-29" },
-            { id: "ad-2p", title: "Segundo Parcial", category: "parciales", startDate: "2026-11-10", endDate: "2026-11-10" },
-            { id: "ad-2r", title: "Recuperatorio Segundo Parcial", category: "recuperatorios", startDate: "2026-11-17", endDate: "2026-11-17" },
-            { id: "ad-col1", title: "1º Llamado Coloquios", category: "coloquios", startDate: "2026-09-23", endDate: "2026-09-25" },
-            { id: "ad-col1r", title: "Recup. Coloquios 1º", category: "recuperatorios", startDate: "2026-09-30", endDate: "2026-10-02" },
-            { id: "ad-col2", title: "2º Llamado Coloquios", category: "coloquios", startDate: "2026-11-11", endDate: "2026-11-13" },
-            { id: "ad-col2r", title: "Recup. Coloquios 2º", category: "recuperatorios", startDate: "2026-11-18", endDate: "2026-11-20" }
-          ]
-        },
-        {
-          id: "entregas_imp",
-          name: "FECHAS IMPORTANTES (ENTREGAS)",
-          code: "ENTREGAS",
-          color: "#16a34a",
-          headerBg: "#14532d",
-          events: [
-            { id: "ent-1", title: "1 - Propuesta de Proyecto y Repositorio", category: "entregas", startDate: "2026-08-30", endDate: "2026-08-30" },
-            { id: "ent-2", title: "2 - Diseño y Módulos", category: "entregas", startDate: "2026-09-27", endDate: "2026-09-27" },
-            { id: "ent-3", title: "3 - Entrega Final - Informe y Video", category: "entregas", startDate: "2026-11-14", endDate: "2026-11-14" }
-          ]
-        },
-        {
-          id: "ad_int",
-          name: "ANÁLISIS DE DATOS (INTEGRADOR)",
-          code: "AD-INT",
-          color: "#ea580c",
-          headerBg: "#831843",
-          events: [
-            { id: "ad-int-1", title: "1ª Entrega", category: "entregas", startDate: "2026-08-17", endDate: "2026-08-21" },
-            { id: "ad-int-2", title: "2ª Entrega", category: "entregas", startDate: "2026-08-31", endDate: "2026-09-04" },
-            { id: "ad-int-3", title: "3ª Entrega", category: "entregas", startDate: "2026-09-07", endDate: "2026-09-11" },
-            { id: "ad-int-4", title: "4ª Entrega", category: "entregas", startDate: "2026-10-05", endDate: "2026-10-09" },
-            { id: "ad-int-5", title: "5ª Entrega", category: "entregas", startDate: "2026-10-19", endDate: "2026-10-23" },
-            { id: "ad-int-6", title: "6ª Entrega", category: "entregas", startDate: "2026-10-26", endDate: "2026-10-30" },
-            { id: "ad-int-fn", title: "Entrega Final", category: "entregas", startDate: "2026-11-09", endDate: "2026-11-13" },
-            { id: "ad-int-col", title: "Coloquio Integrador", category: "coloquios", startDate: "2026-11-16", endDate: "2026-11-20" }
-          ]
+          id: "tif",
+          name: "TRABAJO INTEGRADOR FINAL",
+          code: "TIF",
+          color: "#059669",
+          headerBg: "#064e3b",
+          icsUrl: "https://calendar.google.com/calendar/ical/fe34e07ed86f1b002bbb2491731ec4b740ad0b804d667f74f23b3702ea7082de%40group.calendar.google.com/public/basic.ics",
+          events: []
         }
       ],
       months: [
@@ -908,17 +890,294 @@
     };
 
     /* ==========================================================================
+       ICS PARSER & LOCALSTORAGE CACHING ENGINE
+       ========================================================================== */
+    const CACHE_KEY_PREFIX = 'academic_calendar_ics_v2_';
+    const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour TTL
+
+    function getCachedSubjectEvents(subjectId) {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY_PREFIX + subjectId);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        if (data && typeof data.lastUpdated === 'number' && Array.isArray(data.events)) {
+          return data;
+        }
+      } catch (e) {
+        console.error("Error al leer cache de localStorage:", subjectId, e);
+      }
+      return null;
+    }
+
+    function setCachedSubjectEvents(subjectId, events) {
+      try {
+        const cacheObj = {
+          lastUpdated: Date.now(),
+          events: events
+        };
+        localStorage.setItem(CACHE_KEY_PREFIX + subjectId, JSON.stringify(cacheObj));
+      } catch (e) {
+        console.error("Error al guardar cache en localStorage:", subjectId, e);
+      }
+    }
+
+    function isCacheValid(cacheObj) {
+      if (!cacheObj || !cacheObj.lastUpdated) return false;
+      return (Date.now() - cacheObj.lastUpdated) < CACHE_TTL_MS;
+    }
+
+    function unfoldIcsLines(icsContent) {
+      const lines = icsContent.split(/\r\n|\n|\r/);
+      const unfolded = [];
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if ((line.startsWith(' ') || line.startsWith('\t')) && unfolded.length > 0) {
+          unfolded[unfolded.length - 1] += line.slice(1);
+        } else {
+          unfolded.push(line);
+        }
+      }
+      return unfolded;
+    }
+
+    function unescapeIcsText(str) {
+      if (!str) return '';
+      return str
+        .replace(/\\n/gi, '\n')
+        .replace(/\\,/g, ',')
+        .replace(/\\;/g, ';')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
+
+    function parseIcsDate(dateStr) {
+      if (!dateStr) return { date: '', isAllDay: false };
+      const actualValue = dateStr.includes(':') ? dateStr.split(':').pop() : dateStr;
+      if (actualValue.length >= 8) {
+        const year = actualValue.slice(0, 4);
+        const month = actualValue.slice(4, 6);
+        const day = actualValue.slice(6, 8);
+        const formatted = `${year}-${month}-${day}`;
+        const isAllDay = !actualValue.includes('T');
+        return { date: formatted, isAllDay, raw: actualValue };
+      }
+      return { date: '', isAllDay: false };
+    }
+
+    function formatAdjustedEndDate(startDateStr, endDateStr, isAllDay) {
+      if (!endDateStr) return startDateStr;
+      if (!isAllDay) return endDateStr;
+      try {
+        const [sY, sM, sD] = startDateStr.split('-').map(Number);
+        const [eY, eM, eD] = endDateStr.split('-').map(Number);
+        const sDate = new Date(Date.UTC(sY, sM - 1, sD));
+        const eDate = new Date(Date.UTC(eY, eM - 1, eD));
+        const diffDays = Math.round((eDate - sDate) / (1000 * 60 * 60 * 24));
+        if (diffDays <= 1) {
+          return startDateStr;
+        } else {
+          eDate.setUTCDate(eDate.getUTCDate() - 1);
+          const adjY = eDate.getUTCFullYear();
+          const adjM = String(eDate.getUTCMonth() + 1).padStart(2, '0');
+          const adjD = String(eDate.getUTCDate()).padStart(2, '0');
+          return `${adjY}-${adjM}-${adjD}`;
+        }
+      } catch (err) {
+        return endDateStr;
+      }
+    }
+
+    function categorizeEvent(title = '', description = '') {
+      const text = (title + ' ' + description).toLowerCase();
+      if (text.includes('recuperatorio') || text.includes('recup')) return 'recuperatorios';
+      if (text.includes('parcial')) return 'parciales';
+      if (text.includes('coloquio')) return 'coloquios';
+      if (text.includes('integrador') || text.includes('int.')) return 'integradores';
+      if (text.includes('entrega') || text.includes('tp') || text.includes('trabajo') || text.includes('propuesta')) return 'entregas';
+      return 'entregas';
+    }
+
+    function parseIcsEvents(icsContent, subjectId) {
+      const lines = unfoldIcsLines(icsContent);
+      const events = [];
+      let current = null;
+      let counter = 0;
+
+      for (const line of lines) {
+        if (line === 'BEGIN:VEVENT') {
+          current = {};
+        } else if (line === 'END:VEVENT') {
+          if (current && current.title) {
+            counter++;
+            const startObj = parseIcsDate(current.dtstartRaw);
+            const endObj = parseIcsDate(current.dtendRaw);
+            const startDate = startObj.date;
+            const endDate = formatAdjustedEndDate(startDate, endObj.date, startObj.isAllDay);
+            const category = categorizeEvent(current.title, current.description);
+
+            events.push({
+              id: `${subjectId}-ics-${counter}`,
+              title: current.title,
+              category: category,
+              startDate: startDate,
+              endDate: endDate || startDate,
+              details: current.description || ''
+            });
+          }
+          current = null;
+        } else if (current) {
+          const colonIdx = line.indexOf(':');
+          if (colonIdx !== -1) {
+            const keyPart = line.slice(0, colonIdx);
+            const val = line.slice(colonIdx + 1);
+            const key = keyPart.split(';')[0].toUpperCase();
+
+            if (key === 'SUMMARY') current.title = unescapeIcsText(val);
+            else if (key === 'DESCRIPTION') current.description = unescapeIcsText(val);
+            else if (key === 'DTSTART') current.dtstartRaw = line.slice(line.indexOf(':') + 1);
+            else if (key === 'DTEND') current.dtendRaw = line.slice(line.indexOf(':') + 1);
+          }
+        }
+      }
+
+      // Sort events chronologically by startDate
+      events.sort((a, b) => (a.startDate || '').localeCompare(b.startDate || ''));
+      return events;
+    }
+
+    async function fetchIcsData(url) {
+      const proxyFactories = [
+        targetUrl => `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`,
+        targetUrl => `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+        targetUrl => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+      ];
+
+      for (const getProxyUrl of proxyFactories) {
+        try {
+          const proxyUrl = getProxyUrl(url);
+          const res = await fetch(proxyUrl);
+          if (res.ok) {
+            const text = await res.text();
+            if (text && text.includes('BEGIN:VCALENDAR')) {
+              return text;
+            }
+          }
+        } catch (err) {
+          console.warn(`Proxy falló: ${getProxyUrl(url)}`, err);
+        }
+      }
+
+      // Intentar fetch directo como último recurso
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const text = await res.text();
+          if (text && text.includes('BEGIN:VCALENDAR')) {
+            return text;
+          }
+        }
+      } catch (err) {
+        console.warn(`Fetch directo falló para ${url}`, err);
+      }
+
+      throw new Error(`No se pudo obtener el archivo .ics desde ningún proxy CORS.`);
+    }
+
+    async function loadSubjectData(subject, forceRefresh = false) {
+      const cached = getCachedSubjectEvents(subject.id);
+      if (!forceRefresh && cached && isCacheValid(cached)) {
+        subject.events = cached.events;
+        subject.lastUpdated = cached.lastUpdated;
+        return;
+      }
+
+      try {
+        const icsText = await fetchIcsData(subject.icsUrl);
+        const parsedEvents = parseIcsEvents(icsText, subject.id);
+        setCachedSubjectEvents(subject.id, parsedEvents);
+        subject.events = parsedEvents;
+        subject.lastUpdated = Date.now();
+      } catch (err) {
+        console.error(`Error cargando ICS para ${subject.name}:`, err);
+        if (cached) {
+          subject.events = cached.events;
+          subject.lastUpdated = cached.lastUpdated;
+        } else {
+          subject.events = [];
+          subject.lastUpdated = null;
+        }
+      }
+    }
+
+    async function syncSingleSubject(subjectId, forceRefresh = true) {
+      const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
+      if (!subj) return;
+
+      const btnIcon = document.getElementById(`sync-icon-${subjectId}`);
+      if (btnIcon) btnIcon.classList.add("spinning");
+
+      await loadSubjectData(subj, forceRefresh);
+
+      if (btnIcon) btnIcon.classList.remove("spinning");
+
+      updateSyncStatusLabel();
+      renderSidebarSubjects();
+      renderCalendars();
+    }
+
+    async function syncAllSubjects(forceRefresh = false) {
+      const syncIcon = document.getElementById("sync-all-icon");
+      const statusLabel = document.getElementById("sync-status-label");
+
+      if (syncIcon) syncIcon.classList.add("spinning");
+      if (statusLabel) statusLabel.innerText = forceRefresh ? "Sincronizando..." : "Cargando...";
+
+      const promises = academicCalendarData.subjects.map(subj => loadSubjectData(subj, forceRefresh));
+      await Promise.allSettled(promises);
+
+      if (syncIcon) syncIcon.classList.remove("spinning");
+
+      updateSyncStatusLabel();
+      renderSidebarSubjects();
+      renderCalendars();
+    }
+
+    function updateSyncStatusLabel() {
+      const statusLabel = document.getElementById("sync-status-label");
+      if (!statusLabel) return;
+
+      let maxLastUpdated = 0;
+      academicCalendarData.subjects.forEach(subj => {
+        if (subj.lastUpdated && subj.lastUpdated > maxLastUpdated) {
+          maxLastUpdated = subj.lastUpdated;
+        }
+      });
+
+      if (maxLastUpdated > 0) {
+        const date = new Date(maxLastUpdated);
+        const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const ageMin = Math.floor((Date.now() - maxLastUpdated) / 60000);
+        if (ageMin < 1) {
+          statusLabel.innerText = `Sincronizado recién (${timeStr}hs)`;
+        } else {
+          statusLabel.innerText = `Sincronizado a las ${timeStr}hs (hace ${ageMin}m)`;
+        }
+      } else {
+        statusLabel.innerText = "Sin sincronizar";
+      }
+    }
+
+    /* ==========================================================================
        STATE MANAGEMENT & RENDER ENGINE
        ========================================================================== */
     let selectedCategory = null;
     let selectedSubjectId = null;
     let searchQuery = "";
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       renderLegend();
-      renderSidebarSubjects();
-      renderCalendars();
       setupSearch();
+      await syncAllSubjects(false);
     });
 
     // 1. Render Category Legend
@@ -959,26 +1218,35 @@
 
         const codeBadge = subject.code ? `<span style="background: rgba(255,255,255,0.25); padding: 1px 5px; border-radius: 4px; font-size: 11px; margin-right: 4px; font-weight: 800;">${subject.code}</span>` : '';
 
+        const eventsListHtml = subject.events.length === 0 
+          ? `<tr><td colspan="2" style="color: #94a3b8; text-align: center; font-style: italic; padding: 10px;">Sin eventos registrados</td></tr>`
+          : subject.events.map(ev => {
+              const cat = getCategory(ev.category);
+              const dStr = getEventDateStr(ev);
+              return `
+                <tr onclick="event.stopPropagation(); openEventModal('${ev.id}')" title="${ev.details ? `${ev.title} - ${ev.details}` : ev.title}">
+                  <td class="event-name">
+                    <span class="event-dot" style="background-color: ${cat.color}"></span>
+                    <span>${ev.title}</span>
+                  </td>
+                  <td class="event-date">${dStr}</td>
+                </tr>
+              `;
+            }).join('');
+
         return `
           <div class="subject-card ${selectedSubjectId === subject.id ? 'highlighted' : ''}" onclick="toggleSubjectHighlight('${subject.id}')">
-            <div class="subject-header" style="background-color: ${subject.headerBg}; border-left: 5px solid ${subject.color};">
+            <div class="subject-header" style="background-color: ${subject.headerBg}; border-left: 5px solid ${subject.color}; display: flex; justify-content: space-between; align-items: center;">
               <span>${codeBadge}${subject.name}</span>
+              <button class="subject-sync-btn" onclick="event.stopPropagation(); syncSingleSubject('${subject.id}', true)" title="Sincronizar ${subject.name}">
+                <svg id="sync-icon-${subject.id}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                </svg>
+              </button>
             </div>
             <table class="subject-table">
               <tbody>
-                ${subject.events.map(ev => {
-                  const cat = getCategory(ev.category);
-                  const dStr = getEventDateStr(ev);
-                  return `
-                    <tr onclick="event.stopPropagation(); openEventModal('${ev.id}')" title="${ev.details ? `${ev.title} - ${ev.details}` : ev.title}">
-                      <td class="event-name">
-                        <span class="event-dot" style="background-color: ${cat.color}"></span>
-                        <span>${ev.title}</span>
-                      </td>
-                      <td class="event-date">${dStr}</td>
-                    </tr>
-                  `;
-                }).join('')}
+                ${eventsListHtml}
               </tbody>
             </table>
           </div>
