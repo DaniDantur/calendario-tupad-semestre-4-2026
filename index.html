@@ -371,29 +371,43 @@
     }
 
     .month-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-auto-rows: minmax(75px, auto);
+      display: flex;
+      flex-direction: column;
       border-left: 1px solid #e2e8f0;
       border-top: 1px solid #e2e8f0;
     }
 
+    .week-row {
+      position: relative;
+      border-bottom: 1px solid #e2e8f0;
+      min-height: 55px;
+    }
+
+    .week-bg-grid {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      z-index: 1;
+      pointer-events: none;
+    }
+
     .day-cell {
       border-right: 1px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
       background: #ffffff;
-      padding: 4px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      min-height: 75px;
       transition: background 0.15s ease;
+      height: 100%;
+    }
+
+    .day-cell:last-child {
+      border-right: none;
     }
 
     .day-cell.other-month {
       background-color: #f8fafc;
-      color: #94a3b8;
     }
 
     .day-cell.today {
@@ -401,7 +415,36 @@
       box-shadow: inset 0 0 0 2px #2563eb;
     }
 
-    .day-cell.today .day-number {
+    .week-content-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: min-content;
+      padding-top: 22px;
+      padding-bottom: 4px;
+      gap: 2px 0;
+    }
+
+    .day-number-wrapper {
+      position: absolute;
+      top: 3px;
+      padding: 0 4px;
+      box-sizing: border-box;
+      pointer-events: auto;
+    }
+
+    .day-number {
+      font-size: 11px;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1.2;
+    }
+    .other-month-num .day-number {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .today-num .day-number {
       color: #1d4ed8;
       font-weight: 800;
       display: flex;
@@ -423,14 +466,23 @@
     .event-pill {
       font-size: 10px;
       font-weight: 700;
-      padding: 3px 6px;
+      padding: 2px 5px;
       border-radius: 4px;
-      line-height: 1.25;
+      line-height: 1.3;
       cursor: pointer;
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      border-left: 3px solid transparent;
+      border-left: 4px solid transparent;
       transition: transform 0.15s ease, filter 0.15s ease;
-      word-break: break-word;
+      margin: 1px 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event-pill:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.95);
+      z-index: 10;
     }
 
     .event-pill:hover {
@@ -1451,6 +1503,8 @@
       const todayDay = String(now.getDate()).padStart(2, '0');
       const todayStr = `${todayYear}-${todayMonth}-${todayDay}`;
 
+      const normalizedQuery = normalizeStr(searchQuery);
+
       academicCalendarData.months.forEach(m => {
         const monthCard = document.createElement("div");
         monthCard.className = "month-card";
@@ -1467,118 +1521,206 @@
         daysHeader.innerHTML = dayNames.map(d => `<div>${d}</div>`).join('');
         monthCard.appendChild(daysHeader);
 
-        // Grid
+        // Month Grid Container
         const grid = document.createElement("div");
         grid.className = "month-grid";
 
-        // Generate day cells for month
         const year = m.year;
-        const monthIdx = m.monthIdx; // 7 = Aug, 8 = Sept, 9 = Oct, 10 = Nov
+        const monthIdx = m.monthIdx;
 
-        // First day of month date object
         const firstDay = new Date(year, monthIdx, 1);
-        // Get day of week (Monday = 0 ... Sunday = 6)
-        let firstDayOfWeek = (firstDay.getDay() + 6) % 7; 
-
-        // Days in current month
+        let firstDayOfWeek = (firstDay.getDay() + 6) % 7; // 0 = Mon, 6 = Sun
         const totalDays = new Date(year, monthIdx + 1, 0).getDate();
-        // Days in previous month
         const prevMonthTotalDays = new Date(year, monthIdx, 0).getDate();
 
         let dayCount = 1;
         let nextMonthDayCount = 1;
-
-        // 5 or 6 rows of 7 days = 35 or 42 cells
         const totalCells = Math.ceil((firstDayOfWeek + totalDays) / 7) * 7;
+        const numWeeks = totalCells / 7;
 
+        // Build list of all dates for all cells in month grid
+        const allCellDates = [];
         for (let cellIdx = 0; cellIdx < totalCells; cellIdx++) {
-          const cell = document.createElement("div");
-          cell.className = "day-cell";
-
           let cellDateStr = "";
           let isCurrentMonth = false;
           let cellDayNum = 1;
 
           if (cellIdx < firstDayOfWeek) {
-            // Previous month day
             cellDayNum = prevMonthTotalDays - (firstDayOfWeek - cellIdx - 1);
-            cell.classList.add("other-month");
-            cell.innerHTML = `<div class="day-number"><span>${cellDayNum}</span></div>`;
-            const prevMonthIdx = monthIdx - 1;
-            const pMonthFormatted = String(prevMonthIdx + 1).padStart(2, '0');
-            cellDateStr = `${year}-${pMonthFormatted}-${String(cellDayNum).padStart(2, '0')}`;
+            const dObj = new Date(year, monthIdx - 1, cellDayNum);
+            const y = dObj.getFullYear();
+            const mo = String(dObj.getMonth() + 1).padStart(2, '0');
+            const da = String(dObj.getDate()).padStart(2, '0');
+            cellDateStr = `${y}-${mo}-${da}`;
           } else if (dayCount <= totalDays) {
-            // Current month day
             cellDayNum = dayCount;
-            cell.innerHTML = `<div class="day-number"><span>${cellDayNum}</span></div>`;
             isCurrentMonth = true;
-            const mMonthFormatted = String(monthIdx + 1).padStart(2, '0');
-            cellDateStr = `${year}-${mMonthFormatted}-${String(cellDayNum).padStart(2, '0')}`;
+            const mo = String(monthIdx + 1).padStart(2, '0');
+            const da = String(cellDayNum).padStart(2, '0');
+            cellDateStr = `${year}-${mo}-${da}`;
             dayCount++;
           } else {
-            // Next month day
             cellDayNum = nextMonthDayCount;
-            cell.classList.add("other-month");
-            cell.innerHTML = `<div class="day-number"><span>${cellDayNum}</span></div>`;
-            const nextMonthIdx = monthIdx + 1;
-            const nMonthFormatted = String(nextMonthIdx + 1).padStart(2, '0');
-            cellDateStr = `${year}-${nMonthFormatted}-${String(cellDayNum).padStart(2, '0')}`;
+            const dObj = new Date(year, monthIdx + 1, cellDayNum);
+            const y = dObj.getFullYear();
+            const mo = String(dObj.getMonth() + 1).padStart(2, '0');
+            const da = String(dObj.getDate()).padStart(2, '0');
+            cellDateStr = `${y}-${mo}-${da}`;
             nextMonthDayCount++;
           }
 
-          if (cellDateStr === todayStr) {
-            cell.classList.add("today");
-            const dayNumEl = cell.querySelector(".day-number");
-            if (dayNumEl) {
-              dayNumEl.innerHTML += `<span class="today-badge">HOY</span>`;
-            }
-          }
-
-          // Populate events occurring on this cellDateStr
-          renderEventsForDayCell(cell, cellDateStr, isCurrentMonth);
-
-          grid.appendChild(cell);
+          allCellDates.push({
+            cellIdx,
+            cellDayNum,
+            isCurrentMonth,
+            dateStr: cellDateStr
+          });
         }
 
-        monthCard.appendChild(grid);
-        container.appendChild(monthCard);
-      });
-    }
+        // Render Week Rows
+        for (let w = 0; w < numWeeks; w++) {
+          const weekRow = document.createElement("div");
+          weekRow.className = "week-row";
 
-    // Helper: Find & render events for a specific cell date
-    function renderEventsForDayCell(cellElement, dateStr, isCurrentMonth) {
-      const normalizedQuery = normalizeStr(searchQuery);
+          const weekCells = allCellDates.slice(w * 7, w * 7 + 7);
+          const weekStartDate = weekCells[0].dateStr;
+          const weekEndDate = weekCells[6].dateStr;
 
-      academicCalendarData.subjects.forEach(subject => {
-        // If subject highlight filter active and not matching, dim or skip
-        const isSubjectActive = !selectedSubjectId || selectedSubjectId === subject.id;
+          // 1. Background Grid (Cols 1..7)
+          const weekBgGrid = document.createElement("div");
+          weekBgGrid.className = "week-bg-grid";
 
-        subject.events.forEach(ev => {
-          if (!ev.startDate) return;
+          weekCells.forEach((cData) => {
+            const bgCell = document.createElement("div");
+            bgCell.className = "day-cell";
+            if (!cData.isCurrentMonth) {
+              bgCell.classList.add("other-month");
+            }
+            if (cData.dateStr === todayStr) {
+              bgCell.classList.add("today");
+            }
+            weekBgGrid.appendChild(bgCell);
+          });
+          weekRow.appendChild(weekBgGrid);
 
-          // Check if dateStr falls in [startDate, endDate]
-          if (dateStr >= ev.startDate && dateStr <= ev.endDate) {
-            // Check category filter
-            if (selectedCategory && ev.category !== selectedCategory) return;
-            // Check search filter
-            if (normalizedQuery && !normalizeStr(ev.title).includes(normalizedQuery) && !normalizeStr(subject.name).includes(normalizedQuery) && !normalizeStr(subject.code || "").includes(normalizedQuery)) return;
+          // 2. Content Grid (Day Numbers + Event Pills)
+          const weekContentGrid = document.createElement("div");
+          weekContentGrid.className = "week-content-grid";
 
+          // Render Day Numbers
+          weekCells.forEach((cData, colIdx) => {
+            const numWrap = document.createElement("div");
+            numWrap.className = "day-number-wrapper";
+            numWrap.style.left = `${(colIdx / 7) * 100}%`;
+            numWrap.style.width = `${(1 / 7) * 100}%`;
+
+            if (!cData.isCurrentMonth) {
+              numWrap.classList.add("other-month-num");
+            }
+            if (cData.dateStr === todayStr) {
+              numWrap.classList.add("today-num");
+            }
+
+            numWrap.innerHTML = `<div class="day-number"><span>${cData.cellDayNum}</span>${cData.dateStr === todayStr ? ' <span class="today-badge">HOY</span>' : ''}</div>`;
+            weekContentGrid.appendChild(numWrap);
+          });
+
+          // Render Events
+          const weekEvents = [];
+
+          academicCalendarData.subjects.forEach(subject => {
+            const isSubjectActive = !selectedSubjectId || selectedSubjectId === subject.id;
+
+            subject.events.forEach(ev => {
+              if (!ev.startDate || !ev.endDate) return;
+
+              // Check date intersection: ev [startDate, endDate] intersects week [weekStartDate, weekEndDate]
+              if (ev.startDate <= weekEndDate && ev.endDate >= weekStartDate) {
+                // Category filter
+                if (selectedCategory && ev.category !== selectedCategory) return;
+                // Search query filter
+                if (normalizedQuery && 
+                    !normalizeStr(ev.title).includes(normalizedQuery) && 
+                    !normalizeStr(subject.name).includes(normalizedQuery) && 
+                    !normalizeStr(subject.code || "").includes(normalizedQuery)) return;
+
+                // Find start column (0..6)
+                let startCol = 0;
+                for (let c = 0; c < 7; c++) {
+                  if (weekCells[c].dateStr >= ev.startDate) {
+                    startCol = c;
+                    break;
+                  }
+                }
+
+                // Find end column (0..6)
+                let endCol = 6;
+                for (let c = 6; c >= 0; c--) {
+                  if (weekCells[c].dateStr <= ev.endDate) {
+                    endCol = c;
+                    break;
+                  }
+                }
+
+                if (startCol <= endCol) {
+                  const duration = (new Date(ev.endDate) - new Date(ev.startDate)) / (1000 * 60 * 60 * 24);
+                  weekEvents.push({
+                    subject,
+                    event: ev,
+                    isSubjectActive,
+                    startCol,
+                    endCol,
+                    span: endCol - startCol + 1,
+                    duration
+                  });
+                }
+              }
+            });
+          });
+
+          // Sort week events: longest spans / multi-day first, then by startCol
+          weekEvents.sort((a, b) => {
+            if (b.span !== a.span) return b.span - a.span;
+            return a.startCol - b.startCol;
+          });
+
+          // Render event pills into week content grid
+          weekEvents.forEach(item => {
+            const { subject, event: ev, isSubjectActive, startCol, endCol, span } = item;
             const cat = getCategory(ev.category);
+
             const pill = document.createElement("div");
             pill.className = `event-pill cat-${ev.category}`;
+            pill.style.gridColumn = `${startCol + 1} / ${endCol + 2}`;
+            
             if (cat.bg) pill.style.backgroundColor = cat.bg;
             if (cat.color) pill.style.color = cat.color;
+
             pill.style.borderLeft = `4px solid ${subject.color || subject.headerBg || cat.color || '#000'}`;
-            
+
             if (!isSubjectActive) {
               pill.classList.add("dimmed");
             } else if (selectedSubjectId === subject.id) {
               pill.classList.add("highlighted-pill");
             }
 
-            // Display text format using Siglas (subject.code)
+            // Continuous visual indicator for events extending beyond week boundaries
+            if (ev.startDate < weekStartDate) {
+              pill.style.borderTopLeftRadius = "0";
+              pill.style.borderBottomLeftRadius = "0";
+            }
+            if (ev.endDate > weekEndDate) {
+              pill.style.borderTopRightRadius = "0";
+              pill.style.borderBottomRightRadius = "0";
+            }
+
             const subjectCode = subject.code || subject.name.split(' ')[0];
-            let displayLabel = `${subjectCode}: ${ev.title}`;
+            let displayLabel = "";
+            if (span > 1 || ev.startDate !== ev.endDate) {
+              displayLabel = `${subjectCode}: ${ev.title} (${ev.dateStr})`;
+            } else {
+              displayLabel = `${subjectCode}: ${ev.title}`;
+            }
 
             pill.innerText = displayLabel;
             pill.title = `${subject.name} (${subjectCode}) - ${ev.title} (${ev.dateStr})`;
@@ -1587,9 +1729,15 @@
               openEventModal(ev.id);
             };
 
-            cellElement.appendChild(pill);
-          }
-        });
+            weekContentGrid.appendChild(pill);
+          });
+
+          weekRow.appendChild(weekContentGrid);
+          grid.appendChild(weekRow);
+        }
+
+        monthCard.appendChild(grid);
+        container.appendChild(monthCard);
       });
     }
 
