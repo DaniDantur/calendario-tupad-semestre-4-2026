@@ -395,8 +395,8 @@
     .events-subcol-header {
       background: #0f2754 !important;
       color: #93c5fd !important;
-      width: 140px;
-      min-width: 130px;
+      width: 220px;
+      min-width: 190px;
     }
 
     .sections-subcol-header {
@@ -471,15 +471,101 @@
     .events-cell, .sections-cell {
       border-right: 1px solid #e2e8f0;
       border-bottom: 1px solid #e2e8f0;
-      padding: 8px;
+      padding: 6px;
       vertical-align: top;
       min-height: 60px;
     }
 
     .events-cell {
       background-color: #ffffff;
-      width: 140px;
-      min-width: 130px;
+      width: 220px;
+      min-width: 190px;
+    }
+
+    .sections-cell {
+      background-color: #fafbfc;
+      width: 220px;
+      min-width: 190px;
+    }
+
+    /* Daily Slot Items inside Events Subcolumn */
+    .week-days-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .day-slot-item {
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+      padding: 3px 4px;
+      border-bottom: 1px solid #f1f5f9;
+      min-height: 28px;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+
+    .day-slot-item:last-child {
+      border-bottom: none;
+    }
+
+    .day-slot-item.weekend-slot {
+      background-color: rgba(248, 250, 252, 0.75);
+    }
+
+    .day-slot-item.today-slot {
+      background-color: #eff6ff;
+      border-left: 3px solid #2563eb;
+    }
+
+    .day-slot-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      width: 32px;
+      padding-right: 4px;
+      border-right: 1px solid #e2e8f0;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .day-slot-number {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1;
+    }
+
+    .today-slot .day-slot-number {
+      color: #2563eb;
+    }
+
+    .day-slot-name {
+      font-size: 9px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-top: 1px;
+    }
+
+    .day-slot-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .day-slot-empty-dash {
+      font-size: 11px;
+      color: #cbd5e1;
+      padding-left: 2px;
     }
 
     .sections-cell {
@@ -603,17 +689,14 @@
     }
 
     .status-badge {
-      font-size: 9px;
-      font-weight: 800;
+      font-size: 11px;
       padding: 2px 6px;
-      border-radius: 12px;
+      border-radius: 8px;
       display: inline-flex;
       align-items: center;
-      gap: 3px;
-      white-space: nowrap;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
+      justify-content: center;
       border: 1px solid transparent;
+      line-height: 1;
     }
 
     .no-sections-placeholder {
@@ -1578,45 +1661,74 @@
         academicCalendarData.subjects.forEach(subject => {
           if (selectedSubjectId && selectedSubjectId !== subject.id) return;
 
-          // 1. Filter Events in this week
-          const weekEvents = subject.events.filter(ev => {
-            if (!ev.startDate) return false;
+          // 1. Subcolumn 1: Eventos Cell with 7 Daily Slots (LUN to DOM)
+          const WEEKDAY_NAMES_3 = ["LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"];
 
-            if (selectedCategory && ev.category !== selectedCategory) return false;
+          html += `<td class="events-cell"><div class="week-days-container">`;
 
-            if (normalizedQuery && 
-                !normalizeStr(ev.title).includes(normalizedQuery) && 
-                !normalizeStr(subject.name).includes(normalizedQuery) && 
-                !normalizeStr(subject.code || "").includes(normalizedQuery) &&
-                !normalizeStr(ev.details || "").includes(normalizedQuery)) return false;
+          for (let d = 0; d < 7; d++) {
+            const dayDate = new Date(week.startObj);
+            dayDate.setDate(week.startObj.getDate() + d);
 
-            const evStart = ev.startDate;
-            const evEnd = ev.endDate || ev.startDate;
+            const yyyy = dayDate.getFullYear();
+            const mm = String(dayDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(dayDate.getDate()).padStart(2, '0');
+            const dateStr = `${yyyy}-${mm}-${dd}`;
 
-            // Check overlap between [evStart, evEnd] and [week.startDate, week.endDate]
-            return (evStart <= week.endDate && evEnd >= week.startDate);
-          });
+            const dayNum = dayDate.getDate();
+            const dayName = WEEKDAY_NAMES_3[d];
+            const isWeekend = (d === 5 || d === 6);
+            const isToday = (dateStr === todayStr);
 
-          // Subcolumn 1: Eventos Cell
-          html += `<td class="events-cell">`;
-          if (weekEvents.length > 0) {
-            weekEvents.forEach(ev => {
-              const cat = getCategory(ev.category);
-              const dateRangeStr = getEventDateStr(ev);
+            // Filter events for this specific day
+            const dayEvents = subject.events.filter(ev => {
+              if (!ev.startDate) return false;
 
-              html += `
-                <div class="event-card cat-${ev.category}" onclick="openEventModal('${ev.id}')" title="${ev.title} - ${subject.name}${ev.details ? ` (${ev.details})` : ''}">
-                  <div class="event-card-header">
-                    <span class="event-cat-badge" style="background-color: ${cat.color}; color: #ffffff;">${cat.label}</span>
-                    <span class="event-date-tag">${dateRangeStr}</span>
-                  </div>
-                  <div class="event-card-title">${ev.title}</div>
-                  ${ev.details ? `<div class="event-card-details">${ev.details}</div>` : ''}
-                </div>
-              `;
+              if (selectedCategory && ev.category !== selectedCategory) return false;
+
+              if (normalizedQuery && 
+                  !normalizeStr(ev.title).includes(normalizedQuery) && 
+                  !normalizeStr(subject.name).includes(normalizedQuery) && 
+                  !normalizeStr(subject.code || "").includes(normalizedQuery) &&
+                  !normalizeStr(ev.details || "").includes(normalizedQuery)) return false;
+
+              const evStart = ev.startDate;
+              const evEnd = ev.endDate || ev.startDate;
+              return (dateStr >= evStart && dateStr <= evEnd);
             });
+
+            html += `
+              <div class="day-slot-item ${dayEvents.length > 0 ? 'has-events' : 'empty-slot'} ${isWeekend ? 'weekend-slot' : ''} ${isToday ? 'today-slot' : ''}">
+                <div class="day-slot-badge">
+                  <div class="day-slot-number">${dayNum}</div>
+                  <div class="day-slot-name">${dayName}</div>
+                </div>
+                <div class="day-slot-content">
+            `;
+
+            if (dayEvents.length > 0) {
+              dayEvents.forEach(ev => {
+                const cat = getCategory(ev.category);
+                html += `
+                  <div class="event-card cat-${ev.category}" onclick="openEventModal('${ev.id}')" title="${ev.title} - ${subject.name}${ev.details ? ` (${ev.details})` : ''}">
+                    <div class="event-card-header">
+                      <span class="event-cat-badge" style="background-color: ${cat.color}; color: #ffffff;">${cat.label}</span>
+                    </div>
+                    <div class="event-card-title">${ev.title}</div>
+                  </div>
+                `;
+              });
+            } else {
+              html += `<span class="day-slot-empty-dash">-</span>`;
+            }
+
+            html += `
+                </div>
+              </div>
+            `;
           }
-          html += `</td>`;
+
+          html += `</div></td>`;
 
           // Subcolumn 2: Secciones / Tareas Cell
           html += `<td class="sections-cell">`;
@@ -1636,9 +1748,8 @@
                 html += `
                   <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${subjWeeklyData.topic || ''}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}')">
                     <span class="section-task-title">${sec.title}</span>
-                    <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};">
+                    <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};" title="Estado: ${stDef.label}">
                       <span>${stDef.icon}</span>
-                      <span>${stDef.label}</span>
                     </span>
                   </div>
                 `;
