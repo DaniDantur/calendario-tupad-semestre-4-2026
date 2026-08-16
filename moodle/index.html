@@ -1295,12 +1295,12 @@
             }
         }
 
-        function getHiddenSubjectIds() {
+        function getVisibleSubjectIds() {
             try {
-                const saved = localStorage.getItem("moodle_hidden_subject_ids");
+                const saved = localStorage.getItem("moodle_visible_subject_ids");
                 return saved ? JSON.parse(saved) : [];
             } catch (e) {
-                console.error("Error al leer materias ocultas:", e);
+                console.error("Error al leer materias visibles:", e);
                 return [];
             }
         }
@@ -1314,8 +1314,8 @@
                 const courses = JSON.parse(cachedCoursesStr);
                 if (!Array.isArray(courses) || courses.length === 0) return false;
 
-                const hiddenIds = getHiddenSubjectIds();
-                const visibleCourses = courses.filter(c => !hiddenIds.includes(String(c.id)));
+                const visibleIds = getVisibleSubjectIds();
+                const visibleCourses = courses.filter(c => visibleIds.includes(String(c.id)));
 
                 academicCalendarData.subjects = visibleCourses.map((course, idx) => {
                     const palette = COURSE_PALETTES[idx % COURSE_PALETTES.length];
@@ -1383,8 +1383,8 @@
                     renderTableHeader();
                     renderWeeklyGrid();
 
-                    const hiddenIds = getHiddenSubjectIds();
-                    const visibleCourses = courses.filter(c => !hiddenIds.includes(String(c.id)));
+                    const visibleIds = getVisibleSubjectIds();
+                    const visibleCourses = courses.filter(c => visibleIds.includes(String(c.id)));
 
                     const contentPromises = visibleCourses.map(c => fetchCourseContents(baseUrl, token, c.id));
                     await Promise.allSettled(contentPromises);
@@ -1397,17 +1397,74 @@
             }
         }
 
-        async function fetchCourseContents(baseUrl, token, courseId) {
-            try {
-                const contentsUrl = `${baseUrl}/webservice/rest/server.php?wstoken=${token}&wsfunction=core_course_get_contents&moodlewsrestformat=json&courseid=${courseId}`;
-                const res = await fetch(contentsUrl);
-                const newSections = await res.json();
+        function formatSectionTitle(sec) {
+            if (!sec) return "Sección";
+            let name = sec.name || "";
+            if (typeof name === "string") {
+                name = name.replace(/<[^>]*>/g, "").replace(/&nbsp;/gi, " ").trim();
+            }
+            if (!name) {
+                if (sec.section !== undefined && sec.section !== null) {
+                    name = (sec.section === 0) ? "General / Introducción" : `Sección ${sec.section}`;
+                } else if (sec.id) {
+                    name = `Sección ${sec.id}`;
+                } else {
+                    name = "Sección";
+                }
+            }
+            return name;
+        }
 
-                if (Array.isArray(newSections)) {
-                    localStorage.setItem("moodle_course_contents_" + courseId, JSON.stringify(newSections));
+        async function fetchCourseContents(baseUrl, token, courseId) {
+            if (!baseUrl || !token || !courseId) return null;
+            if (baseUrl.endsWith("/")) baseUrl = baseUrl.slice(0, -1);
+
+            const contentsUrl = `${baseUrl}/webservice/rest/server.php?wstoken=${token}&wsfunction=core_course_get_contents&moodlewsrestformat=json&courseid=${courseId}`;
+            
+            let newSections = null;
+
+            try {
+                const res = await fetch(contentsUrl);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        newSections = data;
+                    }
                 }
             } catch (err) {
-                console.error(`Error al cargar contenidos para el curso ${courseId}:`, err);
+                console.warn(`Direct fetch for course contents ${courseId} failed, trying CORS proxies...`, err);
+            }
+
+            if (!newSections || !Array.isArray(newSections)) {
+                const proxyFactories = [
+                    targetUrl => `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`,
+                    targetUrl => `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+                    targetUrl => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+                ];
+
+                for (const getProxyUrl of proxyFactories) {
+                    try {
+                        const proxyUrl = getProxyUrl(contentsUrl);
+                        const res = await fetch(proxyUrl);
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (Array.isArray(data)) {
+                                newSections = data;
+                                break;
+                            }
+                        }
+                    } catch (err) {
+                        console.warn(`Proxy failed for course ${courseId}`, err);
+                    }
+                }
+            }
+
+            if (Array.isArray(newSections)) {
+                localStorage.setItem("moodle_course_contents_" + courseId, JSON.stringify(newSections));
+                return newSections;
+            } else {
+                console.warn(`No se pudieron obtener secciones en formato de lista para el curso ${courseId}`, newSections);
+                return null;
             }
         }
 
@@ -1429,13 +1486,13 @@
 
                 const baseUrl = localStorage.getItem("moodle_url") || "";
 
-                const topicTitle = assignedSections[0].name || `Sección ${assignedSections[0].section || 1}`;
+                const topicTitle = formatSectionTitle(assignedSections[0]);
 
                 const taskSections = assignedSections.slice(1).map(sec => ({
                     id: `${subjectId}-sec-${sec.id}`,
-                    title: sec.name || `Sección ${sec.section || sec.id}`,
+                    title: formatSectionTitle(sec),
                     defaultStatus: "Pendiente",
-                    url: `${baseUrl}/course/view.php?id=${subjectId}&section=${sec.section || 0}`
+                    url: `${baseUrl}/course/view.php?id=${subjectId}&section=${sec.section !== undefined ? sec.section : (sec.id || 0)}`
                 }));
 
                 return {
@@ -1711,8 +1768,8 @@
         }
 
         async function syncSingleSubject(subjectId, forceRefresh = true) {
-            const hiddenIds = getHiddenSubjectIds();
-            if (hiddenIds.includes(String(subjectId))) return;
+            const visibleIds = getVisibleSubjectIds();
+            if (!visibleIds.includes(String(subjectId))) return;
 
             const subj = academicCalendarData.subjects.find(s => String(s.id) === String(subjectId));
 
@@ -1749,8 +1806,8 @@
             const token = localStorage.getItem("moodle_token");
             const baseUrl = localStorage.getItem("moodle_url");
 
-            const hiddenIds = getHiddenSubjectIds();
-            const visibleSubjects = (academicCalendarData.subjects || []).filter(s => !hiddenIds.includes(String(s.id)));
+            const visibleIds = getVisibleSubjectIds();
+            const visibleSubjects = (academicCalendarData.subjects || []).filter(s => visibleIds.includes(String(s.id)));
 
             const promises = [];
 
@@ -2368,7 +2425,7 @@
 
             const cachedStr = localStorage.getItem("moodle_courses");
             const courses = cachedStr ? JSON.parse(cachedStr) : [];
-            const hiddenIds = getHiddenSubjectIds();
+            const visibleIds = getVisibleSubjectIds();
 
             if (!Array.isArray(courses) || courses.length === 0) {
                 container.innerHTML = "<span style='font-size: 12px; color: #64748b;'>No hay materias cargadas de Moodle.</span>";
@@ -2376,7 +2433,7 @@
             }
 
             container.innerHTML = courses.map(c => {
-                const isVisible = !hiddenIds.includes(String(c.id));
+                const isVisible = visibleIds.includes(String(c.id));
                 return `
                     <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer; user-select: none;">
                         <input type="checkbox" class="course-vis-checkbox" data-course-id="${c.id}" ${isVisible ? 'checked' : ''} onchange="onCourseVisibilityChange()">
@@ -2388,20 +2445,20 @@
 
         function onCourseVisibilityChange() {
             const checkboxes = document.querySelectorAll(".course-vis-checkbox");
-            const hidden = [];
+            const visible = [];
             checkboxes.forEach(cb => {
-                if (!cb.checked) {
-                    hidden.push(String(cb.dataset.courseId));
+                if (cb.checked) {
+                    visible.push(String(cb.dataset.courseId));
                 }
             });
 
-            localStorage.setItem("moodle_hidden_subject_ids", JSON.stringify(hidden));
+            localStorage.setItem("moodle_visible_subject_ids", JSON.stringify(visible));
             loadMoodleSubjectsFromStorage();
             
             const selectEl = document.getElementById("assignment-course-select");
             const cachedStr = localStorage.getItem("moodle_courses");
             const courses = cachedStr ? JSON.parse(cachedStr) : [];
-            const visibleCourses = courses.filter(c => !hidden.includes(String(c.id)));
+            const visibleCourses = courses.filter(c => visible.includes(String(c.id)));
 
             selectEl.innerHTML = visibleCourses.map(s => `
                 <option value="${s.id}" ${currentAssignmentCourseId && String(s.id) === String(currentAssignmentCourseId) ? 'selected' : ''}>
@@ -2415,11 +2472,26 @@
                     renderCourseAssignmentForm(visibleCourses[0].id);
                 }
             } else {
-                document.getElementById("course-sections-assignment-container").innerHTML = "<p style='color:#64748b; font-size:13px; padding: 12px 0;'>No hay materias visibles seleccionadas. Tildá al menos una materia arriba para mostrarla.</p>";
+                document.getElementById("course-sections-assignment-container").innerHTML = "<p style='color:#64748b; font-size:13px; padding: 12px 0;'>No hay materias marcadas como visibles. Tildá al menos una materia arriba para mostrarla y configurarla.</p>";
             }
 
             renderTableHeader();
             renderWeeklyGrid();
+
+            const token = localStorage.getItem("moodle_token");
+            const baseUrl = localStorage.getItem("moodle_url");
+            if (token && baseUrl) {
+                visibleCourses.forEach(c => {
+                    if (!localStorage.getItem("moodle_course_contents_" + c.id)) {
+                        fetchCourseContents(baseUrl, token, c.id).then(() => {
+                            if (String(c.id) === currentAssignmentCourseId) {
+                                renderCourseAssignmentForm(c.id);
+                            }
+                            renderWeeklyGrid();
+                        });
+                    }
+                });
+            }
         }
 
         function openWeekAssignmentModal(subjectId = null) {
@@ -2428,8 +2500,8 @@
             const selectEl = document.getElementById("assignment-course-select");
             const cachedStr = localStorage.getItem("moodle_courses");
             const courses = cachedStr ? JSON.parse(cachedStr) : [];
-            const hiddenIds = getHiddenSubjectIds();
-            const visibleCourses = courses.filter(c => !hiddenIds.includes(String(c.id)));
+            const visibleIds = getVisibleSubjectIds();
+            const visibleCourses = courses.filter(c => visibleIds.includes(String(c.id)));
 
             selectEl.innerHTML = visibleCourses.map(s => `
                 <option value="${s.id}" ${subjectId && String(s.id) === String(subjectId) ? 'selected' : ''}>
@@ -2442,15 +2514,33 @@
                 selectEl.value = targetCourseId;
                 renderCourseAssignmentForm(targetCourseId);
             } else {
-                document.getElementById("course-sections-assignment-container").innerHTML = "<p style='color:#64748b; font-size:13px;'>No hay materias visibles seleccionadas.</p>";
+                document.getElementById("course-sections-assignment-container").innerHTML = "<p style='color:#64748b; font-size:13px;'>No hay materias marcadas como visibles. Tildá al menos una materia arriba para mostrarla.</p>";
             }
 
             openModal("week-assignment-modal");
         }
 
+        async function manualSyncCurrentCourseSections(courseId) {
+            const container = document.getElementById("course-sections-assignment-container");
+            if (container) {
+                container.innerHTML = `<div style="padding: 16px; text-align: center; color: #1e3a8a; font-size: 13px; font-weight: 600;">
+                    🔄 Consultando secciones de Moodle...
+                </div>`;
+            }
+
+            const token = localStorage.getItem("moodle_token");
+            const baseUrl = localStorage.getItem("moodle_url");
+
+            if (token && baseUrl) {
+                await fetchCourseContents(baseUrl, token, courseId);
+            }
+
+            renderCourseAssignmentForm(courseId);
+        }
+
         function renderCourseAssignmentForm(courseId) {
             currentAssignmentCourseId = String(courseId);
-            const subj = academicCalendarData.subjects.find(s => s.id === currentAssignmentCourseId);
+            const subj = academicCalendarData.subjects.find(s => String(s.id) === currentAssignmentCourseId);
 
             const icsInput = document.getElementById("subject-ics-url-input");
             icsInput.value = subj ? (subj.icsUrl || "") : "";
@@ -2463,16 +2553,28 @@
             const assignments = assignmentsStr ? JSON.parse(assignmentsStr) : {};
 
             if (!Array.isArray(contents) || contents.length === 0) {
-                container.innerHTML = `<div style="padding: 16px; background: #f8fafc; border-radius: 8px; text-align: center; color: #64748b; font-size: 13px;">
-                    Sin contenidos cargados para este curso. Inicia sesión en Moodle o sincroniza los datos.
-                </div>`;
+                container.innerHTML = `
+                    <div style="padding: 16px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; text-align: center; color: #64748b; font-size: 13px;">
+                        <p style="margin-bottom: 10px;">No se encontraron secciones cargadas para esta materia.</p>
+                        <button class="btn btn-secondary" onclick="manualSyncCurrentCourseSections('${currentAssignmentCourseId}')">
+                            🔄 Cargar / Re-sincronizar Secciones de Moodle
+                        </button>
+                    </div>
+                `;
                 return;
             }
 
-            let html = "";
+            let html = `
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
+                    <button class="btn btn-outline" style="padding: 4px 8px; font-size: 11px;" onclick="manualSyncCurrentCourseSections('${currentAssignmentCourseId}')" title="Re-obtener secciones de esta materia desde Moodle">
+                        🔄 Re-sincronizar Secciones de Moodle
+                    </button>
+                </div>
+            `;
 
             contents.forEach(sec => {
                 const secAssignedWeek = assignments[`sec_${sec.id}`] || "";
+                const cleanTitle = formatSectionTitle(sec);
 
                 let weekSelectOptionsSec = `<option value="">Sin Asignar</option>`;
                 for (let w = 1; w <= 16; w++) {
@@ -2482,7 +2584,7 @@
                 html += `
                     <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
                         <div style="font-weight: 700; color: #0f172a; font-size: 14px; flex: 1;">
-                            📌 ${sec.name || `Sección ${sec.section || sec.id}`}
+                            📌 ${cleanTitle}
                         </div>
                         <div style="display: flex; align-items: center; gap: 6px;">
                             <label style="font-size: 11px; font-weight: 700; color: #64748b;">Semana:</label>
