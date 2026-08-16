@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Interfaz Moodle</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+
+    <div class="max-w-4xl mx-auto p-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Navegación Personalizada Moodle</h1>
+
+        <div id="login-section" class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Iniciar Sesión</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">URL de tu Moodle</label>
+                    <input type="text" id="moodle-url" placeholder="https://miuniversidad.edu.ar" class="w-full p-2 border rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Usuario</label>
+                    <input type="text" id="username" placeholder="Tu usuario" class="w-full p-2 border rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Contraseña</label>
+                    <input type="password" id="password" placeholder="Tu contraseña" class="w-full p-2 border rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button onclick="login()" class="w-full bg-blue-600 text-white p-2 rounded font-semibold hover:bg-blue-700 transition">Conectar</button>
+                <p id="login-error" class="text-red-500 text-sm hidden mt-2"></p>
+            </div>
+        </div>
+
+        <div id="courses-section" class="hidden space-y-6">
+            <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+                <span class="text-gray-700 font-medium">¡Conexión exitosa!</span>
+                <button onclick="logout()" class="text-sm bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200">Cerrar Sesión</button>
+            </div>
+            
+            <h2 class="text-2xl font-semibold text-gray-700">Mis Cursos</h2>
+            <div id="courses-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p class="text-gray-500">Cargando tus asignaturas...</p>
+            </div>
+        </div>
+
+        <div id="course-contents-section" class="hidden space-y-6">
+            <div class="flex items-center bg-white p-4 rounded-lg shadow-sm">
+                <button onclick="backToCourses()" class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">&larr; Volver a Mis Cursos</button>
+                <span id="course-title" class="text-gray-700 font-medium truncate ml-4"></span>
+            </div>
+
+            <div id="group-builder-section" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <div id="group-builder-default" class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-semibold text-gray-800">Agrupar Secciones</h3>
+                        <p class="text-xs text-gray-500">Organizá el contenido visualmente.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="clearGroups()" id="clear-groups-btn" class="text-sm text-red-600 hover:underline hidden">Limpiar agrupamientos</button>
+                        <button onclick="startGroupingMode()" class="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 transition">Crear grupo</button>
+                    </div>
+                </div>
+
+                <div id="group-builder-active" class="hidden bg-blue-50 p-4 rounded border border-blue-200 mt-2">
+                    <h3 class="font-semibold text-blue-800 mb-2">Nuevo Grupo</h3>
+                    <p class="text-xs text-blue-600 mb-3">Tildá las secciones debajo, escribí un nombre y guardá.</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="new-group-name" placeholder="Nombre del grupo (ej: Unidad 1)" class="p-2 border rounded flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button onclick="saveGroup()" class="bg-green-600 text-white px-4 py-2 rounded font-semibold hover:bg-green-700 transition">Agrupar</button>
+                        <button onclick="cancelGroupingMode()" class="bg-gray-400 text-white px-4 py-2 rounded font-semibold hover:bg-gray-500 transition">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="course-contents-container" class="space-y-4">
+                <p class="text-gray-500">Cargando contenidos...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Al cargar la página, verificamos si ya tenemos un token guardado
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("moodle_token");
+            const baseUrl = localStorage.getItem("moodle_url");
+            
+            if (token && baseUrl) {
+                showCoursesSection();
+                fetchCourses(baseUrl, token);
+            }
+        });
+
+        // 1. FUNCIÓN DE LOGIN (Obtener Token)
+        async function login() {
+            let baseUrl = document.getElementById("moodle-url").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const errorElement = document.getElementById("login-error");
+
+            if (!baseUrl || !username || !password) {
+                showError("Por favor, completa todos los campos.");
+                return;
+            }
+
+            // Aseguramos que la URL no termine en barra diagonal /
+            if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+
+            // Endpoint de Moodle para obtener el token de la app móvil
+            const loginUrl = `${baseUrl}/login/token.php?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&service=moodle_mobile_app`;
+
+            try {
+                const response = await fetch(loginUrl);
+                const data = await response.json();
+
+                if (data.token) {
+                    // Guardamos los datos de sesión en el navegador
+                    localStorage.setItem("moodle_token", data.token);
+                    localStorage.setItem("moodle_url", baseUrl);
+                    
+                    showCoursesSection();
+                    fetchCourses(baseUrl, data.token);
+                } else if (data.error) {
+                    showError(`Error de Moodle: ${data.error}`);
+                }
+            } catch (err) {
+                showError("No se pudo conectar con el servidor. Verifica la URL o problemas de CORS.");
+                console.error(err);
+            }
+        }
+
+        // 2. FUNCIÓN PARA BUSCAR CURSOS
+        async function fetchCourses(baseUrl, token) {
+            const container = document.getElementById("courses-container");
+            let hasCached = false;
+
+            // Intentamos mostrar los cursos guardados en localstorage inmediatamente
+            const cachedCoursesStr = localStorage.getItem("moodle_courses");
+            if (cachedCoursesStr) {
+                try {
+                    const cachedCourses = JSON.parse(cachedCoursesStr);
+                    if (Array.isArray(cachedCourses) && cachedCourses.length > 0) {
+                        renderCourses(cachedCourses);
+                        hasCached = true;
+                    }
+                } catch (e) {
+                    console.error("Error al parsear cursos de localstorage", e);
+                }
+            }
+
+            if (!hasCached) {
+                container.innerHTML = "<p class='text-gray-500'>Cargando tus asignaturas...</p>";
+            }
+
+            try {
+                // Obtener ID de usuario usando core_webservice_get_site_info
+                let userid = localStorage.getItem("moodle_userid");
+                if (!userid) {
+                    const infoUrl = `${baseUrl}/webservice/rest/server.php?wstoken=${token}&wsfunction=core_webservice_get_site_info&moodlewsrestformat=json`;
+                    const infoResponse = await fetch(infoUrl);
+                    const infoData = await infoResponse.json();
+                    
+                    if (infoData.userid) {
+                        userid = infoData.userid;
+                        // Guardamos los datos en localstorage
+                        localStorage.setItem("moodle_userid", userid);
+                        localStorage.setItem("moodle_site_info", JSON.stringify(infoData));
+                    } else {
+                        throw new Error("No se pudo obtener el ID de usuario.");
+                    }
+                }
+
+                // Endpoint para ejecutar funciones de la API REST
+                const coursesUrl = `${baseUrl}/webservice/rest/server.php?wstoken=${token}&wsfunction=core_enrol_get_users_courses&moodlewsrestformat=json&userid=${userid}&returnusercount=0`;
+
+                const response = await fetch(coursesUrl);
+                const courses = await response.json();
+
+                if (Array.isArray(courses)) {
+                    // Guardamos y actualizamos localstorage con la nueva data
+                    localStorage.setItem("moodle_courses", JSON.stringify(courses));
+                    renderCourses(courses);
+                } else if (!hasCached) {
+                    container.innerHTML = "<p class='text-gray-500'>No se encontraron cursos asignados a tu usuario.</p>";
+                }
+            } catch (err) {
+                if (!hasCached) {
+                    container.innerHTML = "<p class='text-red-500'>Error al cargar los cursos.</p>";
+                }
+                console.error(err);
+            }
+        }
+
+        function renderCourses(courses) {
+            const container = document.getElementById("courses-container");
+            container.innerHTML = "";
+
+            if (Array.isArray(courses) && courses.length > 0) {
+                courses.forEach(curso => {
+                    const card = document.createElement("div");
+                    card.className = "bg-white p-5 rounded-lg shadow-md border-l-4 border-blue-500 hover:shadow-lg transition cursor-pointer";
+                    card.innerHTML = `
+                        <h3 class="font-bold text-lg text-gray-800">${curso.fullname}</h3>
+                        <p class="text-sm text-gray-500 mt-1">Código: ${curso.shortname}</p>
+                        <div class="mt-4 text-right">
+                            <button onclick="viewCourseContents(${curso.id}, '${curso.fullname.replace(/'/g, "\\'")}')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold px-2.5 py-1 rounded transition">Ver contenidos</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = "<p class='text-gray-500'>No se encontraron cursos asignados a tu usuario.</p>";
+            }
+        }
+
+        let currentCourseId = null;
+        let currentSections = [];
+        let isGroupingMode = false;
+
+        // 3. FUNCIÓN PARA VER CONTENIDOS DEL CURSO
+        async function viewCourseContents(courseId, courseName) {
+            document.getElementById("courses-section").classList.add("hidden");
+            document.getElementById("course-contents-section").classList.remove("hidden");
+            document.getElementById("course-title").innerText = courseName;
+            
+            currentCourseId = courseId;
+            isGroupingMode = false;
+            document.getElementById("group-builder-active").classList.add("hidden");
+            document.getElementById("group-builder-default").classList.remove("hidden");
+            document.getElementById("new-group-name").value = "";
+            
+            const container = document.getElementById("course-contents-container");
+            let hasCached = false;
+
+            // Si el curso ya está en local storage, mostramos ese contenido de inmediato
+            const cachedContentsKey = "moodle_course_contents_" + courseId;
+            const cachedContentsStr = localStorage.getItem(cachedContentsKey);
+            if (cachedContentsStr) {
+                try {
+                    const cachedSections = JSON.parse(cachedContentsStr);
+                    if (Array.isArray(cachedSections) && cachedSections.length > 0) {
+                        currentSections = cachedSections;
+                        renderSections();
+                        hasCached = true;
+                    }
+                } catch (e) {
+                    console.error("Error al parsear contenidos de localstorage", e);
+                }
+            }
+
+            if (!hasCached) {
+                container.innerHTML = "<p class='text-gray-500'>Cargando contenidos...</p>";
+            }
+            
+            const baseUrl = localStorage.getItem("moodle_url");
+            const token = localStorage.getItem("moodle_token");
+            
+            try {
+                // Recupera la nueva data en el background
+                const contentsUrl = `${baseUrl}/webservice/rest/server.php?wstoken=${token}&wsfunction=core_course_get_contents&moodlewsrestformat=json&courseid=${courseId}`;
+                const response = await fetch(contentsUrl);
+                const newSections = await response.json();
+                
+                if (Array.isArray(newSections)) {
+                    // Actualiza localstorage con la data nueva y refresca el contenido de la página
+                    localStorage.setItem(cachedContentsKey, JSON.stringify(newSections));
+                    currentSections = newSections;
+                    renderSections();
+                } else if (!hasCached) {
+                    container.innerHTML = "<p class='text-gray-500'>No se encontraron contenidos para este curso.</p>";
+                }
+            } catch (err) {
+                if (!hasCached) {
+                    container.innerHTML = "<p class='text-red-500'>Error al cargar los contenidos.</p>";
+                }
+                console.error(err);
+            }
+        }
+
+        function renderSections() {
+            const container = document.getElementById("course-contents-container");
+            const groups = JSON.parse(localStorage.getItem('moodle_course_groups_' + currentCourseId) || '[]');
+            
+            // Guardamos los checkboxes marcados previamente si el usuario está seleccionando
+            const checkedIds = new Set(
+                Array.from(document.querySelectorAll(".section-checkbox:checked")).map(cb => cb.value)
+            );
+
+            let finalHtml = "";
+            const groupedSectionIds = new Set();
+            
+            groups.forEach(group => {
+                let groupHtml = "";
+                group.sectionIds.forEach(id => {
+                    groupedSectionIds.add(id);
+                    const section = currentSections.find(s => s.id === id);
+                    if (section) groupHtml += renderSingleSection(section, true, checkedIds);
+                });
+                
+                if (groupHtml) {
+                    finalHtml += `
+                        <div class="p-5 bg-gray-50 rounded-xl border border-gray-300 mt-6 shadow-sm">
+                            <h3 class="font-bold text-gray-700 mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                                ${group.groupName}
+                            </h3>
+                            <div class="space-y-4 ml-2 border-l-2 border-gray-200 pl-4">
+                                ${groupHtml}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            let ungroupedHtml = "";
+            currentSections.forEach(section => {
+                if (!groupedSectionIds.has(section.id) && section.modules && section.modules.length > 0) {
+                    ungroupedHtml += renderSingleSection(section, false, checkedIds);
+                }
+            });
+            
+            if (ungroupedHtml) {
+                finalHtml += `<div class="mt-6 space-y-4">${ungroupedHtml}</div>`;
+            }
+            
+            container.innerHTML = finalHtml || "<p class='text-gray-500'>Este curso no tiene contenidos visibles.</p>";
+            
+            updateGroupControls(groups);
+        }
+
+        function renderSingleSection(section, isGrouped, checkedIds = new Set()) {
+            const isChecked = checkedIds.has(String(section.id));
+            let html = `<div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <div class="flex items-center mb-3">
+                    <input type="checkbox" class="section-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded mr-3 ${isGrouped ? 'hidden' : (isGroupingMode ? '' : 'hidden')}" value="${section.id}" ${isChecked ? 'checked' : ''}>
+                    <h4 class="font-semibold text-lg text-gray-800">${section.name}</h4>
+                </div>
+                <ul class="space-y-2 ml-7">`;
+            
+            section.modules.forEach(mod => {
+                const hasDescription = mod.description ? true : false;
+                const toggleBtn = hasDescription ? `<button onclick="toggleDescription('desc-${mod.id}')" class="ml-2 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-0.5 rounded transition">Ver descripción</button>` : '';
+                const descHtml = hasDescription ? `<div id="desc-${mod.id}" class="hidden mt-2 text-sm text-gray-600 bg-gray-50 p-3 rounded border border-gray-200 overflow-hidden">${mod.description}</div>` : '';
+                
+                html += `
+                    <li class="flex flex-col text-gray-700">
+                        <div class="flex items-center">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded mr-2">${mod.modname}</span>
+                            ${mod.url ? `<a href="${mod.url}" target="_blank" class="text-blue-600 hover:underline">${mod.name}</a>` : `<span>${mod.name}</span>`}
+                            ${toggleBtn}
+                        </div>
+                        ${descHtml}
+                    </li>
+                `;
+            });
+            html += `</ul></div>`;
+            return html;
+        }
+
+        function backToCourses() {
+            document.getElementById("course-contents-section").classList.add("hidden");
+            document.getElementById("courses-section").classList.remove("hidden");
+        }
+
+        function startGroupingMode() {
+            isGroupingMode = true;
+            document.getElementById("group-builder-default").classList.add("hidden");
+            document.getElementById("group-builder-active").classList.remove("hidden");
+            renderSections();
+        }
+
+        function cancelGroupingMode() {
+            isGroupingMode = false;
+            document.getElementById("group-builder-active").classList.add("hidden");
+            document.getElementById("group-builder-default").classList.remove("hidden");
+            document.getElementById("new-group-name").value = "";
+            renderSections();
+        }
+
+        function saveGroup() {
+            const groupName = document.getElementById("new-group-name").value.trim();
+            if (!groupName) {
+                alert("Por favor, ingresá un nombre para el grupo.");
+                return;
+            }
+
+            const checkboxes = document.querySelectorAll(".section-checkbox:checked");
+            if (checkboxes.length === 0) {
+                alert("Por favor, seleccioná al menos una sección.");
+                return;
+            }
+
+            const sectionIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+            
+            const groups = JSON.parse(localStorage.getItem('moodle_course_groups_' + currentCourseId) || '[]');
+            
+            const existingGroupIndex = groups.findIndex(g => g.groupName === groupName);
+            if (existingGroupIndex >= 0) {
+                const mergedIds = new Set([...groups[existingGroupIndex].sectionIds, ...sectionIds]);
+                groups[existingGroupIndex].sectionIds = Array.from(mergedIds);
+            } else {
+                groups.push({ groupName: groupName, sectionIds: sectionIds });
+            }
+
+            localStorage.setItem('moodle_course_groups_' + currentCourseId, JSON.stringify(groups));
+            
+            cancelGroupingMode();
+        }
+
+        function clearGroups() {
+            if (confirm("¿Estás seguro que querés eliminar todos los grupos de este curso?")) {
+                localStorage.removeItem('moodle_course_groups_' + currentCourseId);
+                renderSections();
+            }
+        }
+
+        function updateGroupControls(groups) {
+            const clearBtn = document.getElementById("clear-groups-btn");
+            if (groups && groups.length > 0) {
+                clearBtn.classList.remove("hidden");
+            } else {
+                clearBtn.classList.add("hidden");
+            }
+        }
+
+        // FUNCIONES DE SOPORTE PARA LA INTERFAZ
+        function toggleDescription(id) {
+            const descDiv = document.getElementById(id);
+            if (descDiv) {
+                descDiv.classList.toggle('hidden');
+            }
+        }
+
+        function showCoursesSection() {
+            document.getElementById("login-section").classList.add("hidden");
+            document.getElementById("courses-section").classList.remove("hidden");
+        }
+
+        function logout() {
+            localStorage.clear();
+            document.getElementById("login-section").classList.remove("hidden");
+            document.getElementById("courses-section").classList.add("hidden");
+            document.getElementById("courses-container").innerHTML = "<p class='text-gray-500'>Cargando tus asignaturas...</p>";
+        }
+
+        function showError(msg) {
+            const errorElement = document.getElementById("login-error");
+            errorElement.innerText = msg;
+            errorElement.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
