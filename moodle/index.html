@@ -1383,7 +1383,10 @@
                     renderTableHeader();
                     renderWeeklyGrid();
 
-                    const contentPromises = courses.map(c => fetchCourseContents(baseUrl, token, c.id));
+                    const hiddenIds = getHiddenSubjectIds();
+                    const visibleCourses = courses.filter(c => !hiddenIds.includes(String(c.id)));
+
+                    const contentPromises = visibleCourses.map(c => fetchCourseContents(baseUrl, token, c.id));
                     await Promise.allSettled(contentPromises);
 
                     renderWeeklyGrid();
@@ -1708,13 +1711,26 @@
         }
 
         async function syncSingleSubject(subjectId, forceRefresh = true) {
-            const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
-            if (!subj) return;
+            const hiddenIds = getHiddenSubjectIds();
+            if (hiddenIds.includes(String(subjectId))) return;
+
+            const subj = academicCalendarData.subjects.find(s => String(s.id) === String(subjectId));
 
             const btnIcon = document.getElementById(`sync-icon-${subjectId}`);
             if (btnIcon) btnIcon.classList.add("spinning");
 
-            await loadSubjectData(subj, forceRefresh);
+            const token = localStorage.getItem("moodle_token");
+            const baseUrl = localStorage.getItem("moodle_url");
+
+            const promises = [];
+            if (token && baseUrl) {
+                promises.push(fetchCourseContents(baseUrl, token, subjectId));
+            }
+            if (subj && subj.icsUrl) {
+                promises.push(loadSubjectData(subj, forceRefresh));
+            }
+
+            await Promise.allSettled(promises);
 
             if (btnIcon) btnIcon.classList.remove("spinning");
 
@@ -1730,7 +1746,23 @@
             if (syncIcon) syncIcon.classList.add("spinning");
             if (statusLabel) statusLabel.innerText = forceRefresh ? "Sincronizando..." : "Cargando...";
 
-            const promises = academicCalendarData.subjects.map(subj => loadSubjectData(subj, forceRefresh));
+            const token = localStorage.getItem("moodle_token");
+            const baseUrl = localStorage.getItem("moodle_url");
+
+            const hiddenIds = getHiddenSubjectIds();
+            const visibleSubjects = (academicCalendarData.subjects || []).filter(s => !hiddenIds.includes(String(s.id)));
+
+            const promises = [];
+
+            visibleSubjects.forEach(subj => {
+                if (token && baseUrl) {
+                    promises.push(fetchCourseContents(baseUrl, token, subj.id));
+                }
+                if (subj.icsUrl) {
+                    promises.push(loadSubjectData(subj, forceRefresh));
+                }
+            });
+
             await Promise.allSettled(promises);
 
             if (syncIcon) syncIcon.classList.remove("spinning");
