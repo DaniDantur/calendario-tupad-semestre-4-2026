@@ -391,6 +391,32 @@
       background: rgba(255, 255, 255, 0.4);
     }
 
+    /* Discreet External Links */
+    .discreet-link {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.15s ease, text-decoration 0.15s ease;
+    }
+
+    .discreet-link:hover {
+      text-decoration: underline;
+      opacity: 0.9;
+    }
+
+    .discreet-link-icon {
+      font-size: 0.85em;
+      opacity: 0.75;
+      margin-left: 3px;
+      display: inline-block;
+      vertical-align: middle;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .discreet-link:hover .discreet-link-icon {
+      opacity: 1;
+      transform: translate(1px, -1px);
+    }
+
     /* Subcolumn Headers */
     .events-subcol-header {
       background: #0f2754 !important;
@@ -1071,6 +1097,7 @@
           code: "GDS",
           color: "#7e22ce",
           headerBg: "#581c87",
+          url: "https://tup.sied.utn.edu.ar/course/view.php?id=54&section=0",
           icsUrl: "https://calendar.google.com/calendar/ical/343983d89f95598734f74565941f78db635da707c25086be8c2e7f784dc63db2%40group.calendar.google.com/public/basic.ics",
           events: []
         },
@@ -1166,11 +1193,11 @@
         1: {
           topic: "Fundamentos e Ingeniería de Requerimientos",
           sections: [
-            { id: "gds-w1-s1", title: "Introducción 🌟", defaultStatus: "Pendiente" },
-            { id: "gds-w1-s2", title: "Actividades 🧩", defaultStatus: "Pendiente" },
-            { id: "gds-w1-s3", title: "Práctica 💻", defaultStatus: "Pendiente" },
-            { id: "gds-w1-s4", title: "Autoevaluación 🔍", defaultStatus: "Pendiente" },
-            { id: "gds-w1-s5", title: "Encuesta de cierre 📬", defaultStatus: "Pendiente" }
+            { id: "gds-w1-s1", title: "Introducción 🌟", defaultStatus: "Pendiente", url: "https://tup.sied.utn.edu.ar/course/view.php?id=54&section=1" },
+            { id: "gds-w1-s2", title: "Actividades 🧩", defaultStatus: "Pendiente", url: "https://tup.sied.utn.edu.ar/course/view.php?id=54&section=2" },
+            { id: "gds-w1-s3", title: "Práctica 💻", defaultStatus: "Pendiente", url: "https://tup.sied.utn.edu.ar/course/view.php?id=54&section=3" },
+            { id: "gds-w1-s4", title: "Autoevaluación 🔍", defaultStatus: "Pendiente", url: "https://tup.sied.utn.edu.ar/course/view.php?id=54&section=5" },
+            { id: "gds-w1-s5", title: "Encuesta de cierre 📬", defaultStatus: "Pendiente", url: "https://tup.sied.utn.edu.ar/course/view.php?id=54&section=6" }
           ]
         }
       },
@@ -1606,7 +1633,13 @@
                   </svg>
                 </button>
               </div>
-              <div class="subject-title-name">${subject.name}</div>
+              <div class="subject-title-name">
+                ${subject.url ? `
+                  <a href="${subject.url}" target="_blank" rel="noopener noreferrer" class="discreet-link" onclick="event.stopPropagation();" title="Abrir aula virtual de ${subject.name}">
+                    ${subject.name} <span class="discreet-link-icon">↗</span>
+                  </a>
+                ` : subject.name}
+              </div>
               <div class="subject-header-bottom">
                 <span>${matchCount} evento${matchCount === 1 ? '' : 's'}</span>
                 ${isHighlighted ? '<span style="color:#fbbf24; font-weight:800;">★ FILTRADO</span>' : ''}
@@ -1653,7 +1686,6 @@
           <td class="week-cell">
             <div class="week-number">Semana ${week.number}</div>
             <div class="week-date-range">${week.labelRange}</div>
-            ${isCurrentWeek ? '<span class="current-week-badge">ESTA SEMANA</span>' : ''}
           </td>
         `;
 
@@ -1744,9 +1776,10 @@
               subjWeeklyData.sections.forEach(sec => {
                 const currentStatus = getTaskStatus(sec.id, sec.defaultStatus || "Pendiente");
                 const stDef = TASK_STATUSES[currentStatus] || TASK_STATUSES["Pendiente"];
+                const safeUrl = sec.url ? sec.url.replace(/'/g, "\\'") : '';
 
                 html += `
-                  <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${subjWeeklyData.topic || ''}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}')">
+                  <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${subjWeeklyData.topic || ''}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}', '${safeUrl}')">
                     <span class="section-task-title">${sec.title}</span>
                     <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};" title="Estado: ${stDef.label}">
                       <span>${stDef.icon}</span>
@@ -1870,7 +1903,7 @@
     }
 
     /* Task Status Modal logic */
-    function openTaskModal(subjectId, weekNum, taskId, topic, sectionTitle, currentStatus) {
+    function openTaskModal(subjectId, weekNum, taskId, topic, sectionTitle, currentStatus, sectionUrl) {
       const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
       const subjName = subj ? subj.name : subjectId.toUpperCase();
 
@@ -1878,7 +1911,17 @@
 
       document.getElementById("task-modal-context").innerText = `${subjName} • Semana ${weekNum}`;
       document.getElementById("task-modal-topic").innerText = topic || "General";
-      document.getElementById("task-modal-section").innerText = sectionTitle;
+      
+      const secElem = document.getElementById("task-modal-section");
+      if (sectionUrl) {
+        secElem.innerHTML = `
+          <a href="${sectionUrl}" target="_blank" rel="noopener noreferrer" class="discreet-link" style="color: #1e3a8a; font-weight: 700;">
+            ${sectionTitle} <span class="discreet-link-icon" style="font-size: 14px;">↗</span>
+          </a>
+        `;
+      } else {
+        secElem.innerText = sectionTitle;
+      }
 
       const container = document.getElementById("status-options-container");
       container.innerHTML = Object.keys(TASK_STATUSES).map(statusKey => {
