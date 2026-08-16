@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendario Académico 2026 - Vista Vertical por Materias</title>
-  <meta name="description" content="Calendario Académico 2026 con vista vertical organizada por columnas por materia.">
+  <title>Seguimiento Semanal de Contenidos y Tareas - 4° Cuatrimestre 2026</title>
+  <meta name="description" content="Control semanal de contenidos, tareas y eventos académicos por materia para el 4° Cuatrimestre 2026.">
   
   <!-- Modern Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@
       --header-bg: #0b1f48;
       --header-accent: #1e3a8a;
 
-      /* Category Colors */
+      /* Category Colors for Events */
       --cat-parcial-color: #1d4ed8;
       --cat-parcial-bg: #dbeafe;
       --cat-parcial-border: #93c5fd;
@@ -79,7 +79,7 @@
     }
 
     .container {
-      max-width: 1600px;
+      max-width: 1750px;
       margin: 0 auto;
       background: var(--bg-card);
       border-radius: 12px;
@@ -224,34 +224,6 @@
       font-family: var(--font-body);
     }
 
-    /* Toggle Switch View Mode */
-    .toggle-view-group {
-      display: flex;
-      align-items: center;
-      background: #e2e8f0;
-      padding: 3px;
-      border-radius: 8px;
-      gap: 2px;
-    }
-
-    .toggle-btn {
-      padding: 5px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background: transparent;
-      color: #475569;
-      transition: all 0.15s ease;
-    }
-
-    .toggle-btn.active {
-      background: #ffffff;
-      color: #0b1f48;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -301,7 +273,7 @@
     }
 
     /* ==========================================================================
-       VERTICAL CALENDAR CONTAINER & STICKY GRID
+       WEEKLY TRACKER GRID TABLE
        ========================================================================== */
     .vertical-calendar-wrapper {
       position: relative;
@@ -315,27 +287,43 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      min-width: 1100px;
+      min-width: 1400px;
     }
 
     /* Sticky Headers */
     .vertical-calendar-table th {
       position: sticky;
-      top: 0;
       z-index: 100;
       background: #0b1f48;
       color: #ffffff;
       font-family: var(--font-heading);
-      padding: 10px 12px;
+      padding: 10px 8px;
       text-align: left;
-      border-bottom: 2px solid #1e293b;
+      border-bottom: 1px solid #1e293b;
       border-right: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     }
 
+    .vertical-calendar-table th.top-header-row {
+      top: 0;
+      z-index: 105;
+    }
+
+    .vertical-calendar-table th.sub-header-row {
+      top: 48px;
+      z-index: 100;
+      background: #0f295e;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 6px 8px;
+      color: #cbd5e1;
+    }
+
     .vertical-calendar-table th:first-child {
       left: 0;
-      z-index: 110;
+      z-index: 115;
       width: 140px;
       min-width: 140px;
       max-width: 140px;
@@ -403,51 +391,43 @@
       background: rgba(255, 255, 255, 0.4);
     }
 
-    /* Month Section Divider Rows */
-    .month-divider-row td {
-      position: sticky;
-      z-index: 50;
-      background: #1e3a8a;
-      color: #ffffff;
-      font-family: var(--font-heading);
-      font-size: 13px;
-      font-weight: 800;
-      padding: 8px 16px;
-      letter-spacing: 1px;
-      border-top: 1px solid #1d4ed8;
-      border-bottom: 1px solid #1d4ed8;
+    /* Subcolumn Headers */
+    .events-subcol-header {
+      background: #0f2754 !important;
+      color: #93c5fd !important;
+      width: 140px;
+      min-width: 130px;
+    }
+
+    .sections-subcol-header {
+      background: #142e63 !important;
+      color: #cbd5e1 !important;
+      width: 220px;
+      min-width: 190px;
     }
 
     /* Table Rows & Cells */
-    .date-row {
+    .week-row {
       transition: background 0.15s ease;
     }
 
-    .date-row:hover {
+    .week-row:hover {
       background-color: #f8fafc;
     }
 
-    .date-row.weekend-row {
-      background-color: #f8fafc;
-    }
-
-    .date-row.today-row {
+    .week-row.current-week-row {
       background-color: #eff6ff;
     }
 
-    .date-row.has-events-row {
-      background-color: #ffffff;
-    }
-
-    /* Sticky Date Cell */
-    .date-cell {
+    /* Sticky Week Cell */
+    .week-cell {
       position: sticky;
       left: 0;
       z-index: 40;
       background: #ffffff;
       border-right: 2px solid #cbd5e1;
       border-bottom: 1px solid #e2e8f0;
-      padding: 8px 10px;
+      padding: 10px 8px;
       vertical-align: top;
       text-align: center;
       width: 140px;
@@ -455,68 +435,64 @@
       max-width: 140px;
     }
 
-    .weekend-row .date-cell {
-      background: #f8fafc;
-    }
-
-    .today-row .date-cell {
+    .current-week-row .week-cell {
       background: #dbeafe;
       border-left: 4px solid #2563eb;
     }
 
-    .date-number {
+    .week-number {
       font-family: var(--font-heading);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: #0f172a;
-      line-height: 1.1;
+      line-height: 1.2;
     }
 
-    .date-day-name {
+    .week-date-range {
       font-size: 10px;
       font-weight: 700;
       color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      margin-top: 2px;
     }
 
-    .today-badge-sm {
+    .current-week-badge {
       display: inline-block;
       font-size: 9px;
       font-weight: 800;
       background-color: #2563eb;
       color: #ffffff;
-      padding: 1px 5px;
+      padding: 1px 6px;
       border-radius: 8px;
-      margin-top: 2px;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
     }
 
-    .weekend-badge-sm {
-      display: inline-block;
-      font-size: 9px;
-      font-weight: 700;
-      color: #94a3b8;
-      margin-top: 2px;
-    }
-
-    /* Subject Cell */
-    .subject-cell {
+    /* Subcolumn Cells */
+    .events-cell, .sections-cell {
       border-right: 1px solid #e2e8f0;
       border-bottom: 1px solid #e2e8f0;
-      padding: 6px 8px;
+      padding: 8px;
       vertical-align: top;
-      width: calc((100% - 140px) / 6);
-      min-width: 160px;
-      height: 100%;
-      min-height: 52px;
-      transition: background 0.15s ease;
+      min-height: 60px;
     }
 
-    .subject-cell.highlighted-subject-col {
-      background-color: rgba(37, 99, 235, 0.03);
+    .events-cell {
+      background-color: #ffffff;
+      width: 140px;
+      min-width: 130px;
     }
 
-    /* Event Card Inside Column Cell */
+    .sections-cell {
+      background-color: #fafbfc;
+      width: 220px;
+      min-width: 190px;
+    }
+
+    .current-week-row .sections-cell {
+      background-color: #f1f7fe;
+    }
+
+    /* Event Cards */
     .event-card {
       border-radius: 6px;
       padding: 6px 8px;
@@ -582,20 +558,72 @@
       text-overflow: ellipsis;
     }
 
-    /* Multi-day Indicator Badge */
-    .multiday-indicator {
+    /* Topic Title & Sections Cards */
+    .week-topic-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #1e3a8a;
+      background: rgba(30, 58, 138, 0.08);
+      padding: 4px 8px;
+      border-radius: 5px;
+      margin-bottom: 6px;
+      border-left: 3px solid #1e3a8a;
+      line-height: 1.3;
+    }
+
+    .section-task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 8px;
+      margin-bottom: 5px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .section-task-item:hover {
+      border-color: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+    }
+
+    .section-task-title {
+      font-weight: 600;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      line-height: 1.2;
+    }
+
+    .status-badge {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 12px;
       display: inline-flex;
       align-items: center;
       gap: 3px;
-      font-size: 9px;
-      font-weight: 700;
-      background: rgba(0, 0, 0, 0.08);
-      padding: 1px 4px;
-      border-radius: 3px;
-      margin-top: 4px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border: 1px solid transparent;
     }
 
-    /* Category Specific Styling */
+    .no-sections-placeholder {
+      font-size: 10px;
+      color: #94a3b8;
+      font-style: italic;
+      padding: 4px 2px;
+    }
+
+    /* Category Specific Event Styling */
     .cat-parciales { background-color: var(--cat-parcial-bg); color: var(--cat-parcial-color); border-left-color: var(--cat-parcial-color); }
     .cat-recu_parciales { background-color: var(--cat-recup-bg); color: var(--cat-recup-color); border-left-color: var(--cat-recup-color); }
     .cat-coloquios { background-color: var(--cat-coloquio-bg); color: var(--cat-coloquio-color); border-left-color: var(--cat-coloquio-color); }
@@ -610,7 +638,7 @@
       filter: grayscale(80%);
     }
 
-    /* Empty state */
+    /* Empty schedule notice */
     .empty-schedule-notice {
       padding: 40px 20px;
       text-align: center;
@@ -620,7 +648,7 @@
     }
 
     /* ==========================================================================
-       MODAL POPUP
+       MODALS (EVENT DETAILS & TASK STATUS EDITING)
        ========================================================================== */
     .modal-overlay {
       position: fixed;
@@ -663,7 +691,7 @@
     .modal-header {
       background: #0b1f48;
       color: #ffffff;
-      padding: 14px 20px;
+      padding: 16px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -676,13 +704,13 @@
     }
 
     .modal-close {
-      background: none;
+      background: transparent;
       border: none;
       color: #ffffff;
-      font-size: 22px;
+      font-size: 20px;
       cursor: pointer;
       opacity: 0.8;
-      line-height: 1;
+      transition: opacity 0.15s ease;
     }
 
     .modal-close:hover {
@@ -694,7 +722,7 @@
     }
 
     .modal-field {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .modal-field:last-child {
@@ -708,198 +736,184 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       display: block;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .modal-value {
       font-size: 14px;
-      font-weight: 600;
       color: #0f172a;
+      font-weight: 600;
+    }
+
+    /* Task Status Selector Options */
+    .status-options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .status-option-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+      background: #ffffff;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+
+    .status-option-btn:hover {
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    .status-option-btn.selected {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
     }
 
     .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 16px;
-      padding-top: 12px;
+      padding: 14px 20px;
+      background: #f8fafc;
       border-top: 1px solid #e2e8f0;
-    }
-
-    /* ==========================================================================
-       FOOTER
-       ========================================================================== */
-    .app-footer {
-      background-color: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      padding: 16px 24px;
-    }
-
-    .footer-notice {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Footer */
+    .app-footer {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      padding: 16px 24px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      color: #1e40af;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 13px;
     }
 
-    .footer-notice-icon {
-      flex-shrink: 0;
-      color: #2563eb;
+    .footer-sync-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
     }
 
-    /* ==========================================================================
-       PRINT MEDIA STYLES
-       ========================================================================== */
-    @media print {
-      body {
-        background: #ffffff;
-        padding: 0;
-      }
-      .container {
-        box-shadow: none;
-        border: none;
-        padding: 0;
-        max-width: 100%;
-      }
-      .controls-bar,
-      .modal-overlay,
-      .subject-sync-icon-btn,
-      .btn {
-        display: none !important;
-      }
-      .vertical-calendar-wrapper {
-        max-height: none !important;
-        overflow: visible !important;
-      }
-      .vertical-calendar-table th {
-        position: static !important;
-        box-shadow: none !important;
-      }
-      .date-cell {
-        position: static !important;
-      }
-      .app-footer {
-        margin-top: 12px;
-        padding-top: 8px;
-        page-break-inside: avoid;
-      }
+    .sync-status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+    }
+
+    .footer-notice-content {
+      font-size: 11px;
+      max-width: 600px;
     }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <!-- Header: Logo, Title, Nav Link, Legend -->
+    <!-- Header & Branding -->
     <header class="app-header">
       <div class="brand-area">
         <div class="brand-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
-            <line x1="9" y1="14" x2="9" y2="18"></line>
-            <line x1="15" y1="14" x2="15" y2="18"></line>
+            <path d="M9 16l2 2 4-4"></path>
           </svg>
         </div>
         <div>
-          <div class="brand-title">CALENDARIO ACADÉMICO 2026</div>
-          <div class="brand-subtitle">COLUMNAS POR MATERIA (VISTA VERTICAL)</div>
+          <h1 class="brand-title">Control de Tareas y Contenidos</h1>
+          <div class="brand-subtitle">SEMANAS 1 A 16 (DESDE EL 3 DE AGOSTO 2026)</div>
         </div>
       </div>
 
-      <!-- Categories Legend -->
+      <!-- Legend Filters for Events -->
       <div class="legend-container" id="legend-container">
-        <!-- Rendered dynamically -->
+        <!-- Rendered via JS -->
       </div>
     </header>
 
     <!-- Controls Bar -->
     <div class="controls-bar">
       <div class="controls-left">
-        <!-- Link back to index.html -->
-        <a href="index.html" class="btn btn-outline" title="Volver a la vista mensual">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          Vista Mensual
-        </a>
-
         <!-- Search Box -->
         <div class="search-box">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" id="search-input" placeholder="Buscar materia, parcial, entrega...">
+          <input type="text" id="search-input" placeholder="Buscar materia, evento o tema...">
         </div>
 
-        <!-- View Mode Toggle (Only events vs All days) -->
-        <div class="toggle-view-group">
-          <button class="toggle-btn active" id="toggle-events-only" onclick="setViewMode('events-only')">
-            Días con Eventos
-          </button>
-          <button class="toggle-btn" id="toggle-all-days" onclick="setViewMode('all-days')">
-            Todos los Días
-          </button>
-        </div>
+        <button class="btn btn-outline" onclick="resetFilters()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          Limpiar Filtros
+        </button>
       </div>
 
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-        <button class="btn" id="btn-sync-all" onclick="syncAllSubjects(true)" title="Sincronizar todos los calendarios desde Google Calendar">
-          <svg id="sync-all-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="btn btn-secondary" onclick="syncAllSubjects(true)" title="Forzar actualización de los calendarios .ics">
+          <svg id="sync-all-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
           </svg>
-          Sincronizar Todo
+          Actualizar Eventos ICS
         </button>
-        <span id="sync-status-label" style="font-size: 11px; color: #64748b; font-weight: 600;"></span>
-
-        <button class="btn btn-secondary" onclick="resetFilters()">
-          Mostrar Todo
-        </button>
-
-        <button class="btn btn-secondary" onclick="window.print()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-            <rect x="6" y="14" width="12" height="8"></rect>
+        
+        <a href="index.html" class="btn" style="background:#0f295e;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
-          Imprimir / PDF
-        </button>
+          Vista Calendario General
+        </a>
       </div>
     </div>
 
-    <!-- Main Vertical Calendar Table View -->
+    <!-- Main Weekly Grid Container -->
     <div class="vertical-calendar-wrapper">
       <table class="vertical-calendar-table">
-        <thead>
-          <tr id="table-header-row">
-            <!-- Rendered dynamically -->
-          </tr>
+        <thead id="table-header-container">
+          <!-- Top Row Header & Subheader Rows rendered via JS -->
         </thead>
         <tbody id="vertical-calendar-body">
-          <!-- Rendered dynamically -->
+          <!-- Rows rendered via JS -->
         </tbody>
       </table>
     </div>
 
-    <!-- Footer Notice -->
+    <!-- Footer -->
     <footer class="app-footer">
-      <div class="footer-notice">
-        <div class="footer-notice-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
+      <div class="footer-content">
+        <div class="footer-sync-info">
+          <span class="sync-status-indicator"></span>
+          <span id="sync-status-label">Cargando datos...</span>
         </div>
         <div class="footer-notice-content">
-          <strong>IMPORTANTE:</strong> Las fechas y horarios pueden estar sujetos a cambios. Consultar siempre los canales oficiales de la institución.
+          <strong>NOTA:</strong> Haz clic sobre cualquier sección para modificar su estado en el modal. El avance se guarda automáticamente en tu navegador.
         </div>
       </div>
     </footer>
@@ -921,7 +935,40 @@
     </div>
   </div>
 
-  <!-- Data Script & Vertical Render Engine -->
+  <!-- Task Status Change Modal -->
+  <div class="modal-overlay" id="task-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Cambiar Estado de la Sección</div>
+        <button class="modal-close" onclick="closeModal('task-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <span class="modal-label">Materia & Semana</span>
+          <div id="task-modal-context" class="modal-value" style="color: #1e3a8a; font-weight: 800;"></div>
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">Tema General</span>
+          <div id="task-modal-topic" class="modal-value"></div>
+        </div>
+        <div class="modal-field">
+          <span class="modal-label">Sección / Tarea</span>
+          <div id="task-modal-section" class="modal-value" style="font-size: 16px;"></div>
+        </div>
+        <div class="modal-field" style="margin-top: 18px;">
+          <span class="modal-label">Selecciona el Estado:</span>
+          <div class="status-options-grid" id="status-options-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('task-modal')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Script & Weekly Render Engine -->
   <script>
     const academicCalendarData = {
       year: 2026,
@@ -989,13 +1036,66 @@
           icsUrl: "https://calendar.google.com/calendar/ical/fe34e07ed86f1b002bbb2491731ec4b740ad0b804d667f74f23b3702ea7082de%40group.calendar.google.com/public/basic.ics",
           events: []
         }
-      ],
-      months: [
-        { year: 2026, monthIdx: 7, name: "AGOSTO 2026" },
-        { year: 2026, monthIdx: 8, name: "SEPTIEMBRE 2026" },
-        { year: 2026, monthIdx: 9, name: "OCTUBRE 2026" },
-        { year: 2026, monthIdx: 10, name: "NOVIEMBRE 2026" }
       ]
+    };
+
+    /* ==========================================================================
+       TASK STATUSES DEFINITIONS & PERSISTENCE
+       ========================================================================== */
+    const TASK_STATUSES = {
+      "Pendiente": { label: "Pendiente", icon: "⏳", color: "#475569", bg: "#f1f5f9", border: "#cbd5e1" },
+      "Completada": { label: "Completada", icon: "✅", color: "#15803d", bg: "#dcfce7", border: "#86efac" },
+      "Enviada": { label: "Enviada", icon: "📤", color: "#1d4ed8", bg: "#dbeafe", border: "#93c5fd" },
+      "Aprobada": { label: "Aprobada", icon: "🌟", color: "#047857", bg: "#a7f3d0", border: "#6ee7b7" },
+      "Desaprobada": { label: "Desaprobada", icon: "❌", color: "#b91c1c", bg: "#fee2e2", border: "#fca5a5" },
+      "Incompleta": { label: "Incompleta", icon: "⚠️", color: "#b45309", bg: "#fef3c7", border: "#fde68a" }
+    };
+
+    function getTaskStatus(taskId, defaultVal = "Pendiente") {
+      try {
+        const saved = localStorage.getItem("tupad_task_statuses");
+        if (saved) {
+          const obj = JSON.parse(saved);
+          if (obj[taskId]) return obj[taskId];
+        }
+      } catch (e) {
+        console.error("Error al obtener estado de tarea:", e);
+      }
+      return defaultVal;
+    }
+
+    function setTaskStatus(taskId, status) {
+      try {
+        const saved = localStorage.getItem("tupad_task_statuses");
+        const obj = saved ? JSON.parse(saved) : {};
+        obj[taskId] = status;
+        localStorage.setItem("tupad_task_statuses", JSON.stringify(obj));
+      } catch (e) {
+        console.error("Error al guardar estado de tarea:", e);
+      }
+    }
+
+    /* ==========================================================================
+       HARDCODED WEEKLY SECTIONS PER SUBJECT
+       ========================================================================== */
+    const weeklySectionsData = {
+      gds: {
+        1: {
+          topic: "Fundamentos e Ingeniería de Requerimientos",
+          sections: [
+            { id: "gds-w1-s1", title: "Introducción 🌟", defaultStatus: "Pendiente" },
+            { id: "gds-w1-s2", title: "Actividades 🧩", defaultStatus: "Pendiente" },
+            { id: "gds-w1-s3", title: "Práctica 💻", defaultStatus: "Pendiente" },
+            { id: "gds-w1-s4", title: "Autoevaluación 🔍", defaultStatus: "Pendiente" },
+            { id: "gds-w1-s5", title: "Encuesta de cierre 📬", defaultStatus: "Pendiente" }
+          ]
+        }
+      },
+      iad: {},
+      leg: {},
+      ms2: {},
+      p4: {},
+      tif: {}
     };
 
     /* ==========================================================================
@@ -1099,7 +1199,6 @@
     function categorizeEvent(title = '', description = '') {
       const text = (title + ' ' + description).toLowerCase();
 
-      // Check Recuperatorios first
       if (text.includes('recu') || text.includes('recuperatorio')) {
         if (text.includes('coloquio')) return 'recu_coloquios';
         if (text.includes('tpi') || text.includes('integrador') || text.includes('int.')) return 'recu_integradores';
@@ -1107,7 +1206,6 @@
         return 'recu_parciales';
       }
 
-      // Regular categories
       if (text.includes('coloquio')) return 'coloquios';
       if (text.includes('tpi') || text.includes('integrador') || text.includes('int.')) return 'integradores';
       if (text.includes('parcial')) return 'parciales';
@@ -1239,7 +1337,7 @@
 
       updateSyncStatusLabel();
       renderTableHeader();
-      renderVerticalGrid();
+      renderWeeklyGrid();
     }
 
     async function syncAllSubjects(forceRefresh = false) {
@@ -1256,7 +1354,7 @@
 
       updateSyncStatusLabel();
       renderTableHeader();
-      renderVerticalGrid();
+      renderWeeklyGrid();
     }
 
     function updateSyncStatusLabel() {
@@ -1285,15 +1383,55 @@
     }
 
     /* ==========================================================================
-       STATE MANAGEMENT & RENDER ENGINE FOR VERTICAL GRID
+       WEEK DEFINITIONS (16 WEEKS STARTING AUGUST 3, 2026)
+       ========================================================================== */
+    const MONTH_SHORT = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+    function generateWeeksData() {
+      const weeks = [];
+      // Week 1 starts Aug 3, 2026 (Monday)
+      let startDate = new Date(2026, 7, 3); // Month 7 is August
+
+      for (let i = 1; i <= 16; i++) {
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6); // Sunday of that week
+
+        const sYear = startDate.getFullYear();
+        const sMonth = String(startDate.getMonth() + 1).padStart(2, '0');
+        const sDay = String(startDate.getDate()).padStart(2, '0');
+        const sDateStr = `${sYear}-${sMonth}-${sDay}`;
+
+        const eYear = endDate.getFullYear();
+        const eMonth = String(endDate.getMonth() + 1).padStart(2, '0');
+        const eDay = String(endDate.getDate()).padStart(2, '0');
+        const eDateStr = `${eYear}-${eMonth}-${eDay}`;
+
+        const labelRange = `${startDate.getDate()} ${MONTH_SHORT[startDate.getMonth()]} - ${endDate.getDate()} ${MONTH_SHORT[endDate.getMonth()]}`;
+
+        weeks.push({
+          number: i,
+          startDate: sDateStr,
+          endDate: eDateStr,
+          labelRange: labelRange,
+          startObj: new Date(startDate),
+          endObj: new Date(endDate)
+        });
+
+        // Advance to next Monday
+        startDate.setDate(startDate.getDate() + 7);
+      }
+      return weeks;
+    }
+
+    const WEEKS = generateWeeksData();
+
+    /* ==========================================================================
+       STATE MANAGEMENT & RENDER ENGINE FOR WEEKLY GRID
        ========================================================================== */
     let selectedCategory = null;
     let selectedSubjectId = null;
     let searchQuery = "";
-    let viewMode = "events-only"; // 'events-only' or 'all-days'
-
-    const DAY_NAMES = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
-    const MONTH_SHORT = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+    let activeTaskToEdit = null;
 
     document.addEventListener("DOMContentLoaded", async () => {
       renderLegend();
@@ -1302,7 +1440,7 @@
       await syncAllSubjects(false);
     });
 
-    // 1. Render Category Legend
+    // Render Category Legend
     function renderLegend() {
       const container = document.getElementById("legend-container");
       container.innerHTML = academicCalendarData.categories.map(cat => `
@@ -1313,19 +1451,11 @@
       `).join('');
     }
 
-    function setViewMode(mode) {
-      viewMode = mode;
-      document.getElementById("toggle-events-only").classList.toggle("active", mode === 'events-only');
-      document.getElementById("toggle-all-days").classList.toggle("active", mode === 'all-days');
-      renderVerticalGrid();
-    }
-
     // Helper for accent-insensitive search matching
     function normalizeStr(str) {
       return (str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
     }
 
-    // Helper to format event date string dynamically
     function getEventDateStr(ev) {
       if (ev.startDate && ev.endDate) {
         const sParts = ev.startDate.split('-');
@@ -1339,12 +1469,10 @@
       return ev.dateStr || "";
     }
 
-    // Helper to get category definition
     function getCategory(catId) {
       return academicCalendarData.categories.find(c => c.id === catId) || { id: catId, label: 'EVENTO', color: '#000', bg: '#fff' };
     }
 
-    // Helper to get subject definition by event ID
     function getSubjectByEvent(eventId) {
       for (const subj of academicCalendarData.subjects) {
         const ev = subj.events.find(e => e.id === eventId);
@@ -1353,22 +1481,27 @@
       return null;
     }
 
-    // 2. Render Sticky Table Header (Fecha + 6 Subject Columns)
+    // Render Sticky Table Header (Semana + 6 Subjects x 2 Subcolumns)
     function renderTableHeader() {
-      const headerRow = document.getElementById("table-header-row");
+      const headerContainer = document.getElementById("table-header-container");
       const normalizedQuery = normalizeStr(searchQuery);
 
-      let html = `
-        <th>
-          <div style="font-size: 13px; font-weight: 800; letter-spacing: 1px;">FECHA</div>
-          <div style="font-size: 10px; opacity: 0.7; font-weight: 600;">Día / Mes</div>
-        </th>
+      let topRowHtml = `
+        <tr class="top-header-row">
+          <th rowspan="2" style="background: #091738; vertical-align: middle;">
+            <div style="font-size: 13px; font-weight: 800; letter-spacing: 1px;">SEMANA</div>
+            <div style="font-size: 10px; opacity: 0.75; font-weight: 600;">Semanas 1 a 16</div>
+          </th>
       `;
 
+      let subRowHtml = `<tr class="sub-header-row">`;
+
       academicCalendarData.subjects.forEach(subject => {
+        if (selectedSubjectId && selectedSubjectId !== subject.id) return;
+
         const isHighlighted = selectedSubjectId === subject.id;
 
-        // Count filtered events for this subject
+        // Count matching events
         const matchCount = subject.events.filter(ev => {
           if (selectedCategory && ev.category !== selectedCategory) return false;
           if (normalizedQuery && 
@@ -1379,13 +1512,13 @@
           return true;
         }).length;
 
-        html += `
-          <th style="background-color: ${subject.headerBg}; border-top: 4px solid ${subject.color}; cursor: pointer;" onclick="toggleSubjectHighlight('${subject.id}')" title="Haz clic para aislar la materia ${subject.name}">
+        topRowHtml += `
+          <th colspan="2" style="background-color: ${subject.headerBg}; border-top: 4px solid ${subject.color}; cursor: pointer;" onclick="toggleSubjectHighlight('${subject.id}')" title="Haz clic para aislar ${subject.name}">
             <div class="subject-col-header">
               <div class="subject-header-top">
                 <span class="subject-code-badge" style="${isHighlighted ? 'background:#ffffff; color:'+subject.headerBg+';' : ''}">${subject.code}</span>
                 <button class="subject-sync-icon-btn" onclick="event.stopPropagation(); syncSingleSubject('${subject.id}', true)" title="Sincronizar ${subject.name}">
-                  <svg id="sync-icon-${subject.id}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg id="sync-icon-${subject.id}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
                   </svg>
                 </button>
@@ -1398,205 +1531,124 @@
             </div>
           </th>
         `;
+
+        subRowHtml += `
+          <th class="subcol-header events-subcol-header">📅 Eventos</th>
+          <th class="subcol-header sections-subcol-header">📚 Secciones / Tareas</th>
+        `;
       });
 
-      headerRow.innerHTML = html;
+      topRowHtml += `</tr>`;
+      subRowHtml += `</tr>`;
+
+      headerContainer.innerHTML = topRowHtml + subRowHtml;
     }
 
-    // 3. Render Main Vertical Grid Rows
-    function renderVerticalGrid() {
+    // Render Main Weekly Grid Rows
+    function renderWeeklyGrid() {
       const tbody = document.getElementById("vertical-calendar-body");
       tbody.innerHTML = "";
 
       const normalizedQuery = normalizeStr(searchQuery);
 
-      // Current Date for HOY badge
+      // Current Date comparison for CURRENT WEEK badge
       const now = new Date();
       const todayYear = now.getFullYear();
       const todayMonth = String(now.getMonth() + 1).padStart(2, '0');
       const todayDay = String(now.getDate()).padStart(2, '0');
       const todayStr = `${todayYear}-${todayMonth}-${todayDay}`;
 
-      // Gather all events mapped by date key "YYYY-MM-DD"
-      // Date key -> { dateObj, eventsBySubject: { [subjId]: [events] } }
-      const dateMap = new Map();
-
-      // Build continuous list of days across August, September, October, November 2026
-      academicCalendarData.months.forEach(m => {
-        const year = m.year;
-        const monthIdx = m.monthIdx;
-        const totalDaysInMonth = new Date(year, monthIdx + 1, 0).getDate();
-
-        for (let d = 1; d <= totalDaysInMonth; d++) {
-          const mo = String(monthIdx + 1).padStart(2, '0');
-          const da = String(d).padStart(2, '0');
-          const dateStr = `${year}-${mo}-${da}`;
-          const dObj = new Date(year, monthIdx, d);
-
-          dateMap.set(dateStr, {
-            dateStr,
-            year,
-            monthIdx,
-            monthName: m.name,
-            dayNum: d,
-            dayOfWeekIdx: dObj.getDay(), // 0 = Sun, 1 = Mon, ...
-            eventsBySubject: {}
-          });
-        }
-      });
-
-      // Populate events into dateMap
-      let totalFilteredEventsCount = 0;
-
-      academicCalendarData.subjects.forEach(subject => {
-        if (selectedSubjectId && selectedSubjectId !== subject.id) return;
-
-        subject.events.forEach(ev => {
-          if (!ev.startDate) return;
-
-          // Check category filter
-          if (selectedCategory && ev.category !== selectedCategory) return;
-
-          // Check search query filter
-          if (normalizedQuery && 
-              !normalizeStr(ev.title).includes(normalizedQuery) && 
-              !normalizeStr(subject.name).includes(normalizedQuery) && 
-              !normalizeStr(subject.code || "").includes(normalizedQuery) &&
-              !normalizeStr(ev.details || "").includes(normalizedQuery)) return;
-
-          const sDateStr = ev.startDate;
-          const eDateStr = ev.endDate || ev.startDate;
-
-          // Iterate through every date spanned by this event
-          for (const [dateStr, dateInfo] of dateMap.entries()) {
-            if (dateStr >= sDateStr && dateStr <= eDateStr) {
-              if (!dateInfo.eventsBySubject[subject.id]) {
-                dateInfo.eventsBySubject[subject.id] = [];
-              }
-              dateInfo.eventsBySubject[subject.id].push({
-                subject,
-                event: ev,
-                isStart: dateStr === sDateStr,
-                isEnd: dateStr === eDateStr,
-                isMultiDay: sDateStr !== eDateStr
-              });
-              totalFilteredEventsCount++;
-            }
-          }
-        });
-      });
-
-      // Filter rows based on viewMode ('events-only' vs 'all-days')
-      const rowsToRender = [];
-      let currentMonthHeader = null;
-
-      for (const [dateStr, dateInfo] of dateMap.entries()) {
-        const hasEvents = Object.keys(dateInfo.eventsBySubject).length > 0;
-
-        if (viewMode === 'events-only' && !hasEvents) {
-          continue; // Skip days with no matching events in compact mode
-        }
-
-        // Add Month Section Header if month changes
-        if (currentMonthHeader !== dateInfo.monthName) {
-          currentMonthHeader = dateInfo.monthName;
-          rowsToRender.push({
-            type: 'month-divider',
-            title: dateInfo.monthName
-          });
-        }
-
-        rowsToRender.push({
-          type: 'day-row',
-          dateInfo,
-          hasEvents
-        });
-      }
-
-      if (rowsToRender.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="${academicCalendarData.subjects.length + 1}" class="empty-schedule-notice">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5" style="margin-bottom: 8px;">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <div>No se encontraron eventos con los filtros seleccionados.</div>
-              <button class="btn btn-secondary btn-sm" onclick="resetFilters()" style="margin-top: 10px;">Limpiar Filtros</button>
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      // Render Table Rows
       let html = "";
-      rowsToRender.forEach(row => {
-        if (row.type === 'month-divider') {
-          html += `
-            <tr class="month-divider-row">
-              <td colspan="${academicCalendarData.subjects.length + 1}">${row.title}</td>
-            </tr>
-          `;
-          return;
-        }
 
-        const { dateInfo, hasEvents } = row;
-        const isWeekend = dateInfo.dayOfWeekIdx === 0 || dateInfo.dayOfWeekIdx === 6;
-        const isToday = dateInfo.dateStr === todayStr;
+      WEEKS.forEach(week => {
+        const isCurrentWeek = todayStr >= week.startDate && todayStr <= week.endDate;
 
-        let rowClasses = ["date-row"];
-        if (isToday) rowClasses.push("today-row");
-        else if (isWeekend) rowClasses.push("weekend-row");
-        if (hasEvents) rowClasses.push("has-events-row");
+        html += `<tr class="week-row ${isCurrentWeek ? 'current-week-row' : ''}">`;
 
-        const dayNameStr = DAY_NAMES[dateInfo.dayOfWeekIdx];
-        const monthShortStr = MONTH_SHORT[dateInfo.monthIdx];
-
-        html += `<tr class="${rowClasses.join(' ')}">`;
-
-        // Sticky Date Cell
+        // Sticky Week Column
         html += `
-          <td class="date-cell">
-            <div class="date-number">${dateInfo.dayNum} ${monthShortStr}</div>
-            <div class="date-day-name">${dayNameStr}</div>
-            ${isToday ? '<span class="today-badge-sm">HOY</span>' : ''}
-            ${isWeekend && !isToday ? '<span class="weekend-badge-sm">FINDE</span>' : ''}
+          <td class="week-cell">
+            <div class="week-number">Semana ${week.number}</div>
+            <div class="week-date-range">${week.labelRange}</div>
+            ${isCurrentWeek ? '<span class="current-week-badge">ESTA SEMANA</span>' : ''}
           </td>
         `;
 
-        // Render cell for each subject column
+        // Render Subcolumns per Subject
         academicCalendarData.subjects.forEach(subject => {
-          const isHighlightedSubject = selectedSubjectId === subject.id;
-          const subjectEvents = dateInfo.eventsBySubject[subject.id] || [];
+          if (selectedSubjectId && selectedSubjectId !== subject.id) return;
 
-          html += `<td class="subject-cell ${isHighlightedSubject ? 'highlighted-subject-col' : ''}">`;
+          // 1. Filter Events in this week
+          const weekEvents = subject.events.filter(ev => {
+            if (!ev.startDate) return false;
 
-          subjectEvents.forEach(item => {
-            const ev = item.event;
-            const cat = getCategory(ev.category);
-            const dateRangeStr = getEventDateStr(ev);
+            if (selectedCategory && ev.category !== selectedCategory) return false;
 
-            html += `
-              <div class="event-card cat-${ev.category}" onclick="openEventModal('${ev.id}')" title="${ev.title} - ${subject.name}${ev.details ? ` (${ev.details})` : ''}">
-                <div class="event-card-header">
-                  <span class="event-cat-badge" style="background-color: ${cat.color}; color: #ffffff;">${cat.label}</span>
-                  ${item.isMultiDay ? `<span class="event-date-tag">${dateRangeStr}</span>` : ''}
-                </div>
-                <div class="event-card-title">${ev.title}</div>
-                ${ev.details ? `<div class="event-card-details">${ev.details}</div>` : ''}
-                ${item.isMultiDay ? `
-                  <div class="multiday-indicator">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                      <path d="M16 2v4M8 2v4M3 10h18"></path>
-                    </svg>
-                    <span>Rango: ${dateRangeStr}</span>
-                  </div>
-                ` : ''}
-              </div>
-            `;
+            if (normalizedQuery && 
+                !normalizeStr(ev.title).includes(normalizedQuery) && 
+                !normalizeStr(subject.name).includes(normalizedQuery) && 
+                !normalizeStr(subject.code || "").includes(normalizedQuery) &&
+                !normalizeStr(ev.details || "").includes(normalizedQuery)) return false;
+
+            const evStart = ev.startDate;
+            const evEnd = ev.endDate || ev.startDate;
+
+            // Check overlap between [evStart, evEnd] and [week.startDate, week.endDate]
+            return (evStart <= week.endDate && evEnd >= week.startDate);
           });
+
+          // Subcolumn 1: Eventos Cell
+          html += `<td class="events-cell">`;
+          if (weekEvents.length > 0) {
+            weekEvents.forEach(ev => {
+              const cat = getCategory(ev.category);
+              const dateRangeStr = getEventDateStr(ev);
+
+              html += `
+                <div class="event-card cat-${ev.category}" onclick="openEventModal('${ev.id}')" title="${ev.title} - ${subject.name}${ev.details ? ` (${ev.details})` : ''}">
+                  <div class="event-card-header">
+                    <span class="event-cat-badge" style="background-color: ${cat.color}; color: #ffffff;">${cat.label}</span>
+                    <span class="event-date-tag">${dateRangeStr}</span>
+                  </div>
+                  <div class="event-card-title">${ev.title}</div>
+                  ${ev.details ? `<div class="event-card-details">${ev.details}</div>` : ''}
+                </div>
+              `;
+            });
+          }
+          html += `</td>`;
+
+          // Subcolumn 2: Secciones / Tareas Cell
+          html += `<td class="sections-cell">`;
+
+          const subjWeeklyData = (weeklySectionsData[subject.id] && weeklySectionsData[subject.id][week.number]) ? weeklySectionsData[subject.id][week.number] : null;
+
+          if (subjWeeklyData) {
+            if (subjWeeklyData.topic) {
+              html += `<div class="week-topic-title">📌 ${subjWeeklyData.topic}</div>`;
+            }
+
+            if (subjWeeklyData.sections && subjWeeklyData.sections.length > 0) {
+              subjWeeklyData.sections.forEach(sec => {
+                const currentStatus = getTaskStatus(sec.id, sec.defaultStatus || "Pendiente");
+                const stDef = TASK_STATUSES[currentStatus] || TASK_STATUSES["Pendiente"];
+
+                html += `
+                  <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${subjWeeklyData.topic || ''}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}')">
+                    <span class="section-task-title">${sec.title}</span>
+                    <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};">
+                      <span>${stDef.icon}</span>
+                      <span>${stDef.label}</span>
+                    </span>
+                  </div>
+                `;
+              });
+            } else {
+              html += `<div class="no-sections-placeholder">Sin secciones especificadas</div>`;
+            }
+          } else {
+            html += `<div class="no-sections-placeholder">Sin secciones cargadas</div>`;
+          }
 
           html += `</td>`;
         });
@@ -1608,7 +1660,7 @@
     }
 
     /* ==========================================================================
-       INTERACTIVE CONTROLS & MODAL
+       INTERACTIVE CONTROLS & MODALS
        ========================================================================== */
     function filterCategory(catId) {
       if (selectedCategory === catId) {
@@ -1626,7 +1678,7 @@
       });
 
       renderTableHeader();
-      renderVerticalGrid();
+      renderWeeklyGrid();
     }
 
     function toggleSubjectHighlight(subjectId) {
@@ -1636,7 +1688,7 @@
         selectedSubjectId = subjectId;
       }
       renderTableHeader();
-      renderVerticalGrid();
+      renderWeeklyGrid();
     }
 
     function resetFilters() {
@@ -1647,7 +1699,7 @@
 
       document.querySelectorAll('.legend-item').forEach(el => el.classList.remove('active'));
       renderTableHeader();
-      renderVerticalGrid();
+      renderWeeklyGrid();
     }
 
     function setupSearch() {
@@ -1655,7 +1707,7 @@
       input.addEventListener("input", (e) => {
         searchQuery = e.target.value.toLowerCase().trim();
         renderTableHeader();
-        renderVerticalGrid();
+        renderWeeklyGrid();
       });
     }
 
@@ -1704,6 +1756,40 @@
       `;
 
       openModal("event-modal");
+    }
+
+    /* Task Status Modal logic */
+    function openTaskModal(subjectId, weekNum, taskId, topic, sectionTitle, currentStatus) {
+      const subj = academicCalendarData.subjects.find(s => s.id === subjectId);
+      const subjName = subj ? subj.name : subjectId.toUpperCase();
+
+      activeTaskToEdit = { taskId, subjectId, weekNum };
+
+      document.getElementById("task-modal-context").innerText = `${subjName} • Semana ${weekNum}`;
+      document.getElementById("task-modal-topic").innerText = topic || "General";
+      document.getElementById("task-modal-section").innerText = sectionTitle;
+
+      const container = document.getElementById("status-options-container");
+      container.innerHTML = Object.keys(TASK_STATUSES).map(statusKey => {
+        const st = TASK_STATUSES[statusKey];
+        const isSelected = currentStatus === statusKey;
+        return `
+          <button class="status-option-btn ${isSelected ? 'selected' : ''}" 
+                  style="background-color: ${st.bg}; color: ${st.color}; border-color: ${isSelected ? st.color : st.border};"
+                  onclick="selectTaskStatus('${taskId}', '${statusKey}')">
+            <span>${st.icon} ${st.label}</span>
+            ${isSelected ? '<span>✓</span>' : ''}
+          </button>
+        `;
+      }).join('');
+
+      openModal("task-modal");
+    }
+
+    function selectTaskStatus(taskId, newStatus) {
+      setTaskStatus(taskId, newStatus);
+      closeModal("task-modal");
+      renderWeeklyGrid();
     }
 
     // Close modal on escape key or backdrop click
