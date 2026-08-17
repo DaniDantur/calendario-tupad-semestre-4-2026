@@ -1632,8 +1632,10 @@
                 const baseUrl = localStorage.getItem("moodle_url") || "";
 
                 const topicTitle = formatSectionTitle(assignedSections[0]);
+                const topicSec = assignedSections[0];
+                const topicUrl = `${baseUrl}/course/view.php?id=${subjectId}&section=${topicSec.section !== undefined ? topicSec.section : (topicSec.id || 0)}`;
 
-                const taskSections = assignedSections.map(sec => ({
+                const taskSections = assignedSections.slice(1).map(sec => ({
                     id: `${subjectId}-sec-${sec.id}`,
                     title: formatSectionTitle(sec),
                     defaultStatus: "Pendiente",
@@ -1642,6 +1644,7 @@
 
                 return {
                     topic: topicTitle,
+                    topicUrl: topicUrl,
                     sections: taskSections
                 };
             } catch (e) {
@@ -2542,7 +2545,11 @@
 
                     if (subjWeeklyData) {
                         if (subjWeeklyData.topic) {
-                            html += `<div class="week-topic-title">📌 ${subjWeeklyData.topic}</div>`;
+                            if (subjWeeklyData.topicUrl) {
+                                html += `<div class="week-topic-title"><a href="${subjWeeklyData.topicUrl}" target="_blank" rel="noopener noreferrer" class="discreet-link" title="Abrir sección de introducción en Moodle">📌 ${subjWeeklyData.topic} <span class="discreet-link-icon">↗</span></a></div>`;
+                            } else {
+                                html += `<div class="week-topic-title">📌 ${subjWeeklyData.topic}</div>`;
+                            }
                         }
 
                         if (subjWeeklyData.sections && subjWeeklyData.sections.length > 0) {
