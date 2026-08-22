@@ -844,13 +844,23 @@
         }
 
         .status-badge {
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 8px;
+            font-size: 13px;
+            padding: 4px;
+            border-radius: 4px;
             display: inline-flex;
-            align-items: center;
+            align-items: baseline;
             justify-content: center;
+            vertical-align: baseline;
             border: 1px solid transparent;
+            line-height: 1.2;
+            flex-shrink: 0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .status-badge-icon {
+            font-size: 13px;
+            display: inline-block;
             line-height: 1;
         }
 
@@ -1896,11 +1906,12 @@
            ========================================================================== */
         const TASK_STATUSES = {
             "Pendiente": { label: "Pendiente", icon: "⏳", color: "#475569", bg: "#f1f5f9", border: "#cbd5e1" },
+            "En progreso": { label: "En progreso", icon: "🔄", color: "#c2410c", bg: "#ffedd5", border: "#fed7aa" },
+            "Opcionales": { label: "Opcionales", icon: "🔹", color: "#4338ca", bg: "#e0e7ff", border: "#a5b4fc" },
             "Completada": { label: "Completada", icon: "✅", color: "#15803d", bg: "#dcfce7", border: "#86efac" },
             "Enviada": { label: "Enviada", icon: "📤", color: "#1d4ed8", bg: "#dbeafe", border: "#93c5fd" },
-            "Aprobada": { label: "Aprobada", icon: "🌟", color: "#047857", bg: "#a7f3d0", border: "#6ee7b7" },
-            "Desaprobada": { label: "Desaprobada", icon: "❌", color: "#b91c1c", bg: "#fee2e2", border: "#fca5a5" },
-            "Incompleta": { label: "Incompleta", icon: "⚠️", color: "#b45309", bg: "#fef3c7", border: "#fde68a" }
+            "Aprobada": { label: "Aprobada", icon: "🌟", color: "#ffffff", bg: "#0b1f48", border: "#1e3a8a" },
+            "Desaprobada": { label: "Desaprobada", icon: "❌", color: "#b91c1c", bg: "#fee2e2", border: "#fca5a5" }
         };
 
         function getTaskStatus(taskId, defaultVal = "Pendiente") {
@@ -1908,7 +1919,9 @@
                 const saved = localStorage.getItem("tupad_task_statuses");
                 if (saved) {
                     const obj = JSON.parse(saved);
-                    if (obj[taskId]) return obj[taskId];
+                    let status = obj[taskId];
+                    if (status === "Incompleta") status = "En progreso";
+                    if (status && TASK_STATUSES[status]) return status;
                 }
             } catch (e) {
                 console.error("Error al obtener estado de tarea:", e);
@@ -2562,7 +2575,7 @@
                   <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${(subjWeeklyData.topic || '').replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}', '${safeUrl}')">
                     <span class="section-task-title">${sec.title}</span>
                     <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};" title="Estado: ${stDef.label}">
-                      <span>${stDef.icon}</span>
+                      <span class="status-badge-icon">${stDef.icon}</span>
                     </span>
                   </div>
                 `;
