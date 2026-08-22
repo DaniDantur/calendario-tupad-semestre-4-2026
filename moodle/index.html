@@ -1127,6 +1127,335 @@
             font-size: 11px;
             max-width: 600px;
         }
+
+        /* ==========================================================================
+       MOBILE & RESPONSIVE UX ENHANCEMENTS
+       ========================================================================== */
+        /* Mobile Subject Switcher Bar */
+        .mobile-subject-tabs {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 8px 12px;
+            background: #091738;
+            border-bottom: 1px solid #1e293b;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .mobile-subject-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .mobile-subj-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .mobile-subj-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .mobile-subj-tab.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        .mobile-subj-badge {
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: inherit;
+            text-transform: uppercase;
+        }
+
+        /* Floating Action Button (FAB) */
+        .fab-current-week {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 990;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 28px;
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-body);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4), 0 2px 6px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+            user-select: none;
+        }
+
+        .fab-current-week:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+        }
+
+        .fab-current-week:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        /* Media Queries for Mobile & Tablet Responsiveness (up to 900px) */
+        @media (max-width: 900px) {
+            body {
+                padding: 0;
+                background-color: #0b1f48;
+            }
+
+            .container {
+                border-radius: 0;
+                border: none;
+                box-shadow: none;
+            }
+
+            .app-header {
+                padding: 12px 14px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .brand-area {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .brand-title {
+                font-size: 17px;
+            }
+
+            .brand-subtitle {
+                font-size: 10px;
+            }
+
+            .legend-container {
+                width: 100%;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .legend-container::-webkit-scrollbar {
+                display: none;
+            }
+
+            .legend-item {
+                flex-shrink: 0;
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            .controls-bar {
+                padding: 10px 12px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .controls-left {
+                width: 100%;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .search-box {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .controls-bar > div:last-child {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px !important;
+                width: 100%;
+            }
+
+            .controls-bar .btn {
+                justify-content: center;
+                padding: 8px 10px;
+                font-size: 11px;
+                width: 100%;
+            }
+
+        /* Single Subject Isolated Mode: Table fits container width without forced 1400px min-width */
+        .vertical-calendar-table.single-subject {
+            min-width: 0 !important;
+            width: 100% !important;
+            table-layout: fixed;
+        }
+
+        .vertical-calendar-table.single-subject .events-subcol-header,
+        .vertical-calendar-table.single-subject .sections-subcol-header,
+        .vertical-calendar-table.single-subject .events-cell,
+        .vertical-calendar-table.single-subject .sections-cell {
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+        }
+
+        /* Table Adjustments for Mobile */
+        .vertical-calendar-wrapper {
+            max-height: calc(100vh - 170px);
+            min-height: 380px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .vertical-calendar-table.single-subject {
+            min-width: 100% !important;
+            width: 100% !important;
+            table-layout: fixed;
+        }
+
+        .vertical-calendar-table.single-subject th:first-child,
+        .vertical-calendar-table.single-subject tr.top-header-row th:first-child,
+        .vertical-calendar-table.single-subject .week-cell {
+            width: 76px !important;
+            min-width: 76px !important;
+            max-width: 76px !important;
+            padding: 6px 3px !important;
+        }
+
+        .vertical-calendar-table.single-subject .events-subcol-header,
+        .vertical-calendar-table.single-subject .sections-subcol-header,
+        .vertical-calendar-table.single-subject .events-cell,
+        .vertical-calendar-table.single-subject .sections-cell {
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            padding: 4px !important;
+        }
+
+        .vertical-calendar-table th:first-child,
+        .vertical-calendar-table tr.top-header-row th:first-child,
+        .week-cell {
+            width: 88px !important;
+            min-width: 88px !important;
+            max-width: 88px !important;
+            padding: 6px 4px !important;
+        }
+
+        .week-number {
+            font-size: 12px;
+        }
+
+        .week-date-range {
+            font-size: 9px;
+        }
+
+        .current-week-badge {
+            font-size: 8px;
+            padding: 1px 4px;
+        }
+
+        .events-cell,
+        .sections-cell,
+        .events-subcol-header,
+        .sections-subcol-header {
+            width: 155px !important;
+            min-width: 145px !important;
+            padding: 4px !important;
+        }
+
+            .day-slot-item {
+                padding: 3px 2px;
+                min-height: 32px;
+            }
+
+            .day-slot-badge {
+                min-width: 26px;
+                width: 26px;
+                padding-right: 2px;
+            }
+
+            .day-slot-number {
+                font-size: 11px;
+            }
+
+            .day-slot-name {
+                font-size: 8px;
+            }
+
+            .section-task-item {
+                padding: 8px 8px;
+                min-height: 38px;
+            }
+
+            .event-card {
+                padding: 6px 7px;
+            }
+
+            /* Bottom Sheet Modals for Mobile */
+            .modal-overlay {
+                align-items: flex-end;
+                padding: 0;
+            }
+
+            .modal-content {
+                border-radius: 20px 20px 0 0;
+                max-width: 100%;
+                max-height: 85vh;
+                display: flex;
+                flex-direction: column;
+                animation: slideUp 0.25s ease-out;
+            }
+
+            @keyframes slideUp {
+                from { transform: translateY(100%); }
+                to { transform: translateY(0); }
+            }
+
+            .modal-body {
+                overflow-y: auto;
+                padding: 16px;
+            }
+
+            .status-options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .status-option-btn {
+                padding: 12px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fab-current-week span {
+                display: none;
+            }
+            .fab-current-week {
+                padding: 12px;
+                border-radius: 50%;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
     </style>
 </head>
 
@@ -1208,6 +1537,11 @@
                     Vista Calendario General
                 </a>
             </div>
+        </div>
+
+        <!-- Mobile Subject Switcher Bar -->
+        <div class="mobile-subject-tabs" id="mobile-subject-tabs">
+            <!-- Rendered dynamically via JS -->
         </div>
 
         <!-- Main Weekly Grid Container -->
@@ -1386,6 +1720,18 @@
             </div>
         </div>
     </div>
+
+    <!-- Floating Action Button for Mobile: Jump to Current Week -->
+    <button id="fab-current-week" class="fab-current-week" onclick="scrollToCurrentWeek()" title="Ir a la Semana Actual">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <circle cx="12" cy="15" r="2" fill="currentColor"></circle>
+        </svg>
+        <span>Semana Actual</span>
+    </button>
 
     <!-- Data Script & Weekly Render Engine -->
     <script>
@@ -2369,6 +2715,15 @@
 
         // Render Sticky Table Header (Semana + 6 Subjects x 2 Subcolumns)
         function renderTableHeader() {
+            const tableEl = document.querySelector(".vertical-calendar-table");
+            if (tableEl) {
+                if (selectedSubjectId) {
+                    tableEl.classList.add("single-subject");
+                } else {
+                    tableEl.classList.remove("single-subject");
+                }
+            }
+
             const headerContainer = document.getElementById("table-header-container");
             const normalizedQuery = normalizeStr(searchQuery);
 
@@ -2401,8 +2756,12 @@
                 const forumData = getForumsForSubject(subject.id);
                 const hasUnreadForums = forumData.unreadTotal > 0;
 
+                const showEvents = !selectedSubjectId || activeSubcolumnView === 'all' || activeSubcolumnView === 'events';
+                const showSections = !selectedSubjectId || activeSubcolumnView === 'all' || activeSubcolumnView === 'sections';
+                const colSpan = (showEvents && showSections) ? 2 : 1;
+
                 topRowHtml += `
-          <th colspan="2" style="background-color: ${subject.headerBg}; border-top: 4px solid ${subject.color}; cursor: pointer;" onclick="toggleSubjectHighlight('${subject.id}')" title="Haz clic para aislar ${subject.name}">
+          <th colspan="${colSpan}" style="background-color: ${subject.headerBg}; border-top: 4px solid ${subject.color}; cursor: pointer;" onclick="toggleSubjectHighlight('${subject.id}')" title="Haz clic para aislar ${subject.name}">
             <div class="subject-col-header">
               <div class="subject-header-top">
                 <span class="subject-code-badge" style="${isHighlighted ? 'background:#ffffff; color:' + subject.headerBg + ';' : ''}">${subject.code}</span>
@@ -2437,16 +2796,19 @@
           </th>
         `;
 
-                subRowHtml += `
-          <th class="subcol-header events-subcol-header">📅 Eventos</th>
-          <th class="subcol-header sections-subcol-header">📚 Secciones / Tareas</th>
-        `;
+                if (showEvents) {
+                    subRowHtml += `<th class="subcol-header events-subcol-header">📅 Eventos</th>`;
+                }
+                if (showSections) {
+                    subRowHtml += `<th class="subcol-header sections-subcol-header">📚 Secciones / Tareas</th>`;
+                }
             });
 
             topRowHtml += `</tr>`;
             subRowHtml += `</tr>`;
 
             headerContainer.innerHTML = topRowHtml + subRowHtml;
+            renderMobileSubjectTabs();
         }
 
         // Render Main Weekly Grid Rows
@@ -2482,112 +2844,119 @@
                 academicCalendarData.subjects.forEach(subject => {
                     if (selectedSubjectId && selectedSubjectId !== subject.id) return;
 
+                    const showEvents = !selectedSubjectId || activeSubcolumnView === 'all' || activeSubcolumnView === 'events';
+                    const showSections = !selectedSubjectId || activeSubcolumnView === 'all' || activeSubcolumnView === 'sections';
+
                     // 1. Subcolumn 1: Eventos Cell with 7 Daily Slots (LUN to DOM)
-                    const WEEKDAY_NAMES_3 = ["LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"];
+                    if (showEvents) {
+                        const WEEKDAY_NAMES_3 = ["LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"];
 
-                    html += `<td class="events-cell"><div class="week-days-container">`;
+                        html += `<td class="events-cell"><div class="week-days-container">`;
 
-                    for (let d = 0; d < 7; d++) {
-                        const dayDate = new Date(week.startObj);
-                        dayDate.setDate(week.startObj.getDate() + d);
+                        for (let d = 0; d < 7; d++) {
+                            const dayDate = new Date(week.startObj);
+                            dayDate.setDate(week.startObj.getDate() + d);
 
-                        const yyyy = dayDate.getFullYear();
-                        const mm = String(dayDate.getMonth() + 1).padStart(2, '0');
-                        const dd = String(dayDate.getDate()).padStart(2, '0');
-                        const dateStr = `${yyyy}-${mm}-${dd}`;
+                            const yyyy = dayDate.getFullYear();
+                            const mm = String(dayDate.getMonth() + 1).padStart(2, '0');
+                            const dd = String(dayDate.getDate()).padStart(2, '0');
+                            const dateStr = `${yyyy}-${mm}-${dd}`;
 
-                        const dayNum = dayDate.getDate();
-                        const dayName = WEEKDAY_NAMES_3[d];
-                        const isWeekend = (d === 5 || d === 6);
-                        const isToday = (dateStr === todayStr);
+                            const dayNum = dayDate.getDate();
+                            const dayName = WEEKDAY_NAMES_3[d];
+                            const isWeekend = (d === 5 || d === 6);
+                            const isToday = (dateStr === todayStr);
 
-                        // Filter events for this specific day
-                        const dayEvents = subject.events.filter(ev => {
-                            if (!ev.startDate) return false;
+                            // Filter events for this specific day
+                            const dayEvents = subject.events.filter(ev => {
+                                if (!ev.startDate) return false;
 
-                            if (selectedCategory && ev.category !== selectedCategory) return false;
+                                if (selectedCategory && ev.category !== selectedCategory) return false;
 
-                            if (normalizedQuery &&
-                                !normalizeStr(ev.title).includes(normalizedQuery) &&
-                                !normalizeStr(subject.name).includes(normalizedQuery) &&
-                                !normalizeStr(subject.code || "").includes(normalizedQuery) &&
-                                !normalizeStr(ev.details || "").includes(normalizedQuery)) return false;
+                                if (normalizedQuery &&
+                                    !normalizeStr(ev.title).includes(normalizedQuery) &&
+                                    !normalizeStr(subject.name).includes(normalizedQuery) &&
+                                    !normalizeStr(subject.code || "").includes(normalizedQuery) &&
+                                    !normalizeStr(ev.details || "").includes(normalizedQuery)) return false;
 
-                            const evStart = ev.startDate;
-                            const evEnd = ev.endDate || ev.startDate;
-                            return (dateStr >= evStart && dateStr <= evEnd);
-                        });
+                                const evStart = ev.startDate;
+                                const evEnd = ev.endDate || ev.startDate;
+                                return (dateStr >= evStart && dateStr <= evEnd);
+                            });
 
-                        html += `
-              <div class="day-slot-item ${dayEvents.length > 0 ? 'has-events' : 'empty-slot'} ${isWeekend ? 'weekend-slot' : ''} ${isToday ? 'today-slot' : ''}">
-                <div class="day-slot-badge">
-                  <div class="day-slot-number">${dayNum}</div>
-                  <div class="day-slot-name">${dayName}</div>
-                </div>
-                <div class="day-slot-content">
-            `;
-
-                        if (dayEvents.length > 0) {
-                            dayEvents.forEach(ev => {
-                                const cat = getCategory(ev.category);
-                                html += `
-                  <div class="event-card cat-${ev.category}" onclick="openEventModal('${ev.id}')" title="${ev.title} - ${subject.name}${ev.details ? ` (${ev.details})` : ''}">
-                    <div class="event-card-header">
-                      <span class="event-cat-badge" style="background-color: ${cat.color}; color: #ffffff;">${cat.label}</span>
+                            html += `
+                  <div class="day-slot-item ${dayEvents.length > 0 ? 'has-events' : 'empty-slot'} ${isWeekend ? 'weekend-slot' : ''} ${isToday ? 'today-slot' : ''}">
+                    <div class="day-slot-badge">
+                      <div class="day-slot-number">${dayNum}</div>
+                      <div class="day-slot-name">${dayName}</div>
                     </div>
-                    <div class="event-card-title">${ev.title}</div>
+                    <div class="day-slot-content">
+                `;
+
+                            if (dayEvents.length > 0) {
+                                dayEvents.forEach(ev => {
+                                    const cat = getCategory(ev.category);
+                                    html += `
+                      <div class="event-card cat-${ev.category}" onclick="openEventModal('${ev.id}')" title="${ev.title} - ${subject.name}${ev.details ? ` (${ev.details})` : ''}">
+                        <div class="event-card-header">
+                          <span class="event-cat-badge" style="background-color: ${cat.color}; color: #ffffff;">${cat.label}</span>
+                        </div>
+                        <div class="event-card-title">${ev.title}</div>
+                      </div>
+                    `;
+                                });
+                            } else {
+                                html += `<span class="day-slot-empty-dash">-</span>`;
+                            }
+
+                            html += `
+                    </div>
                   </div>
                 `;
-                            });
-                        } else {
-                            html += `<span class="day-slot-empty-dash">-</span>`;
                         }
 
-                        html += `
-                </div>
-              </div>
-            `;
+                        html += `</div></td>`;
                     }
-
-                    html += `</div></td>`;
 
                     // Subcolumn 2: Secciones / Tareas Cell
-                    html += `<td class="sections-cell">`;
+                    if (showSections) {
+                        html += `<td class="sections-cell">`;
 
-                    const subjWeeklyData = getWeeklySectionsForSubject(subject.id, week.number);
+                        const subjWeeklyData = getWeeklySectionsForSubject(subject.id, week.number);
 
-                    if (subjWeeklyData) {
-                        if (subjWeeklyData.topic) {
-                            if (subjWeeklyData.topicUrl) {
-                                html += `<div class="week-topic-title"><a href="${subjWeeklyData.topicUrl}" target="_blank" rel="noopener noreferrer" class="discreet-link" title="Abrir sección de introducción en Moodle">📌 ${subjWeeklyData.topic} <span class="discreet-link-icon">↗</span></a></div>`;
-                            } else {
-                                html += `<div class="week-topic-title">📌 ${subjWeeklyData.topic}</div>`;
+                        if (subjWeeklyData) {
+                            if (subjWeeklyData.topic) {
+                                if (subjWeeklyData.topicUrl) {
+                                    html += `<div class="week-topic-title"><a href="${subjWeeklyData.topicUrl}" target="_blank" rel="noopener noreferrer" class="discreet-link" title="Abrir sección de introducción en Moodle">📌 ${subjWeeklyData.topic} <span class="discreet-link-icon">↗</span></a></div>`;
+                                } else {
+                                    html += `<div class="week-topic-title">📌 ${subjWeeklyData.topic}</div>`;
+                                }
                             }
-                        }
 
-                        if (subjWeeklyData.sections && subjWeeklyData.sections.length > 0) {
-                            subjWeeklyData.sections.forEach(sec => {
-                                const currentStatus = getTaskStatus(sec.id, sec.defaultStatus || "Pendiente");
-                                const stDef = TASK_STATUSES[currentStatus] || TASK_STATUSES["Pendiente"];
-                                const safeUrl = sec.url ? sec.url.replace(/'/g, "\\'") : '';
+                            if (subjWeeklyData.sections && subjWeeklyData.sections.length > 0) {
+                                subjWeeklyData.sections.forEach(sec => {
+                                    const currentStatus = getTaskStatus(sec.id, sec.defaultStatus || "Pendiente");
+                                    const stDef = TASK_STATUSES[currentStatus] || TASK_STATUSES["Pendiente"];
+                                    const safeUrl = sec.url ? sec.url.replace(/'/g, "\\'") : '';
 
-                                html += `
-                  <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${(subjWeeklyData.topic || '').replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}', '${safeUrl}')">
-                    <span class="section-task-title">${sec.title}</span>
-                    <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};" title="Estado: ${stDef.label}">
-                      <span class="status-badge-icon">${stDef.icon}</span>
-                    </span>
-                  </div>
-                `;
-                            });
+                                    html += `
+                      <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${(subjWeeklyData.topic || '').replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}', '${safeUrl}')">
+                        <span class="section-task-title">${sec.title}</span>
+                        <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};" title="Estado: ${stDef.label}">
+                          <span class="status-badge-icon">${stDef.icon}</span>
+                        </span>
+                      </div>
+                    `;
+                                });
+                            } else {
+                                html += `<div class="no-sections-placeholder">Sin tareas asignadas esta semana</div>`;
+                            }
                         } else {
-                            html += `<div class="no-sections-placeholder">Sin tareas asignadas esta semana</div>`;
+                            html += `<div class="no-sections-placeholder">Sin secciones asignadas</div>`;
                         }
-                    } else {
-                        html += `<div class="no-sections-placeholder">Sin secciones asignadas</div>`;
-                    }
 
-                    html += `</td>`;
+                        html += `</td>`;
+                    }
                 });
 
                 html += `</tr>`;
@@ -2618,25 +2987,99 @@
             renderWeeklyGrid();
         }
 
+        let activeSubcolumnView = "all";
+
         function toggleSubjectHighlight(subjectId) {
             if (selectedSubjectId === subjectId) {
                 selectedSubjectId = null;
             } else {
                 selectedSubjectId = subjectId;
             }
+            activeSubcolumnView = "all";
             renderTableHeader();
             renderWeeklyGrid();
+            renderMobileSubjectTabs();
+        }
+
+        function selectSubjectFilter(subjectId) {
+            selectedSubjectId = subjectId;
+            activeSubcolumnView = "all";
+            renderTableHeader();
+            renderWeeklyGrid();
+            renderMobileSubjectTabs();
+        }
+
+        function setSubcolumnView(view) {
+            activeSubcolumnView = view;
+            renderTableHeader();
+            renderWeeklyGrid();
+            renderMobileSubjectTabs();
         }
 
         function resetFilters() {
             selectedCategory = null;
             selectedSubjectId = null;
+            activeSubcolumnView = "all";
             searchQuery = "";
             document.getElementById("search-input").value = "";
 
             document.querySelectorAll('.legend-item').forEach(el => el.classList.remove('active'));
             renderTableHeader();
             renderWeeklyGrid();
+            renderMobileSubjectTabs();
+        }
+
+        // Render Mobile Subject Switcher Bar
+        function renderMobileSubjectTabs() {
+            const container = document.getElementById("mobile-subject-tabs");
+            if (!container) return;
+
+            if (!academicCalendarData.subjects || academicCalendarData.subjects.length === 0) {
+                container.style.display = "none";
+                return;
+            }
+
+            container.style.display = "flex";
+
+            let html = `
+                <button class="mobile-subj-tab ${selectedSubjectId === null ? 'active' : ''}" onclick="selectSubjectFilter(null)">
+                    <span class="mobile-subj-badge">TODAS</span>
+                    <span>Todas las Materias</span>
+                </button>
+            `;
+
+            academicCalendarData.subjects.forEach(subj => {
+                const isActive = (selectedSubjectId === subj.id);
+                const shortName = subj.name ? subj.name.split(' ')[0] : subj.code;
+                html += `
+                    <button class="mobile-subj-tab ${isActive ? 'active' : ''}" style="${isActive ? 'background-color:' + subj.color + '; border-color:' + subj.color + '; color:#ffffff;' : ''}" onclick="selectSubjectFilter('${subj.id}')">
+                        <span class="mobile-subj-badge" style="${!isActive ? 'background:' + subj.color + '25; color:' + subj.color + ';' : 'background:rgba(255,255,255,0.3); color:#ffffff;'}">${subj.code}</span>
+                        <span>${shortName}</span>
+                    </button>
+                `;
+            });
+
+            if (selectedSubjectId) {
+                html += `
+                    <div style="display:inline-flex; align-items:center; gap:4px; margin-left:6px; border-left:1px solid rgba(255,255,255,0.25); padding-left:8px; flex-shrink:0;">
+                        <button class="mobile-subj-tab ${activeSubcolumnView === 'all' ? 'active' : ''}" onclick="setSubcolumnView('all')">Ambas</button>
+                        <button class="mobile-subj-tab ${activeSubcolumnView === 'events' ? 'active' : ''}" onclick="setSubcolumnView('events')">📅 Eventos</button>
+                        <button class="mobile-subj-tab ${activeSubcolumnView === 'sections' ? 'active' : ''}" onclick="setSubcolumnView('sections')">📚 Tareas</button>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function scrollToCurrentWeek() {
+            const currentWeekRow = document.querySelector(".current-week-row");
+            if (currentWeekRow) {
+                currentWeekRow.scrollIntoView({ behavior: "smooth", block: "center" });
+            } else {
+                const firstRow = document.querySelector(".week-row");
+                if (firstRow) firstRow.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
         }
 
         function setupSearch() {
