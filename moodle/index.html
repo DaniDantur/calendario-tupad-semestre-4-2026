@@ -641,6 +641,7 @@
             background-color: #fafbfc;
             width: 220px;
             min-width: 190px;
+            height: 100%;
         }
 
         /* Daily Slot Items inside Events Subcolumn */
@@ -799,7 +800,59 @@
             text-overflow: ellipsis;
         }
 
-        /* Topic Title & Sections Cards */
+        /* Topic Group Container & Sections Cards */
+        .sections-group-container {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid var(--subject-accent, #1e3a8a);
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 0;
+            height: 100%;
+            min-height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .sections-group-container:hover {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .sections-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .sections-group-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            word-break: break-word;
+        }
+
+        .sections-group-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .sections-group-body .section-task-item {
+            margin-bottom: 0;
+        }
+
         .week-topic-title {
             font-size: 11px;
             font-weight: 800;
@@ -1290,7 +1343,7 @@
                 max-width: 100%;
             }
 
-            .controls-bar > div:last-child {
+            .controls-bar>div:last-child {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr);
                 gap: 6px !important;
@@ -1304,84 +1357,84 @@
                 width: 100%;
             }
 
-        /* Single Subject Isolated Mode: Table fits container width without forced 1400px min-width */
-        .vertical-calendar-table.single-subject {
-            min-width: 0 !important;
-            width: 100% !important;
-            table-layout: fixed;
-        }
+            /* Single Subject Isolated Mode: Table fits container width without forced 1400px min-width */
+            .vertical-calendar-table.single-subject {
+                min-width: 0 !important;
+                width: 100% !important;
+                table-layout: fixed;
+            }
 
-        .vertical-calendar-table.single-subject .events-subcol-header,
-        .vertical-calendar-table.single-subject .sections-subcol-header,
-        .vertical-calendar-table.single-subject .events-cell,
-        .vertical-calendar-table.single-subject .sections-cell {
-            width: auto !important;
-            min-width: 0 !important;
-            max-width: none !important;
-        }
+            .vertical-calendar-table.single-subject .events-subcol-header,
+            .vertical-calendar-table.single-subject .sections-subcol-header,
+            .vertical-calendar-table.single-subject .events-cell,
+            .vertical-calendar-table.single-subject .sections-cell {
+                width: auto !important;
+                min-width: 0 !important;
+                max-width: none !important;
+            }
 
-        /* Table Adjustments for Mobile */
-        .vertical-calendar-wrapper {
-            max-height: calc(100vh - 170px);
-            min-height: 380px;
-            -webkit-overflow-scrolling: touch;
-        }
+            /* Table Adjustments for Mobile */
+            .vertical-calendar-wrapper {
+                max-height: calc(100vh - 170px);
+                min-height: 380px;
+                -webkit-overflow-scrolling: touch;
+            }
 
-        .vertical-calendar-table.single-subject {
-            min-width: 100% !important;
-            width: 100% !important;
-            table-layout: fixed;
-        }
+            .vertical-calendar-table.single-subject {
+                min-width: 100% !important;
+                width: 100% !important;
+                table-layout: fixed;
+            }
 
-        .vertical-calendar-table.single-subject th:first-child,
-        .vertical-calendar-table.single-subject tr.top-header-row th:first-child,
-        .vertical-calendar-table.single-subject .week-cell {
-            width: 76px !important;
-            min-width: 76px !important;
-            max-width: 76px !important;
-            padding: 6px 3px !important;
-        }
+            .vertical-calendar-table.single-subject th:first-child,
+            .vertical-calendar-table.single-subject tr.top-header-row th:first-child,
+            .vertical-calendar-table.single-subject .week-cell {
+                width: 76px !important;
+                min-width: 76px !important;
+                max-width: 76px !important;
+                padding: 6px 3px !important;
+            }
 
-        .vertical-calendar-table.single-subject .events-subcol-header,
-        .vertical-calendar-table.single-subject .sections-subcol-header,
-        .vertical-calendar-table.single-subject .events-cell,
-        .vertical-calendar-table.single-subject .sections-cell {
-            width: auto !important;
-            min-width: 0 !important;
-            max-width: none !important;
-            padding: 4px !important;
-        }
+            .vertical-calendar-table.single-subject .events-subcol-header,
+            .vertical-calendar-table.single-subject .sections-subcol-header,
+            .vertical-calendar-table.single-subject .events-cell,
+            .vertical-calendar-table.single-subject .sections-cell {
+                width: auto !important;
+                min-width: 0 !important;
+                max-width: none !important;
+                padding: 4px !important;
+            }
 
-        .vertical-calendar-table th:first-child,
-        .vertical-calendar-table tr.top-header-row th:first-child,
-        .week-cell {
-            width: 88px !important;
-            min-width: 88px !important;
-            max-width: 88px !important;
-            padding: 6px 4px !important;
-        }
+            .vertical-calendar-table th:first-child,
+            .vertical-calendar-table tr.top-header-row th:first-child,
+            .week-cell {
+                width: 88px !important;
+                min-width: 88px !important;
+                max-width: 88px !important;
+                padding: 6px 4px !important;
+            }
 
-        .week-number {
-            font-size: 12px;
-        }
+            .week-number {
+                font-size: 12px;
+            }
 
-        .week-date-range {
-            font-size: 9px;
-        }
+            .week-date-range {
+                font-size: 9px;
+            }
 
-        .current-week-badge {
-            font-size: 8px;
-            padding: 1px 4px;
-        }
+            .current-week-badge {
+                font-size: 8px;
+                padding: 1px 4px;
+            }
 
-        .events-cell,
-        .sections-cell,
-        .events-subcol-header,
-        .sections-subcol-header {
-            width: 155px !important;
-            min-width: 145px !important;
-            padding: 4px !important;
-        }
+            .events-cell,
+            .sections-cell,
+            .events-subcol-header,
+            .sections-subcol-header {
+                width: 155px !important;
+                min-width: 145px !important;
+                padding: 4px !important;
+            }
 
             .day-slot-item {
                 padding: 3px 2px;
@@ -1427,8 +1480,13 @@
             }
 
             @keyframes slideUp {
-                from { transform: translateY(100%); }
-                to { transform: translateY(0); }
+                from {
+                    transform: translateY(100%);
+                }
+
+                to {
+                    transform: translateY(0);
+                }
             }
 
             .modal-body {
@@ -1449,6 +1507,7 @@
             .fab-current-week span {
                 display: none;
             }
+
             .fab-current-week {
                 padding: 12px;
                 border-radius: 50%;
@@ -1510,7 +1569,8 @@
             </div>
 
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <button class="btn btn-secondary" onclick="openWeekAssignmentModal()" title="Asignar semanas y URL .ics a las materias">
+                <button class="btn btn-secondary" onclick="openWeekAssignmentModal()"
+                    title="Asignar semanas y URL .ics a las materias">
                     📚 Asignar Semanas / ICS
                 </button>
 
@@ -1523,7 +1583,8 @@
                     Actualizar Eventos ICS
                 </button>
 
-                <button class="btn btn-outline" onclick="openMoodleLoginModal()" title="Configuración de cuenta y token Moodle">
+                <button class="btn btn-outline" onclick="openMoodleLoginModal()"
+                    title="Configuración de cuenta y token Moodle">
                     🔑 Moodle
                 </button>
 
@@ -1630,20 +1691,24 @@
             <div class="modal-body">
                 <div class="modal-field">
                     <label class="modal-label">URL del Campus Moodle</label>
-                    <input type="text" id="moodle-login-url" class="modal-input" placeholder="https://tup.sied.utn.edu.ar" value="https://tup.sied.utn.edu.ar">
+                    <input type="text" id="moodle-login-url" class="modal-input"
+                        placeholder="https://tup.sied.utn.edu.ar" value="https://tup.sied.utn.edu.ar">
                 </div>
                 <div class="modal-field">
                     <label class="modal-label">Usuario</label>
-                    <input type="text" id="moodle-login-username" class="modal-input" placeholder="Tu usuario de Moodle">
+                    <input type="text" id="moodle-login-username" class="modal-input"
+                        placeholder="Tu usuario de Moodle">
                 </div>
                 <div class="modal-field">
                     <label class="modal-label">Contraseña</label>
                     <input type="password" id="moodle-login-password" class="modal-input" placeholder="Tu contraseña">
                 </div>
-                <div id="moodle-login-error" class="modal-field" style="color: #ef4444; font-size: 13px; display: none; margin-top: 8px; font-weight: 600;"></div>
+                <div id="moodle-login-error" class="modal-field"
+                    style="color: #ef4444; font-size: 13px; display: none; margin-top: 8px; font-weight: 600;"></div>
             </div>
             <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                <button class="btn btn-secondary" onclick="logoutMoodle()" title="Cerrar sesión de Moodle">Cerrar Sesión</button>
+                <button class="btn btn-secondary" onclick="logoutMoodle()" title="Cerrar sesión de Moodle">Cerrar
+                    Sesión</button>
                 <button class="btn" id="moodle-login-btn" onclick="executeMoodleLogin()">Conectar Moodle</button>
             </div>
         </div>
@@ -1660,23 +1725,27 @@
                 <div class="modal-field" style="margin-bottom: 18px;">
                     <label class="modal-label">Materias Visibles en el Calendario</label>
                     <p style="font-size: 11px; color: #64748b; margin-bottom: 6px;">
-                        Tildá las materias que querés mostrar en el calendario. Las desmarcadas (ej. materias pasadas) se ocultarán.
+                        Tildá las materias que querés mostrar en el calendario. Las desmarcadas (ej. materias pasadas)
+                        se ocultarán.
                     </p>
-                    <div id="course-visibility-toggle-container" style="display: flex; flex-wrap: wrap; gap: 8px 16px; background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                    <div id="course-visibility-toggle-container"
+                        style="display: flex; flex-wrap: wrap; gap: 8px 16px; background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1;">
                         <!-- Checkboxes populated dynamically -->
                     </div>
                 </div>
 
                 <div class="modal-field">
                     <label class="modal-label">Seleccionar Materia para Configurar Semanas e ICS</label>
-                    <select id="assignment-course-select" class="modal-input" onchange="renderCourseAssignmentForm(this.value)">
+                    <select id="assignment-course-select" class="modal-input"
+                        onchange="renderCourseAssignmentForm(this.value)">
                         <!-- Options populated dynamically -->
                     </select>
                 </div>
-                
+
                 <div class="modal-field" style="margin-top: 14px;">
                     <label class="modal-label">URL Calendario Google (.ics) para esta materia</label>
-                    <input type="text" id="subject-ics-url-input" class="modal-input" placeholder="https://calendar.google.com/calendar/ical/.../basic.ics">
+                    <input type="text" id="subject-ics-url-input" class="modal-input"
+                        placeholder="https://calendar.google.com/calendar/ical/.../basic.ics">
                 </div>
 
                 <hr style="margin: 18px 0; border: none; border-top: 1px solid #e2e8f0;">
@@ -1685,7 +1754,8 @@
                     Secciones del Curso
                 </div>
                 <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">
-                    Asigná la semana (Semana 1 a 16) a la que pertenece cada sección de Moodle. La primera sección asignada a una semana actuará como título del tema y las siguientes como tareas.
+                    Asigná la semana (Semana 1 a 16) a la que pertenece cada sección de Moodle. La primera sección
+                    asignada a una semana actuará como título del tema y las siguientes como tareas.
                 </p>
 
                 <div id="course-sections-assignment-container">
@@ -1706,9 +1776,11 @@
                 <div>
                     <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
                         <span>💬 Foros de Discusión</span>
-                        <span id="forums-modal-unread-summary" class="forum-unread-pill unread" style="display: none; font-size: 11px;"></span>
+                        <span id="forums-modal-unread-summary" class="forum-unread-pill unread"
+                            style="display: none; font-size: 11px;"></span>
                     </div>
-                    <div id="forums-modal-subject-name" style="font-size: 13px; font-weight: 700; margin-top: 2px; color: #fbbf24;"></div>
+                    <div id="forums-modal-subject-name"
+                        style="font-size: 13px; font-weight: 700; margin-top: 2px; color: #fbbf24;"></div>
                 </div>
                 <button class="modal-close" onclick="closeModal('forums-modal')">&times;</button>
             </div>
@@ -1722,7 +1794,8 @@
     </div>
 
     <!-- Floating Action Button for Mobile: Jump to Current Week -->
-    <button id="fab-current-week" class="fab-current-week" onclick="scrollToCurrentWeek()" title="Ir a la Semana Actual">
+    <button id="fab-current-week" class="fab-current-week" onclick="scrollToCurrentWeek()"
+        title="Ir a la Semana Actual">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -1765,7 +1838,7 @@
             "IAD": "https://calendar.google.com/calendar/ical/9a4c41e3f0988d5eca06dc5e6c8b7bf5445a8e6beeda2f847073ad475ad36274%40group.calendar.google.com/public/basic.ics",
             "LEG": "https://calendar.google.com/calendar/ical/d20579ddb27fb62b26db1a8971f4239e62133137a011227263abcbae9de85d59%40group.calendar.google.com/public/basic.ics",
             "MS2": "https://calendar.google.com/calendar/ical/30bb681933c1ad536c39704aa2e1730358eb37837f24d9de7ee8cc14c642c410%40group.calendar.google.com/public/basic.ics",
-            "P4":  "https://calendar.google.com/calendar/ical/e7c3e9e4dcb762f5fe7c6a3ddfe1342710471a2105d26b19b853e9fb8e168ba6%40group.calendar.google.com/public/basic.ics",
+            "P4": "https://calendar.google.com/calendar/ical/e7c3e9e4dcb762f5fe7c6a3ddfe1342710471a2105d26b19b853e9fb8e168ba6%40group.calendar.google.com/public/basic.ics",
             "TIF": "https://calendar.google.com/calendar/ical/fe34e07ed86f1b002bbb2491731ec4b740ad0b804d667f74f23b3702ea7082de%40group.calendar.google.com/public/basic.ics"
         };
 
@@ -1921,7 +1994,7 @@
             if (baseUrl.endsWith("/")) baseUrl = baseUrl.slice(0, -1);
 
             const contentsUrl = `${baseUrl}/webservice/rest/server.php?wstoken=${token}&wsfunction=core_course_get_contents&moodlewsrestformat=json&courseid=${courseId}`;
-            
+
             let newSections = null;
 
             try {
@@ -1969,7 +2042,22 @@
             }
         }
 
-        function getWeeklySectionsForSubject(subjectId, weekNum) {
+        function getSectionWeekRange(assignVal) {
+            if (!assignVal) return null;
+            if (typeof assignVal === 'number') {
+                return { startWeek: assignVal, endWeek: assignVal };
+            }
+            if (typeof assignVal === 'object' && assignVal.startWeek && assignVal.endWeek) {
+                const s = parseInt(assignVal.startWeek, 10);
+                const e = parseInt(assignVal.endWeek, 10);
+                if (!isNaN(s) && !isNaN(e)) {
+                    return { startWeek: s, endWeek: e };
+                }
+            }
+            return null;
+        }
+
+        function getWeeklySectionsStartingAtWeek(subjectId, weekNum) {
             const contentsStr = localStorage.getItem("moodle_course_contents_" + subjectId);
             const assignmentsStr = localStorage.getItem("moodle_week_assignments_" + subjectId);
 
@@ -1981,30 +2069,56 @@
 
                 if (!Array.isArray(contents) || contents.length === 0) return null;
 
-                const assignedSections = contents.filter(sec => assignments[`sec_${sec.id}`] === weekNum);
+                const startingSections = contents.filter(sec => {
+                    const range = getSectionWeekRange(assignments[`sec_${sec.id}`]);
+                    return range && range.startWeek === weekNum;
+                });
 
-                if (assignedSections.length === 0) return null;
+                if (startingSections.length === 0) return null;
 
                 const baseUrl = localStorage.getItem("moodle_url") || "";
 
-                const topicTitle = formatSectionTitle(assignedSections[0]);
-                const topicSec = assignedSections[0];
+                let maxEndWeek = weekNum;
+                startingSections.forEach(sec => {
+                    const range = getSectionWeekRange(assignments[`sec_${sec.id}`]);
+                    if (range && range.endWeek > maxEndWeek) {
+                        maxEndWeek = range.endWeek;
+                    }
+                });
+
+                const rowspan = maxEndWeek - weekNum + 1;
+
+                const topicTitle = formatSectionTitle(startingSections[0]);
+                const topicSec = startingSections[0];
                 const topicUrl = `${baseUrl}/course/view.php?id=${subjectId}&section=${topicSec.section !== undefined ? topicSec.section : (topicSec.id || 0)}`;
 
-                const taskSections = assignedSections.slice(1).map(sec => ({
-                    id: `${subjectId}-sec-${sec.id}`,
-                    title: formatSectionTitle(sec),
-                    defaultStatus: "Pendiente",
-                    url: `${baseUrl}/course/view.php?id=${subjectId}&section=${sec.section !== undefined ? sec.section : (sec.id || 0)}`
-                }));
+                let taskSections = [];
+                if (startingSections.length > 1) {
+                    taskSections = startingSections.slice(1).map(sec => ({
+                        id: `${subjectId}-sec-${sec.id}`,
+                        title: formatSectionTitle(sec),
+                        defaultStatus: "Pendiente",
+                        url: `${baseUrl}/course/view.php?id=${subjectId}&section=${sec.section !== undefined ? sec.section : (sec.id || 0)}`
+                    }));
+                } else {
+                    taskSections = [{
+                        id: `${subjectId}-sec-${topicSec.id}`,
+                        title: topicTitle,
+                        defaultStatus: "Pendiente",
+                        url: topicUrl
+                    }];
+                }
 
                 return {
                     topic: topicTitle,
                     topicUrl: topicUrl,
-                    sections: taskSections
+                    sections: taskSections,
+                    startWeek: weekNum,
+                    endWeek: maxEndWeek,
+                    rowspan: rowspan
                 };
             } catch (e) {
-                console.error("Error obteniendo secciones semanales para materia:", subjectId, e);
+                console.error("Error obteniendo secciones que inician en la semana:", subjectId, weekNum, e);
                 return null;
             }
         }
@@ -2100,7 +2214,7 @@
                     const forumUrl = cmid ? `${baseUrl}/mod/forum/view.php?id=${cmid}` : `${baseUrl}/course/view.php?id=${subjectId}`;
 
                     const sec = forumToSectionMap[cmid] || forumToSectionMap[forum.id] || forumToSectionMap["instance_" + forum.id];
-                    
+
                     const lowerName = (forum.name || "").toLowerCase();
                     const isGeneralType = forum.type === 'news' || forum.type === 'general';
                     const isGeneralName = lowerName.includes("novedades") || lowerName.includes("avisos") || lowerName.includes("general") || lowerName.includes("cafetería") || lowerName.includes("cafeteria");
@@ -2167,7 +2281,7 @@
             const forumData = getForumsForSubject(subjectId);
 
             document.getElementById("forums-modal-subject-name").textContent = subject.name;
-            
+
             const unreadHeaderEl = document.getElementById("forums-modal-unread-summary");
             if (forumData.unreadTotal > 0) {
                 unreadHeaderEl.style.display = "inline-block";
@@ -2825,6 +2939,11 @@
             const todayDay = String(now.getDate()).padStart(2, '0');
             const todayStr = `${todayYear}-${todayMonth}-${todayDay}`;
 
+            const cellSkipMap = {};
+            academicCalendarData.subjects.forEach(subj => {
+                cellSkipMap[subj.id] = 0;
+            });
+
             let html = "";
 
             WEEKS.forEach(week => {
@@ -2920,42 +3039,60 @@
 
                     // Subcolumn 2: Secciones / Tareas Cell
                     if (showSections) {
-                        html += `<td class="sections-cell">`;
-
-                        const subjWeeklyData = getWeeklySectionsForSubject(subject.id, week.number);
-
-                        if (subjWeeklyData) {
-                            if (subjWeeklyData.topic) {
-                                if (subjWeeklyData.topicUrl) {
-                                    html += `<div class="week-topic-title"><a href="${subjWeeklyData.topicUrl}" target="_blank" rel="noopener noreferrer" class="discreet-link" title="Abrir sección de introducción en Moodle">📌 ${subjWeeklyData.topic} <span class="discreet-link-icon">↗</span></a></div>`;
-                                } else {
-                                    html += `<div class="week-topic-title">📌 ${subjWeeklyData.topic}</div>`;
-                                }
-                            }
-
-                            if (subjWeeklyData.sections && subjWeeklyData.sections.length > 0) {
-                                subjWeeklyData.sections.forEach(sec => {
-                                    const currentStatus = getTaskStatus(sec.id, sec.defaultStatus || "Pendiente");
-                                    const stDef = TASK_STATUSES[currentStatus] || TASK_STATUSES["Pendiente"];
-                                    const safeUrl = sec.url ? sec.url.replace(/'/g, "\\'") : '';
-
-                                    html += `
-                      <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${(subjWeeklyData.topic || '').replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}', '${safeUrl}')">
-                        <span class="section-task-title">${sec.title}</span>
-                        <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};" title="Estado: ${stDef.label}">
-                          <span class="status-badge-icon">${stDef.icon}</span>
-                        </span>
-                      </div>
-                    `;
-                                });
-                            } else {
-                                html += `<div class="no-sections-placeholder">Sin tareas asignadas esta semana</div>`;
-                            }
+                        if (cellSkipMap[subject.id] > 0) {
+                            // Covered by rowspan from a previous week row
+                            cellSkipMap[subject.id]--;
                         } else {
-                            html += `<div class="no-sections-placeholder">Sin secciones asignadas</div>`;
-                        }
+                            const startingData = getWeeklySectionsStartingAtWeek(subject.id, week.number);
 
-                        html += `</td>`;
+                            if (startingData) {
+                                const rowspanAttr = startingData.rowspan > 1 ? ` rowspan="${startingData.rowspan}"` : '';
+                                if (startingData.rowspan > 1) {
+                                    cellSkipMap[subject.id] = startingData.rowspan - 1;
+                                }
+
+                                html += `<td class="sections-cell"${rowspanAttr} style="vertical-align: top;">`;
+                                html += `
+                                    <div class="sections-group-container" style="--subject-accent: ${subject.color || '#1e3a8a'};">
+                                        <div class="sections-group-header">
+                                            <div class="sections-group-title">
+                                                ${startingData.topicUrl ? `
+                                                    <a href="${startingData.topicUrl}" target="_blank" rel="noopener noreferrer" class="discreet-link" title="Abrir sección de Moodle">
+                                                        📌 ${startingData.topic} <span class="discreet-link-icon">↗</span>
+                                                    </a>
+                                                ` : `📌 ${startingData.topic}`}
+                                            </div>
+                                        </div>
+                                        <div class="sections-group-body">
+                                `;
+
+                                if (startingData.sections && startingData.sections.length > 0) {
+                                    startingData.sections.forEach(sec => {
+                                        const currentStatus = getTaskStatus(sec.id, sec.defaultStatus || "Pendiente");
+                                        const stDef = TASK_STATUSES[currentStatus] || TASK_STATUSES["Pendiente"];
+                                        const safeUrl = sec.url ? sec.url.replace(/'/g, "\\'") : '';
+
+                                        html += `
+                                            <div class="section-task-item" onclick="openTaskModal('${subject.id}', ${week.number}, '${sec.id}', '${(startingData.topic || '').replace(/'/g, "\\'")}', '${sec.title.replace(/'/g, "\\'")}', '${currentStatus}', '${safeUrl}')">
+                                                <span class="section-task-title">${sec.title}</span>
+                                                <span class="status-badge" style="background-color: ${stDef.bg}; color: ${stDef.color}; border-color: ${stDef.border};" title="Estado: ${stDef.label}">
+                                                    <span class="status-badge-icon">${stDef.icon}</span>
+                                                </span>
+                                            </div>
+                                        `;
+                                    });
+                                } else {
+                                    html += `<div class="no-sections-placeholder">Sin tareas asignadas esta semana</div>`;
+                                }
+
+                                html += `
+                                        </div>
+                                    </div>
+                                </td>`;
+                            } else {
+                                html += `<td class="sections-cell"><div class="no-sections-placeholder">Sin secciones asignadas</div></td>`;
+                            }
+                        }
                     }
                 });
 
@@ -3313,7 +3450,7 @@
 
             localStorage.setItem("moodle_visible_subject_ids", JSON.stringify(visible));
             loadMoodleSubjectsFromStorage();
-            
+
             const selectEl = document.getElementById("assignment-course-select");
             const cachedStr = localStorage.getItem("moodle_courses");
             const courses = cachedStr ? JSON.parse(cachedStr) : [];
@@ -3397,6 +3534,38 @@
             renderCourseAssignmentForm(courseId);
         }
 
+        function onWeekStartChange(secId) {
+            const startEl = document.querySelector(`.week-start-select[data-id="${secId}"]`);
+            const endEl = document.querySelector(`.week-end-select[data-id="${secId}"]`);
+            if (!startEl || !endEl) return;
+
+            const startVal = parseInt(startEl.value, 10);
+            const endVal = parseInt(endEl.value, 10);
+
+            if (isNaN(startVal)) {
+                endEl.value = "";
+            } else {
+                if (isNaN(endVal) || endVal < startVal) {
+                    endEl.value = String(startVal);
+                }
+            }
+        }
+
+        function onWeekEndChange(secId) {
+            const startEl = document.querySelector(`.week-start-select[data-id="${secId}"]`);
+            const endEl = document.querySelector(`.week-end-select[data-id="${secId}"]`);
+            if (!startEl || !endEl) return;
+
+            const startVal = parseInt(startEl.value, 10);
+            const endVal = parseInt(endEl.value, 10);
+
+            if (!isNaN(endVal)) {
+                if (isNaN(startVal) || startVal > endVal) {
+                    startEl.value = String(endVal);
+                }
+            }
+        }
+
         function renderCourseAssignmentForm(courseId) {
             currentAssignmentCourseId = String(courseId);
             const subj = academicCalendarData.subjects.find(s => String(s.id) === currentAssignmentCourseId);
@@ -3432,24 +3601,46 @@
             `;
 
             contents.forEach(sec => {
-                const secAssignedWeek = assignments[`sec_${sec.id}`] || "";
+                const rawAssign = assignments[`sec_${sec.id}`];
+                let assignedStart = "";
+                let assignedEnd = "";
+
+                if (typeof rawAssign === 'number') {
+                    assignedStart = String(rawAssign);
+                    assignedEnd = String(rawAssign);
+                } else if (typeof rawAssign === 'object' && rawAssign !== null) {
+                    if (rawAssign.startWeek) assignedStart = String(rawAssign.startWeek);
+                    if (rawAssign.endWeek) assignedEnd = String(rawAssign.endWeek);
+                }
+
                 const cleanTitle = formatSectionTitle(sec);
 
-                let weekSelectOptionsSec = `<option value="">Sin Asignar</option>`;
+                let startOptionsHtml = `<option value="">Sin Asignar</option>`;
+                let endOptionsHtml = `<option value="">-</option>`;
+
                 for (let w = 1; w <= 16; w++) {
-                    weekSelectOptionsSec += `<option value="${w}" ${String(secAssignedWeek) === String(w) ? 'selected' : ''}>Semana ${w}</option>`;
+                    startOptionsHtml += `<option value="${w}" ${assignedStart === String(w) ? 'selected' : ''}>Semana ${w}</option>`;
+                    endOptionsHtml += `<option value="${w}" ${assignedEnd === String(w) ? 'selected' : ''}>Semana ${w}</option>`;
                 }
 
                 html += `
-                    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                        <div style="font-weight: 700; color: #0f172a; font-size: 14px; flex: 1;">
+                    <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                        <div style="font-weight: 700; color: #0f172a; font-size: 13.5px; flex: 1; min-width: 200px;">
                             📌 ${cleanTitle}
                         </div>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <label style="font-size: 11px; font-weight: 700; color: #64748b;">Semana:</label>
-                            <select class="week-assignment-select modal-input" data-type="sec" data-id="${sec.id}" style="width: auto; padding: 4px 8px; margin: 0;">
-                                ${weekSelectOptionsSec}
-                            </select>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #64748b;">Desde:</label>
+                                <select class="week-start-select modal-input" data-id="${sec.id}" onchange="onWeekStartChange('${sec.id}')" style="width: auto; padding: 4px 8px; margin: 0; font-size: 12px;">
+                                    ${startOptionsHtml}
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #64748b;">Hasta:</label>
+                                <select class="week-end-select modal-input" data-id="${sec.id}" onchange="onWeekEndChange('${sec.id}')" style="width: auto; padding: 4px 8px; margin: 0; font-size: 12px;">
+                                    ${endOptionsHtml}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -3467,15 +3658,23 @@
             const subj = academicCalendarData.subjects.find(s => s.id === currentAssignmentCourseId);
             if (subj) subj.icsUrl = icsUrl;
 
-            const selects = document.querySelectorAll("#course-sections-assignment-container .week-assignment-select");
+            const startSelects = document.querySelectorAll("#course-sections-assignment-container .week-start-select");
             const assignments = {};
 
-            selects.forEach(sel => {
-                const type = sel.dataset.type;
-                const id = sel.dataset.id;
-                const val = sel.value;
-                if (val) {
-                    assignments[`${type}_${id}`] = parseInt(val, 10);
+            startSelects.forEach(sSel => {
+                const id = sSel.dataset.id;
+                const eSel = document.querySelector(`#course-sections-assignment-container .week-end-select[data-id="${id}"]`);
+
+                const sVal = parseInt(sSel.value, 10);
+                const eVal = eSel ? parseInt(eSel.value, 10) : NaN;
+
+                if (!isNaN(sVal)) {
+                    const endWeekNum = (!isNaN(eVal) && eVal >= sVal) ? eVal : sVal;
+                    if (sVal === endWeekNum) {
+                        assignments[`sec_${id}`] = sVal;
+                    } else {
+                        assignments[`sec_${id}`] = { startWeek: sVal, endWeek: endWeekNum };
+                    }
                 }
             });
 
