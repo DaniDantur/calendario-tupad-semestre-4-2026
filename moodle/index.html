@@ -2154,11 +2154,12 @@
                 const resp = await fetch(url);
                 const data = await resp.json();
 
-                if (data && !data.exception && Array.isArray(data)) {
+                if (data && !data.exception && (Array.isArray(data) || Array.isArray(data?.forums))) {
+                    const forumsList = Array.isArray(data) ? data : data.forums;
                     const forumsByCourse = {};
                     visibleIds.forEach(id => { forumsByCourse[id] = []; });
 
-                    data.forEach(forum => {
+                    forumsList.forEach(forum => {
                         const cId = String(forum.course);
                         if (!forumsByCourse[cId]) forumsByCourse[cId] = [];
                         forumsByCourse[cId].push(forum);
@@ -2193,12 +2194,14 @@
                 const forumToSectionMap = {};
                 if (Array.isArray(contents)) {
                     contents.forEach(sec => {
-                        if (sec.modules && Array.isArray(sec.modules)) {
+                        if (sec && sec.modules && Array.isArray(sec.modules)) {
                             sec.modules.forEach(mod => {
-                                if (mod.modname === "forum") {
-                                    forumToSectionMap[mod.id] = sec;
-                                    forumToSectionMap[mod.instance] = sec;
-                                    forumToSectionMap["instance_" + mod.instance] = sec;
+                                if (mod && mod.modname === "forum") {
+                                    if (mod.id) forumToSectionMap[mod.id] = sec;
+                                    if (mod.instance) {
+                                        forumToSectionMap[mod.instance] = sec;
+                                        forumToSectionMap["instance_" + mod.instance] = sec;
+                                    }
                                 }
                             });
                         }
@@ -2210,6 +2213,7 @@
                 let unreadTotal = 0;
 
                 forums.forEach(forum => {
+                    if (!forum) return;
                     const unreadCount = Number(forum.unreadpostscount ?? forum.unreadpostcount ?? forum.numunreadposts ?? forum.unreadcount ?? 0) || 0;
                     unreadTotal += unreadCount;
 
@@ -2220,32 +2224,39 @@
                     const sec = forumToSectionMap[cmid] || forumToSectionMap[forum.id] || forumToSectionMap["instance_" + forum.id];
 
                     const lowerName = (forum.name || "").toLowerCase();
-                    const isGeneralType = forum.type === 'news' || forum.type === 'general';
-                    const isGeneralName = lowerName.includes("novedades") || lowerName.includes("avisos") || lowerName.includes("general") || lowerName.includes("cafetería") || lowerName.includes("cafeteria");
+                    const isGeneralType = forum.type === 'news';
+                    const isGeneralName = lowerName.includes("novedades") || lowerName.includes("avisos") || lowerName.includes("cafetería") || lowerName.includes("cafeteria");
 
                     let assignedWeekNum = null;
+                    let weekLabel = null;
+                    let weekTopicTitle = "";
+
                     if (sec) {
-                        assignedWeekNum = assignments[`sec_${sec.id}`];
+                        const rawAssign = assignments[`sec_${sec.id}`];
+                        const range = getSectionWeekRange(rawAssign);
+                        if (range) {
+                            assignedWeekNum = range.startWeek;
+                            weekLabel = range.startWeek === range.endWeek ? `${range.startWeek}` : `${range.startWeek}-${range.endWeek}`;
+                            const weekData = getWeeklySectionsStartingAtWeek(subjectId, range.startWeek);
+                            weekTopicTitle = weekData ? weekData.topic : formatSectionTitle(sec);
+                        }
                     }
 
-                    if (assignedWeekNum) {
-                        const weekData = getWeeklySectionsForSubject(subjectId, assignedWeekNum);
-                        const weekTopicTitle = weekData ? weekData.topic : (sec ? formatSectionTitle(sec) : `Semana ${assignedWeekNum}`);
-
+                    if (assignedWeekNum !== null && assignedWeekNum !== undefined) {
                         weeklyForums.push({
                             id: forum.id,
-                            name: forum.name,
+                            name: forum.name || "Foro sin nombre",
                             unreadCount: unreadCount,
                             cmid: cmid,
                             url: forumUrl,
-                            weekNum: assignedWeekNum,
-                            weekTopicTitle: weekTopicTitle,
+                            weekNum: weekLabel || assignedWeekNum,
+                            weekTopicTitle: weekTopicTitle || (sec ? formatSectionTitle(sec) : `Semana ${assignedWeekNum}`),
                             sectionName: sec ? formatSectionTitle(sec) : ""
                         });
                     } else if (isGeneralType || isGeneralName || (sec && (sec.section === 0 || sec.id === 0)) || !sec) {
                         generalForums.push({
                             id: forum.id,
-                            name: forum.name,
+                            name: forum.name || "Foro sin nombre",
                             unreadCount: unreadCount,
                             cmid: cmid,
                             url: forumUrl
@@ -2253,7 +2264,7 @@
                     } else {
                         weeklyForums.push({
                             id: forum.id,
-                            name: forum.name,
+                            name: forum.name || "Foro sin nombre",
                             unreadCount: unreadCount,
                             cmid: cmid,
                             url: forumUrl,
@@ -2338,12 +2349,12 @@
                         </div>
                     `;
                     forumData.weekly.forEach(f => {
-                        const weekLabel = f.weekNum !== "?" ? `Semana ${f.weekNum}` : 'Semana';
+                        const weekLabel = f.weekNum !== "?" ? `Semana ${f.weekNum}` : (f.sectionName || 'Sección');
                         html += `
                             <div class="forum-card ${f.unreadCount > 0 ? 'has-unread' : ''}">
                                 <div class="forum-info">
                                     <div class="forum-week-tag">
-                                        ${weekLabel}: ${f.weekTopicTitle}
+                                        ${weekLabel}${f.weekTopicTitle ? `: ${f.weekTopicTitle}` : ''}
                                     </div>
                                     <div class="forum-title-name">💬 ${f.name}</div>
                                 </div>
