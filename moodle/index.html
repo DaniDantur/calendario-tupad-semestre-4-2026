@@ -1791,7 +1791,10 @@
             <div class="modal-body" id="forums-modal-list" style="overflow-y: auto; flex: 1; padding-right: 4px;">
                 <!-- Populated dynamically -->
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn btn-secondary" id="forums-modal-sync-btn" onclick="syncForumsForSingleSubject()" style="display: flex; align-items: center; gap: 6px;" title="Sincronizar únicamente los foros de esta materia">
+                    <span id="forums-modal-sync-icon" style="display: inline-block;">🔄</span> Sincronizar foros de esta materia
+                </button>
                 <button class="btn btn-secondary" onclick="closeModal('forums-modal')">Cerrar</button>
             </div>
         </div>
@@ -2131,14 +2134,18 @@
            MOODLE FORUMS API INTEGRATION & MODAL
            ========================================================================== */
 
-        async function fetchForumsForAssignedSubjects() {
+        let currentForumsModalSubjectId = null;
+
+        async function fetchForumsForAssignedSubjects(subjectIds = null) {
             const token = localStorage.getItem("moodle_token");
             let baseUrl = localStorage.getItem("moodle_url");
             if (!token || !baseUrl) return;
             if (baseUrl.endsWith("/")) baseUrl = baseUrl.slice(0, -1);
 
-            const visibleIds = getVisibleSubjectIds();
-            if (!visibleIds || visibleIds.length === 0) return;
+            const targetIds = subjectIds
+                ? (Array.isArray(subjectIds) ? subjectIds.map(String) : [String(subjectIds)])
+                : getVisibleSubjectIds();
+            if (!targetIds || targetIds.length === 0) return;
 
             try {
                 let params = new URLSearchParams();
@@ -2146,7 +2153,7 @@
                 params.append("wsfunction", "mod_forum_get_forums_by_courses");
                 params.append("moodlewsrestformat", "json");
 
-                visibleIds.forEach((courseId, idx) => {
+                targetIds.forEach((courseId, idx) => {
                     params.append(`courseids[${idx}]`, courseId);
                 });
 
@@ -2157,7 +2164,7 @@
                 if (data && !data.exception && (Array.isArray(data) || Array.isArray(data?.forums))) {
                     const forumsList = Array.isArray(data) ? data : data.forums;
                     const forumsByCourse = {};
-                    visibleIds.forEach(id => { forumsByCourse[id] = []; });
+                    targetIds.forEach(id => { forumsByCourse[id] = []; });
 
                     forumsList.forEach(forum => {
                         const cId = String(forum.course);
@@ -2175,6 +2182,30 @@
                 }
             } catch (e) {
                 console.error("Error al conectar con la API de foros de Moodle:", e);
+            }
+        }
+
+        async function syncForumsForSingleSubject(subjectId = null) {
+            const targetSubjectId = subjectId || currentForumsModalSubjectId;
+            if (!targetSubjectId) return;
+
+            const syncIcon = document.getElementById("forums-modal-sync-icon");
+            const syncBtn = document.getElementById("forums-modal-sync-btn");
+
+            if (syncIcon) syncIcon.classList.add("spinning");
+            if (syncBtn) syncBtn.disabled = true;
+
+            try {
+                await fetchForumsForAssignedSubjects([targetSubjectId]);
+            } catch (err) {
+                console.error("Error sincronizando foros de la materia:", targetSubjectId, err);
+            } finally {
+                if (syncIcon) syncIcon.classList.remove("spinning");
+                if (syncBtn) syncBtn.disabled = false;
+
+                if (String(currentForumsModalSubjectId) === String(targetSubjectId)) {
+                    openSubjectForumsModal(targetSubjectId);
+                }
             }
         }
 
@@ -2293,6 +2324,7 @@
             const subject = (academicCalendarData.subjects || []).find(s => String(s.id) === String(subjectId));
             if (!subject) return;
 
+            currentForumsModalSubjectId = String(subjectId);
             const forumData = getForumsForSubject(subjectId);
 
             document.getElementById("forums-modal-subject-name").textContent = subject.name;
