@@ -427,16 +427,16 @@
            ========================================================================== */
         .main-content {
             flex: 1;
-            padding: 10px 14px;
+            padding: 14px 16px;
             background: #f8fafc;
             overflow-y: auto;
         }
 
-        /* Responsive Multi-column Grid Layout (Default on Desktop) - Narrow & High Density */
+        /* Responsive Multi-column Grid Layout (Default on Desktop) */
         .subject-group-container.view-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 12px;
             align-items: start;
         }
 
@@ -444,33 +444,33 @@
         .subject-group-container.view-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
 
-        /* Subject Card - Compact & Narrow */
+        /* Subject Card */
         .subject-card {
             background: #ffffff;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
         .subject-card.has-unread-forums {
-            border-left: 3.5px solid #ef4444;
+            border-left: 4px solid #ef4444;
         }
 
-        /* Slim Subject Header (Height ~30px) */
+        /* Subject Header */
         .subject-card-header {
-            padding: 4px 8px;
+            padding: 8px 12px;
             background: #f8fafc;
             border-bottom: 1px solid var(--border-light);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 6px;
+            gap: 8px;
             cursor: pointer;
             user-select: none;
             transition: background 0.12s ease;
@@ -483,15 +483,15 @@
         .subject-header-title-box {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             flex: 1;
             min-width: 0;
         }
 
         .subject-badge {
-            font-size: 9.5px;
+            font-size: 10px;
             font-weight: 800;
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 4px;
             color: #ffffff;
             letter-spacing: 0.4px;
@@ -500,7 +500,7 @@
 
         .subject-name-text {
             font-family: var(--font-heading);
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             color: #0f172a;
             white-space: nowrap;
@@ -511,33 +511,33 @@
         .subject-header-meta {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             flex-shrink: 0;
         }
 
         .subject-unread-counter {
             background: #ef4444;
             color: #ffffff;
-            font-size: 9.5px;
+            font-size: 10px;
             font-weight: 800;
-            padding: 1px 5px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 10px;
             display: inline-flex;
             align-items: center;
-            gap: 2px;
+            gap: 3px;
         }
 
         .subject-all-read-badge {
-            font-size: 9.5px;
+            font-size: 10px;
             font-weight: 700;
             color: #059669;
             background: #ecfdf5;
-            padding: 1px 5px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 10px;
         }
 
         .subject-total-counter {
-            font-size: 10px;
+            font-size: 10.5px;
             font-weight: 600;
             color: #64748b;
         }
@@ -546,8 +546,8 @@
             background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            padding: 2px 4px;
-            font-size: 9.5px;
+            padding: 2px 5px;
+            font-size: 10px;
             color: #334155;
             cursor: pointer;
             display: inline-flex;
@@ -559,7 +559,7 @@
         }
 
         .accordion-chevron {
-            font-size: 9px;
+            font-size: 10px;
             color: #64748b;
             transition: transform 0.15s ease;
         }
@@ -569,7 +569,7 @@
         }
 
         .subject-card-body {
-            padding: 0;
+            padding: 8px 10px;
             background: #ffffff;
         }
 
@@ -579,79 +579,92 @@
 
         /* Section Sub-Divider inside Subject (General vs Semanal) */
         .forum-group-divider {
-            padding: 3px 8px;
-            background: #f1f5f9;
-            font-size: 10px;
+            font-family: var(--font-heading);
+            font-size: 11.5px;
             font-weight: 800;
-            color: #475569;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            border-top: 1px solid var(--border-light);
-            border-bottom: 1px solid var(--border-light);
+            color: #1e3a8a;
+            margin: 10px 0 6px 0;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 6px;
         }
 
-        /* Forum List & Fully Clickable Forum Item Row */
+        .forum-group-divider:first-child {
+            margin-top: 2px;
+        }
+
+        /* Forum List & Forum Card Cells (spaced like index.html) */
         .forum-list {
             display: flex;
             flex-direction: column;
+            gap: 6px;
         }
 
         .forum-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 6px;
-            padding: 5px 8px;
-            border-bottom: 1px solid #f1f5f9;
+            gap: 10px;
+            padding: 8px 11px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
             text-decoration: none;
             color: var(--text-main);
-            transition: background 0.1s ease, color 0.1s ease;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, transform 0.15s ease;
             cursor: pointer;
-            min-height: 27px;
-        }
-
-        .forum-item:last-child {
-            border-bottom: none;
         }
 
         .forum-item:hover {
-            background: #f8fafc;
+            background: #ffffff;
+            border-color: #94a3b8;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
         }
 
         .forum-item.has-unread {
-            background: #fff5f5;
-            border-left: 3px solid #ef4444;
+            background: #fef2f2;
+            border-color: #fca5a5;
+            border-left: 3.5px solid #ef4444;
         }
 
         .forum-item.has-unread:hover {
             background: #fee2e2;
+            border-color: #f87171;
         }
 
         .forum-item-title-box {
             display: flex;
-            align-items: center;
-            gap: 5px;
+            flex-direction: column;
+            gap: 2px;
             flex: 1;
             min-width: 0;
         }
 
+        .forum-item-title-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+        }
+
         .forum-title-icon {
-            font-size: 12px;
+            font-size: 12.5px;
             flex-shrink: 0;
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
         .forum-title-name {
-            font-size: 11.5px;
-            font-weight: 600;
+            font-size: 12.5px;
+            font-weight: 700;
             color: #0f172a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            line-height: 1.25;
+            line-height: 1.3;
         }
 
         .forum-item:hover .forum-title-name {
@@ -659,32 +672,31 @@
         }
 
         .forum-item.has-unread .forum-title-name {
-            font-weight: 700;
             color: #991b1b;
         }
 
         .forum-topic-sub {
-            font-size: 10.5px;
+            font-size: 11px;
             color: #64748b;
             font-weight: 400;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex-shrink: 1;
+            line-height: 1.25;
         }
 
         .forum-item-meta {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             flex-shrink: 0;
         }
 
         .forum-unread-pill {
-            font-size: 9.5px;
+            font-size: 10.5px;
             font-weight: 800;
-            padding: 1px 5px;
-            border-radius: 8px;
+            padding: 2px 7px;
+            border-radius: 10px;
             background: #ef4444;
             color: #ffffff;
             white-space: nowrap;
@@ -692,9 +704,9 @@
         }
 
         .forum-read-check {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
-            color: #cbd5e1;
+            color: #94a3b8;
             padding: 0 2px;
         }
 
@@ -1761,8 +1773,10 @@
             return `
                 <a href="${f.url}" target="_blank" rel="noopener noreferrer" class="forum-item ${hasUnread ? 'has-unread' : ''}" title="${escapeHtml(tooltip)}">
                     <div class="forum-item-title-box">
-                        <span class="forum-title-icon">💬</span>
-                        <span class="forum-title-name">${escapeHtml(f.name)}</span>
+                        <div class="forum-item-title-row">
+                            <span class="forum-title-icon">💬</span>
+                            <span class="forum-title-name">${escapeHtml(f.name)}</span>
+                        </div>
                     </div>
                     <div class="forum-item-meta">
                         ${hasUnread ? `<span class="forum-unread-pill">🔔 ${f.unreadCount}</span>` : `<span class="forum-read-check">✓</span>`}
@@ -1781,9 +1795,11 @@
             return `
                 <a href="${f.url}" target="_blank" rel="noopener noreferrer" class="forum-item ${hasUnread ? 'has-unread' : ''}" title="${escapeHtml(tooltip)}">
                     <div class="forum-item-title-box">
-                        <span class="forum-title-icon">💬</span>
-                        <span class="forum-title-name">${escapeHtml(f.name)}</span>
-                        ${f.weekTopicTitle ? `<span class="forum-topic-sub">• ${escapeHtml(f.weekTopicTitle)}</span>` : ''}
+                        <div class="forum-item-title-row">
+                            <span class="forum-title-icon">💬</span>
+                            <span class="forum-title-name">${escapeHtml(f.name)}</span>
+                        </div>
+                        ${f.weekTopicTitle ? `<div class="forum-topic-sub">• ${escapeHtml(f.weekTopicTitle)}</div>` : ''}
                     </div>
                     <div class="forum-item-meta">
                         ${hasUnread ? `<span class="forum-unread-pill">🔔 ${f.unreadCount}</span>` : `<span class="forum-read-check">✓</span>`}
