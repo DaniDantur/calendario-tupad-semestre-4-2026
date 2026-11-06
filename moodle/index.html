@@ -83,7 +83,7 @@
         }
 
         .container {
-            max-width: 1750px;
+            width: 100%;
             margin: 0 auto;
             background: var(--bg-card);
             border-radius: 12px;
@@ -1592,6 +1592,10 @@
                     🔑 Moodle
                 </button>
 
+                <a href="foros.html" class="btn" style="background:#1e3a8a;" title="Ir al Centro de Foros y mensajes no leídos">
+                    💬 Ver Todos los Foros
+                </a>
+
                 <a href="index.html" class="btn" style="background:#0f295e;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2"></rect>
@@ -1791,11 +1795,14 @@
             <div class="modal-body" id="forums-modal-list" style="overflow-y: auto; flex: 1; padding-right: 4px;">
                 <!-- Populated dynamically -->
             </div>
-            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <button class="btn btn-secondary" id="forums-modal-sync-btn" onclick="syncForumsForSingleSubject()" style="display: flex; align-items: center; gap: 6px;" title="Sincronizar únicamente los foros de esta materia">
                     <span id="forums-modal-sync-icon" style="display: inline-block;">🔄</span> Sincronizar foros de esta materia
                 </button>
-                <button class="btn btn-secondary" onclick="closeModal('forums-modal')">Cerrar</button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <a href="foros.html" class="btn btn-outline" style="font-size: 11px;" title="Ver todos los foros en una sola página">Ver todos los foros ↗</a>
+                    <button class="btn btn-secondary" onclick="closeModal('forums-modal')">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2224,19 +2231,54 @@
 
                 const forumToSectionMap = {};
                 if (Array.isArray(contents)) {
-                    contents.forEach(sec => {
+                    contents.forEach((sec, sIdx) => {
                         if (sec && sec.modules && Array.isArray(sec.modules)) {
-                            sec.modules.forEach(mod => {
+                            sec.modules.forEach((mod, mIdx) => {
                                 if (mod && mod.modname === "forum") {
-                                    if (mod.id) forumToSectionMap[mod.id] = sec;
+                                    const secMeta = Object.assign({}, sec, { _secIdx: sIdx, _modIdx: mIdx });
+                                    if (mod.id) forumToSectionMap[mod.id] = secMeta;
                                     if (mod.instance) {
-                                        forumToSectionMap[mod.instance] = sec;
-                                        forumToSectionMap["instance_" + mod.instance] = sec;
+                                        forumToSectionMap[mod.instance] = secMeta;
+                                        forumToSectionMap["instance_" + mod.instance] = secMeta;
                                     }
                                 }
                             });
                         }
                     });
+                }
+
+                function computeForumSortRank(forum, sec, assignedWeekNum) {
+                    if (assignedWeekNum !== null && assignedWeekNum !== undefined) {
+                        const parsed = parseInt(assignedWeekNum);
+                        if (!isNaN(parsed) && parsed > 0) return parsed * 10000;
+                    }
+                    const nameStr = (forum.name || "").toLowerCase();
+                    const nameMatch = nameStr.match(/(?:semana|foro|unidad|clase|tema|m[oó]dulo|actividad|tp|tpi)\s*#?\s*(\d+)/i) ||
+                                      nameStr.match(/\bforo\s*(\d+)\b/i) ||
+                                      nameStr.match(/\bsemana\s*(\d+)\b/i);
+                    if (nameMatch) {
+                        const n = parseInt(nameMatch[1], 10);
+                        if (!isNaN(n) && n > 0 && n < 200) return n * 10000;
+                    }
+                    if (sec && sec.name) {
+                        const secMatch = (sec.name || "").toLowerCase().match(/(?:semana|unidad|clase|tema|m[oó]dulo|secci[oó]n)\s*#?\s*(\d+)/i);
+                        if (secMatch) {
+                            const sn = parseInt(secMatch[1], 10);
+                            if (!isNaN(sn) && sn > 0 && sn < 200) return sn * 10000;
+                        }
+                    }
+                    if (sec && typeof sec.section === 'number' && sec.section > 0) {
+                        return sec.section * 10000;
+                    }
+                    if (sec && typeof sec._secIdx === 'number' && sec._secIdx > 0) {
+                        return sec._secIdx * 10000;
+                    }
+                    const anyNum = nameStr.match(/\b(\d+)\b/);
+                    if (anyNum) {
+                        const gn = parseInt(anyNum[1], 10);
+                        if (!isNaN(gn) && gn > 0 && gn < 50) return gn * 10000;
+                    }
+                    return 990000;
                 }
 
                 const generalForums = [];
@@ -2273,6 +2315,9 @@
                         }
                     }
 
+                    const sortRank = computeForumSortRank(forum, sec, assignedWeekNum);
+                    const modIdx = sec ? (sec._modIdx ?? 0) : 0;
+
                     if (assignedWeekNum !== null && assignedWeekNum !== undefined) {
                         weeklyForums.push({
                             id: forum.id,
@@ -2282,7 +2327,9 @@
                             url: forumUrl,
                             weekNum: weekLabel || assignedWeekNum,
                             weekTopicTitle: weekTopicTitle || (sec ? formatSectionTitle(sec) : `Semana ${assignedWeekNum}`),
-                            sectionName: sec ? formatSectionTitle(sec) : ""
+                            sectionName: sec ? formatSectionTitle(sec) : "",
+                            sortRank: sortRank,
+                            moduleIndex: modIdx
                         });
                     } else if (isGeneralType || isGeneralName || (sec && (sec.section === 0 || sec.id === 0)) || !sec) {
                         generalForums.push({
@@ -2290,23 +2337,36 @@
                             name: forum.name || "Foro sin nombre",
                             unreadCount: unreadCount,
                             cmid: cmid,
-                            url: forumUrl
+                            url: forumUrl,
+                            sortRank: sortRank,
+                            moduleIndex: modIdx
                         });
                     } else {
+                        // Extract fallback label if possible
+                        let displayWeek = "?";
+                        if (sortRank < 900000) {
+                            displayWeek = `${Math.floor(sortRank / 10000)}`;
+                        }
                         weeklyForums.push({
                             id: forum.id,
                             name: forum.name || "Foro sin nombre",
                             unreadCount: unreadCount,
                             cmid: cmid,
                             url: forumUrl,
-                            weekNum: "?",
+                            weekNum: displayWeek,
                             weekTopicTitle: sec ? formatSectionTitle(sec) : "General",
-                            sectionName: sec ? formatSectionTitle(sec) : ""
+                            sectionName: sec ? formatSectionTitle(sec) : "",
+                            sortRank: sortRank,
+                            moduleIndex: modIdx
                         });
                     }
                 });
 
-                weeklyForums.sort((a, b) => (parseInt(a.weekNum) || 999) - (parseInt(b.weekNum) || 999));
+                weeklyForums.sort((a, b) => {
+                    if (a.sortRank !== b.sortRank) return a.sortRank - b.sortRank;
+                    if (a.moduleIndex !== b.moduleIndex) return a.moduleIndex - b.moduleIndex;
+                    return a.name.localeCompare(b.name, undefined, { numeric: true });
+                });
 
                 return {
                     general: generalForums,
@@ -2357,7 +2417,7 @@
                     `;
                     forumData.general.forEach(f => {
                         html += `
-                            <div class="forum-card ${f.unreadCount > 0 ? 'has-unread' : ''}">
+                            <a href="${f.url}" target="_blank" rel="noopener noreferrer" class="forum-card ${f.unreadCount > 0 ? 'has-unread' : ''}" style="text-decoration:none; cursor:pointer;" title="${f.name} - Abrir en Moodle">
                                 <div class="forum-info">
                                     <div class="forum-title-name">💬 ${f.name}</div>
                                 </div>
@@ -2365,11 +2425,9 @@
                                     <span class="forum-unread-pill ${f.unreadCount > 0 ? 'unread' : ''}">
                                         ${f.unreadCount > 0 ? `${f.unreadCount} no leídos` : 'Al día'}
                                     </span>
-                                    <a href="${f.url}" target="_blank" rel="noopener noreferrer" class="forum-open-btn">
-                                        Abrir en Moodle ↗
-                                    </a>
+                                    <span style="font-size: 12px; color: #64748b;">↗</span>
                                 </div>
-                            </div>
+                            </a>
                         `;
                     });
                 }
@@ -2381,24 +2439,19 @@
                         </div>
                     `;
                     forumData.weekly.forEach(f => {
-                        const weekLabel = f.weekNum !== "?" ? `Semana ${f.weekNum}` : (f.sectionName || 'Sección');
                         html += `
-                            <div class="forum-card ${f.unreadCount > 0 ? 'has-unread' : ''}">
+                            <a href="${f.url}" target="_blank" rel="noopener noreferrer" class="forum-card ${f.unreadCount > 0 ? 'has-unread' : ''}" style="text-decoration:none; cursor:pointer;" title="${f.name} - Abrir en Moodle">
                                 <div class="forum-info">
-                                    <div class="forum-week-tag">
-                                        ${weekLabel}${f.weekTopicTitle ? `: ${f.weekTopicTitle}` : ''}
-                                    </div>
                                     <div class="forum-title-name">💬 ${f.name}</div>
+                                    ${f.weekTopicTitle ? `<div style="font-size:11px; color:#64748b; margin-top:2px;">• ${f.weekTopicTitle}</div>` : ''}
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 8px;">
                                     <span class="forum-unread-pill ${f.unreadCount > 0 ? 'unread' : ''}">
                                         ${f.unreadCount > 0 ? `${f.unreadCount} no leídos` : 'Al día'}
                                     </span>
-                                    <a href="${f.url}" target="_blank" rel="noopener noreferrer" class="forum-open-btn">
-                                        Abrir en Moodle ↗
-                                    </a>
+                                    <span style="font-size: 12px; color: #64748b;">↗</span>
                                 </div>
-                            </div>
+                            </a>
                         `;
                     });
                 }
